@@ -16,9 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from sv_app.views import test_page
+import vote_app.views as vote
+import profile_app.views as profile
+import report_app.views as report
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('test/', test_page),
+    path('vote/test/', vote.test_page),
+    path('profile/test/', profile.test_page),
+    path('report/test/', report.test_page),
 ]
