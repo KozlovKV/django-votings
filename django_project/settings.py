@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'menu_app',
     'vote_app',
     'profile_app',
     'report_app',
@@ -58,6 +59,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+            'menu_app/templates',
             'vote_app/templates',
             'profile_app/templates',
             'report_app/templates',

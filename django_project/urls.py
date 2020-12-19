@@ -16,12 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+import menu_app.views as menu
 import vote_app.views as vote
 import profile_app.views as profile
 import report_app.views as report
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', menu.index_page),
     path('vote/test/', vote.test_page),
     path('profile/test/', profile.test_page),
     path('report/test/', report.test_page),
