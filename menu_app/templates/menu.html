@@ -1,0 +1,23 @@
+{% load static %}
+<div class="menu">
+    <img class="logo" src="{% static 'menu_app/logo.png' %}" alt="logo">
+    {% for item in menu %}
+        <a href="{{ item.url }}" class="header-link">{{ item.label }}</a>
+    {% endfor %}
+    <div class="login-profile-block">
+        {% if request.user.is_authenticated %}
+            <span class="header-link">Пользователь: {{ request.user }}</span>
+            <br>
+            {% for item in profile_menu %}
+                <a href="{{ item.url }}" class="header-link">{{ item.label }}</a>
+            {% endfor %}
+        {% else %}
+            <form action="/login/" method="post">
+                {% csrf_token %}
+                {{ profile_menu.login_form }}
+                <br>
+                <input class="header-link" type="submit" value="Войти">
+            </form>
+        {% endif %}
+    </div>
+</div>
