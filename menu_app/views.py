@@ -22,15 +22,23 @@ def get_profile_menu_context(request):
             {'url': '/logout/', 'label': 'Выход'}
         ]
     else:
+        form = auth_forms.AuthenticationForm(request)
         profile_menu_context = {
-            'login_form': auth_forms.AuthenticationForm,
+            'login_form': form,
+            'usr': form.base_fields['username'],
+            'pswd': form.base_fields['password']
         }
     return profile_menu_context
 
 
-def index_page(request):
+def get_full_menu_context(request):
     context = {
         'menu': get_menu_context(request),
         'profile_menu': get_profile_menu_context(request)
     }
+    return context
+
+
+def index_page(request):
+    context = get_full_menu_context(request)
     return render(request, 'index.html', context)

@@ -17,7 +17,14 @@
                 {{ profile_menu.login_form }}
                 <br>
                 <input class="header-link" type="submit" value="Войти">
+                <button class="header-link">Регистрация</button>
             </form>
         {% endif %}
     </div>
+    <script>
+        usr_input = document.getElementById('id_username');
+        pswd_input = document.getElementById('id_password');
+        usr_input.placeholder = 'Логин'
+        pswd_input.placeholder = 'Пароль'
+    </script>
 </div>
