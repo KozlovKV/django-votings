@@ -7,9 +7,8 @@
         <link rel="stylesheet" type="text/css" href="{% static 'main_style.css' %}">
     </head>
     <body>
-        {% include 'menu.html' %}
-        <h1>Добро пожаловать</h1>
-        <h2>Представьтесь, пожалуйста</h2>
+        <h1>При вводе входе возникла ошибка</h1>
+        <h2>Повторите попытку</h2>
         <form action="/login/" method="post">
             {% csrf_token %}
             {{ form }}

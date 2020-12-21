@@ -11,7 +11,7 @@ body {
     padding: 0;
     padding-top: 10%;
     font-size: 1.5rem;
-    font-family: Roboto, cursive;
+    font-family: Roboto;
 }
 
 .menu {
@@ -29,7 +29,7 @@ body {
     background-color: #AAA;
 
     font-size: 2rem;
-    font-family: Comfortaa;
+    font-family: Jura;
 }
 
 .logo {
@@ -62,10 +62,10 @@ body {
 .login-profile-block input,
 .login-profile-block button {
     font-size: 1.3rem;
-    font-family: Jura;
     padding: 5px;
     margin: 10px;
     border: 2px solid black;
+    font-family: Jura;
 }
 
 h1,h2 {
