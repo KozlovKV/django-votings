@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>TEST</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'main_style.css' %}">
-</head>
-<body>
-    <h1 class="test">Тестовая страница приложения профиля</h1>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>TEST</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
+    </head>
+    <body>
+        {% include 'menu.html' %}
+        <h1 class="test">Тестовая страница приложения профиля</h1>
+    </body>
 </html>
