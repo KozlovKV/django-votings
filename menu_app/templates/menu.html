@@ -1,23 +1,21 @@
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/border_animation.css' %}">
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/border_animation.css' %}">-->
 <link rel="stylesheet" type="text/css" href="{% static 'css/btn_style.css' %}">
 <div class="menu">
     <img class="logo" src="{% static 'menu_app/logo.png' %}" alt="logo">
     {% for item in menu %}
-    <div class="header-link-container">
-        <a href="{{ item.url }}" class="border-animation">
-            <div class="border-animation__inner">
-                {{ item.label }}
-            </div>
+        <a href="{{ item.url }}" class="btn horizontal-border">
+            {{ item.label }}
         </a>
-    </div>
     {% endfor %}
     <div class="login-profile-block">
         {% if request.user.is_authenticated %}
             <span class="header-link">Пользователь: {{ request.user }}</span>
             <br>
             {% for item in profile_menu %}
-                <a href="{{ item.url }}" class="header-link">{{ item.label }}</a>
+                <a href="{{ item.url }}" class="btn horizontal-border">
+                    {{ item.label }}
+                </a>
             {% endfor %}
         {% else %}
             <form action="/login/" method="post">

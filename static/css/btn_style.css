@@ -1,8 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa&family=Jura:wght@700&family=Roboto:wght@500&display=swap');
 
-.btn {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
+  transition: 0.5s ease-in-out;
+}
+
+.btn {
   text-align: center;
+  text-decoration: none;
 
   font-family: 'Jura', Helvetica, arial, sans-serif;
 
@@ -10,25 +17,24 @@
   border: 1px solid #000;
   overflow: hidden;
   color: #000;
-  line-height: 80px;
   text-transform: capitalize;
   float: left;
   z-index: 1;
+  margin: 0 25px;
+  padding: 15px 25px;
+  border-radius: 3px;
   position: relative;
   -webkit-transition: 1s ease-out;
   transition: 1s ease-out;
 }
 
 .horizontal-border:before {
-  -webkit-transition: 0.5s;
   transition: 0.5s;
   z-index: -1;
 }
 .horizontal-border:hover {
-  -webkit-box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
   cursor: pointer;
-  -webkit-transition-delay: 0.1s;
   transition-delay: 0.1s;
   color: #000;
   z-index: 8;
@@ -46,7 +52,6 @@
   top: 0;
   left: 0;
   background: #000;
-  -webkit-transform: translateX(100%);
   transform: translateX(100%);
 }
 .horizontal-border:after {
@@ -58,7 +63,6 @@
   bottom: 0;
   left: 0;
   background: #000;
-  -webkit-transform: translateX(-100%);
   transform: translateX(-100%);
 }
 .horizontal-border:hover {
@@ -66,6 +70,5 @@
   color: #000;
 }
 .horizontal-border:hover:before, .horizontal-border:hover:after {
-  -webkit-transform: translateX(0%);
   transform: translateX(0%);
 }
