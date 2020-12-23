@@ -1,8 +1,16 @@
 {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/border_animation.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/btn_style.css' %}">
 <div class="menu">
     <img class="logo" src="{% static 'menu_app/logo.png' %}" alt="logo">
     {% for item in menu %}
-        <a href="{{ item.url }}" class="header-link">{{ item.label }}</a>
+    <div class="header-link-container">
+        <a href="{{ item.url }}" class="border-animation">
+            <div class="border-animation__inner">
+                {{ item.label }}
+            </div>
+        </a>
+    </div>
     {% endfor %}
     <div class="login-profile-block">
         {% if request.user.is_authenticated %}
@@ -14,7 +22,7 @@
         {% else %}
             <form action="/login/" method="post">
                 {% csrf_token %}
-                {{ profile_menu.login_form }}
+                {{ form }}
                 <br>
                 <input class="header-link" type="submit" value="Войти">
                 <button class="header-link">Регистрация</button>

@@ -36,6 +36,8 @@ def get_full_menu_context(request):
         'menu': get_menu_context(request),
         'profile_menu': get_profile_menu_context(request)
     }
+    if not request.user.is_authenticated:
+        context['form'] = context['profile_menu']['login_form']
     return context
 
 
