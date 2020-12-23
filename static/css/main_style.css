@@ -39,13 +39,13 @@ body {
 
 .header-link-container {
     display: inline-block;
-    padding: 20px;
+    margin: 10px 10px;
+    text-decoration: none;
 }
 
 .header-link {
     display: inline-block;
-    margin: 10 10px;
-    padding: 10px;
+    margin: 5px 25px;
 
     color: black;
     transition: 1s ease-out;
@@ -71,6 +71,10 @@ body {
     margin: 10px;
     border: 2px solid black;
     font-family: Jura;
+}
+
+.login-profile-block .header-link {
+    margin: 0 10px;
 }
 
 h1,h2 {
