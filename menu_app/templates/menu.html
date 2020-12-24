@@ -1,20 +1,30 @@
 {% load static %}
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/border_animation.css' %}">-->
+<link rel="stylesheet" type="text/css" href="{% static 'css/btn_style.css' %}">
 <div class="menu">
     <img class="logo" src="{% static 'menu_app/logo.png' %}" alt="logo">
     {% for item in menu %}
-        <a href="{{ item.url }}" class="header-link">{{ item.label }}</a>
+        <a href="{{ item.url }}" class="btn horizontal-border">
+            {{ item.label }}
+        </a>
     {% endfor %}
     <div class="login-profile-block">
         {% if request.user.is_authenticated %}
-            <span class="header-link">Пользователь: {{ request.user }}</span>
-            <br>
-            {% for item in profile_menu %}
-                <a href="{{ item.url }}" class="header-link">{{ item.label }}</a>
-            {% endfor %}
+            <div class="login-profile-in-block">
+                <span>Пользователь: {{ request.user }}</span>
+            </div>
+            <div class="login-profile-in-block">
+                {% for item in profile_menu %}
+                    <a href="{{ item.url }}" class="btn horizontal-border">
+                        {{ item.label }}
+                    </a>
+                {% endfor %}
+            </div>
         {% else %}
             <form action="/login/" method="post">
                 {% csrf_token %}
-                {{ profile_menu.login_form }}
+                {{ form.username }}
+                {{ form.password }}
                 <br>
                 <input class="header-link" type="submit" value="Войти">
                 <button class="header-link">Регистрация</button>
