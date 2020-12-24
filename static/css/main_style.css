@@ -47,9 +47,10 @@ body {
     display: inline-block;
     margin: 5px 25px;
 
+    border: 2px solid black;
     border-radius: 5px;
     color: black;
-    transition: 1s ease-out;
+    transition: .1s ease-out;
     text-decoration: none;
 }
 
@@ -58,7 +59,7 @@ body {
 }
 
 .header-link:active {
-    border: 2px solid black;
+    border: 2px inset black;
 }
 
 .login-profile-in-block {
@@ -72,10 +73,12 @@ body {
 
 .login-profile-block input,
 .login-profile-block button {
+    display: inline-block;
+    border: 2px solid black;
+    border-radius: 5px;
     font-size: 1.3rem;
     padding: 5px;
     margin: 10px;
-    border: 2px solid black;
     font-family: Jura;
 }
 

@@ -11,7 +11,7 @@
     <div class="login-profile-block">
         {% if request.user.is_authenticated %}
             <div class="login-profile-in-block">
-                <span class="header-link">Пользователь: {{ request.user }}</span>
+                <span>Пользователь: {{ request.user }}</span>
             </div>
             <div class="login-profile-in-block">
                 {% for item in profile_menu %}
