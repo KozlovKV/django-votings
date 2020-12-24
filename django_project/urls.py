@@ -26,7 +26,7 @@ import report_app.views as report
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', menu.index_page),
-    path('login/', auth_views.LoginView.as_view()),
+    path('login/', menu.LoginViewDetailed.as_view()),
     path('logout/', auth_views.LogoutView.as_view()),
     path('vote/test/', vote.test_page),
     path('profile/test/', profile.test_page),
