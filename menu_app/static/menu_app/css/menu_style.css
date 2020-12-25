@@ -51,7 +51,7 @@
     display: none;
 }
 
-.login-profile-block input {
+input {
     display: inline-block;
     border: 2px solid black;
     border-radius: 5px;
