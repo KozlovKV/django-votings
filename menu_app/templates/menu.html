@@ -2,39 +2,51 @@
 <!--<link rel="stylesheet" type="text/css" href="{% static 'css/border_animation.css' %}">-->
 <link rel="stylesheet" type="text/css" href="{% static 'css/btn_style.css' %}">
 <div class="menu">
-    <img class="logo" src="{% static 'menu_app/logo.png' %}" alt="logo">
-    {% for item in menu %}
-        <a href="{{ item.url }}" class="btn horizontal-border">
+    <img class="logo" src="{% static 'menu_app/logo.png' %}" alt="logo"> {% for item in menu %}
+    <a href="{{ item.url }}" class="btn horizontal-border">
             {{ item.label }}
-        </a>
-    {% endfor %}
+        </a> {% endfor %} {% if request.user.is_authenticated %}
     <div class="login-profile-block">
-        {% if request.user.is_authenticated %}
-            <div class="login-profile-in-block">
-                <span>Пользователь: {{ request.user }}</span>
-            </div>
-            <div class="login-profile-in-block">
-                {% for item in profile_menu %}
-                    <a href="{{ item.url }}" class="btn horizontal-border">
-                        {{ item.label }}
-                    </a>
-                {% endfor %}
-            </div>
-        {% else %}
-            <form action="/login/" method="post">
-                {% csrf_token %}
-                {{ form.username }}
-                {{ form.password }}
-                <br>
-                <input class="header-link" type="submit" value="Войти">
-                <button class="header-link">Регистрация</button>
-            </form>
-        {% endif %}
+        <div class="login-profile-in-block">
+            <span>Пользователь: {{ request.user }}</span>
+        </div>
+        <div class="login-profile-in-block">
+            {% for item in profile_menu %}
+            <a href="{{ item.url }}" class="btn horizontal-border">
+                            {{ item.label }}
+                        </a> {% endfor %}
+        </div>
     </div>
-    <script>
-        usr_input = document.getElementById('id_username');
-        pswd_input = document.getElementById('id_password');
-        usr_input.placeholder = 'Логин'
-        pswd_input.placeholder = 'Пароль'
-    </script>
+    {% else %}
+    <div class="login-profile-block">
+
+        <form action="/login/" method="post">
+            {% csrf_token %} {{ form.username }} {{ form.password }}
+            <br>
+            <input class="header-link" type="submit" value="Войти">
+        </form>
+    </div>
+    <button class="header-link" id="reg_btn">Регистрация</button> {% endif %}
 </div>
+<div class="block hidden-top" id="reg_block">
+    <h2>Регистрация</h2>
+</div>
+<div id="window_bg" class="window-around-bg"></div>
+<script>
+    usr_input = document.getElementById('id_username');
+    pswd_input = document.getElementById('id_password');
+    usr_input.placeholder = 'Логин'
+    pswd_input.placeholder = 'Пароль'
+
+    reg_btn = document.getElementById('reg_btn');
+    reg_block = document.getElementById('reg_block');
+    bg = document.getElementById('window_bg');
+    reg_btn.addEventListener('click', (e) => {
+        reg_block.classList.toggle('hidden-top');
+        bg.classList.toggle('active-bg')
+    });
+    bg.addEventListener('click', (e) => {
+        reg_block.classList.toggle('hidden-top');
+        bg.classList.toggle('active-bg')
+    });
+</script>

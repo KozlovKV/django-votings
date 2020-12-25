@@ -10,6 +10,7 @@
 body {
     padding: 0;
     padding-top: 10%;
+    height: 100%;
     font-size: 1.5rem;
     font-family: Roboto;
 }
@@ -18,16 +19,13 @@ body {
     position: fixed;
     left: 0;
     top: 0;
-
     display: flex;
     align-items: center;
     justify-content: space;
-
     width: 100%;
     height: 15%;
     min-height: 160px;
     background-color: #AAA;
-
     font-size: 2rem;
     font-family: Jura;
 }
@@ -46,11 +44,10 @@ body {
 .header-link {
     display: inline-block;
     margin: 5px 25px;
-
     border: 2px solid black;
     border-radius: 5px;
     color: black;
-    transition: .1s ease-out;
+    transition: .1s ease-in-out;
     text-decoration: none;
 }
 
@@ -72,7 +69,7 @@ body {
 }
 
 .login-profile-block input,
-.login-profile-block button {
+button {
     display: inline-block;
     border: 2px solid black;
     border-radius: 5px;
@@ -82,6 +79,55 @@ body {
     font-family: Jura;
 }
 
-h1,h2 {
+h1,
+h2 {
     font-family: Comfortaa, cursive;
+}
+
+.block {
+    border: 3px solid black;
+    border-radius: 30px;
+    padding: 25px;
+    transition: 1s ease-in-out;
+}
+
+.hidden-top {
+    transform: translateY(-1000px);
+}
+
+.hidden-left {
+    transform: translateX(-1000px);
+}
+
+.hidden-bottom {
+    transform: translateY(1000px);
+}
+
+.hidden-right {
+    transform: translateX(1000px);
+}
+
+#reg_block {
+    z-index: 10001;
+    position: fixed;
+    background-color: white;
+    text-align: center;
+    width: 400px;
+    left: calc(50% - 200px);
+    top: 30%;
+}
+
+.window-around-bg {
+    position: fixed;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    transition: 1s ease-in-out;
+}
+
+.active-bg {
+    z-index: 10000;
+    background-color: rgba(0, 0, 0, 0.5);
 }
