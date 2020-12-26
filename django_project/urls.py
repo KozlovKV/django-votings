@@ -28,10 +28,10 @@ urlpatterns = [
     path('', menu.index_page),
     path('login/', menu.LoginViewDetailed.as_view()),
     path('logout/', auth_views.LogoutView.as_view()),
-    # path('account/register/', menu.RegistrationViewDetailed.as_view()),
     path('vote/test/', vote.test_page),
     path('profile/test/', profile.test_page),
     path('report/test/', report.test_page),
 
     path('account/', include('django_registration.backends.one_step.urls')),
+    # path('register/', menu.RegistrationViewDetailed.as_view()),
 ]

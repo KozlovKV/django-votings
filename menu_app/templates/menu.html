@@ -34,6 +34,12 @@
         <button class="header-link" id="reg_btn">Регистрация</button>
     {% endif %}
 </div>
+<script>
+    usr_input = document.getElementById('id_username');
+    pswd_input = document.getElementById('id_password');
+    usr_input.placeholder = 'Логин'
+    pswd_input.placeholder = 'Пароль'
+</script>
 {% if not request.user.is_authenticated %}
 <div class="block hidden-top" id="reg_block">
     <h2>Регистрация</h2>
@@ -46,6 +52,16 @@
         <input type="submit" value="Зарегистрироваться">
     </form>
 </div>
+<script>
+    usr_input = document.getElementById('id_username');
+    email_input = document.getElementById('id_email');
+    pswd1_input = document.getElementById('id_password1');
+    pswd2_input = document.getElementById('id_password2');
+    usr_input.placeholder = 'Логин'
+    email_input.placeholder = 'Электронная почта'
+    pswd1_input.placeholder = 'Пароль'
+    pswd2_input.placeholder = 'Повторите ароль'
+</script>
 {% endif %}
 <div id="window_bg" class="window-around-bg"></div>
 <script>
@@ -53,11 +69,6 @@
         reg_block.classList.toggle('hidden-top');
         bg.classList.toggle('active-bg')
     }
-
-    usr_input = document.getElementById('id_username');
-    pswd_input = document.getElementById('id_password');
-    usr_input.placeholder = 'Логин'
-    pswd_input.placeholder = 'Пароль'
 
     reg_btn = document.getElementById('reg_btn');
     reg_block = document.getElementById('reg_block');

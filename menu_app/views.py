@@ -56,7 +56,7 @@ class LoginViewDetailed(LoginView):
         context = super().get_context_data(**kwargs)
         context['menu'] = get_menu_context(self.request)
         context['profile_menu'] = get_profile_menu_context(self.request)
-        context['login_form'] = self.get_form_class()
+        context['login_form'] = auth_forms.AuthenticationForm(self.request.POST)
         context['reg_form'] = reg_forms.RegistrationFormUniqueEmail(self.request.POST)
         return context
 
@@ -66,6 +66,6 @@ class RegistrationViewDetailed(RegistrationView, ABC):
         context = super().get_context_data(**kwargs)
         context['menu'] = get_menu_context(self.request)
         context['profile_menu'] = get_profile_menu_context(self.request)
-        context['login_form'] = self.get_form_class()
+        context['login_form'] = auth_forms.AuthenticationForm(self.request.POST)
         context['reg_form'] = reg_forms.RegistrationFormUniqueEmail(self.request.POST)
         return context

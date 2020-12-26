@@ -5,13 +5,7 @@
 {% endblock %}
 
 {% block body %}
-    <h2>Регистрация</h2>
-    <form action="/account/register/" method="post">
-        {% csrf_token %}
-        {{ form.username }}
-        {{ form.email }}
-        {{ form.password1 }}
-        {{ form.password2 }}
-        <input type="submit" value="Зарегистрироваться">
-    </form>
+    <h1>Произошла ошибка!</h1>
+        {{ form.errors }}
+    <h2>Повторите попытку</h2>
 {% endblock %}
