@@ -19,7 +19,7 @@ def get_menu_context(request):
 def get_profile_menu_context(request):
     if request.user.is_authenticated:
         profile_menu_context = [
-            {'url': '/profile/test/', 'label': 'Профиль'},
+            {'url': '/profile/test/', 'label': request.user},
             {'url': '/logout/', 'label': 'Выход'}
         ]
     else:
