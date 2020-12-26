@@ -10,27 +10,25 @@
         <a href="{{ item.url }}" class="btn horizontal-border">
             {{ item.label }}
         </a>
-    {% endfor %} {% if request.user.is_authenticated %}
-    <div class="login-profile-block">
-        <div class="login-profile-in-block">
-            <span>Пользователь: {{ request.user }}</span>
-        </div>
-        <div class="login-profile-in-block">
-            {% for item in profile_menu %}
-            <a href="{{ item.url }}" class="btn horizontal-border">
-                            {{ item.label }}
-                        </a> {% endfor %}
-        </div>
-    </div>
+    {% endfor %}
+    {% if request.user.is_authenticated %}
+<!--        <div class="login-profile-block">-->
+<!--                <span>Пользователь: {{ request.user }}</span>-->
+                {% for item in profile_menu %}
+                    <a href="{{ item.url }}" class="btn horizontal-border">
+                        {{ item.label }}
+                    </a>
+                {% endfor %}
+<!--        </div>-->
     {% else %}
-    <div class="login-profile-block">
-
+<!--        <div class="login-profile-block">-->
         <form action="/login/" method="post">
             {% csrf_token %} {{ form.username }} {{ form.password }}
             <input class="header-link" type="submit" value="Войти">
         </form>
-    </div>
-    <button class="header-link" id="reg_btn">Регистрация</button> {% endif %}
+<!--        </div>-->
+        <button class="header-link" id="reg_btn">Регистрация</button>
+    {% endif %}
 </div>
 <div class="block hidden-top" id="reg_block">
     <h2>Регистрация</h2>

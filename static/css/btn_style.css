@@ -19,8 +19,8 @@
   color: #000;
   text-transform: capitalize;
   z-index: 1;
-  margin: 5px 25px;
-  padding: 20px 25px;
+  margin: 5px 15px;
+  padding: 10px 15px;
   border-radius: 3px;
   position: relative;
   transition: 0.2s ease-out;
