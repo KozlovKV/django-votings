@@ -2,9 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-# Create your models here.
-
-
 class Votings(models.Model):
     Title = models.CharField(max_length=256)
     Image = models.FileField()  # ImageField()
@@ -44,3 +41,11 @@ class Votings(models.Model):
     ]
     Type = models.IntegerField(default=0, choices=VOTING_TYPE)
     Votes = models.IntegerField()
+
+
+class VoteVariants(models.Model):
+    ID_voting = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
+    Serial_number = models.IntegerField()
+    Description = models.TextField()
+    Counts_of_votes = models.IntegerField()
+
