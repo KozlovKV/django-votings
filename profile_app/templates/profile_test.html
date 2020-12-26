@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <title>TEST</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
-    </head>
-    <body>
-        {% include 'menu.html' %}
-        <h1 class="test">Тестовая страница приложения профиля</h1>
-    </body>
-</html>
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Профиль</title>
+{% endblock %}
+
+{% block body %}
+    <h1 class="test">Тестовая страница приложения профиля</h1>
+{% endblock %}

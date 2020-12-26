@@ -7,12 +7,9 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
     </head>
     <body>
-        <h1>При вводе входе возникла ошибка</h1>
+        {% include 'menu.html' %}
+        <h1>При входе произошла ошибка!</h1>
+            {{ form.errors }}
         <h2>Повторите попытку</h2>
-        <form action="/login/" method="post">
-            {% csrf_token %}
-            {{ form }}
-            <input type="submit" value="Авторизоваться">
-        </form>
     </body>
 </html>
