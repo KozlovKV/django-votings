@@ -7,7 +7,7 @@
         <img src="{% static 'menu_app/logo.png' %}" alt="logo">
     </a>
     {% for item in menu %}
-        <a href="{{ item.url }}" class="btn horizontal-border">
+        <a href="{{ item.url }}" class="anim-btn horizontal-border">
             {{ item.label }}
         </a>
     {% endfor %}
@@ -15,7 +15,7 @@
         <div class="login-profile-block">
 <!--                <span>Пользователь: {{ request.user }}</span>-->
             {% for item in profile_menu %}
-                <a href="{{ item.url }}" class="btn horizontal-border">
+                <a href="{{ item.url }}" class="anim-btn horizontal-border">
                     {{ item.label }}
                 </a>
             {% endfor %}
@@ -24,9 +24,9 @@
         <div class="login-profile-block">
             <form action="/login/" method="post">
                 {% csrf_token %} {{ form.username }} {{ form.password }}
-                <input class="simple-btn" type="submit" value="Войти">
+                <input class="simple-btn green" type="submit" value="Войти">
             </form>
-            <button class="simple-btn" id="reg_btn">Регистрация</button>
+            <button class="simple-btn yellow" id="reg_btn">Регистрация</button>
         </div>
     {% endif %}
 </div>
@@ -35,10 +35,7 @@
 </div>
 <div id="window_bg" class="window-around-bg"></div>
 <script>
-    usr_input = document.getElementById('id_username');
-    pswd_input = document.getElementById('id_password');
-    usr_input.placeholder = 'Логин'
-    pswd_input.placeholder = 'Пароль'
+
 
     reg_btn = document.getElementById('reg_btn');
     reg_block = document.getElementById('reg_block');
