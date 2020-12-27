@@ -13,13 +13,15 @@
         {% block header %}
         {% endblock %}
     </header>
-    <main class="content-block">
+    <main class="main-content">
         {% block main %}
         {% endblock %}
     </main>
     <footer>
         {% block footer %}
         {% endblock %}
+        {% include 'footer.html' %}
     </footer>
+
 </body>
 </html>
