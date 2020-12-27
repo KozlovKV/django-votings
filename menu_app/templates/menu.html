@@ -23,7 +23,7 @@
     {% else %}
         <div class="login-profile-block">
             <form action="/login/" method="post">
-                {% csrf_token %} {{ form.username }} {{ form.password }}
+                {% csrf_token %} {{ login_form.username }} {{ login_form.password }}
                 <input class="simple-btn green" type="submit" value="Войти">
             </form>
             <button class="simple-btn yellow" id="reg_btn">Регистрация</button>
@@ -43,7 +43,6 @@
     </form>
 </div>
 <script>
-
     usr_input = document.getElementById('id_username');
     email_input = document.getElementById('id_email');
     pswd1_input = document.getElementById('id_password1');
