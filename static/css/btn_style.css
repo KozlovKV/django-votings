@@ -1,13 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa&family=Jura:wght@700&family=Roboto:wght@500&display=swap');
 
-*,
 *:before,
 *:after {
   box-sizing: border-box;
-  transition: 0.5s ease-in-out;
+  transition: 0.2s ease-in-out;
 }
 
-.btn {
+.anim-btn {
   text-align: center;
   text-decoration: none;
 
@@ -20,14 +19,14 @@
   text-transform: capitalize;
   z-index: 1;
   margin: 5px 15px;
-  padding: 20px 15px;
+  padding: 10px 15px;
   border-radius: 3px;
   position: relative;
-  transition: 1s ease-out;
+  transition: 0.2s ease-out;
 }
 
 .horizontal-border:before {
-  transition: 0.5s;
+  transition: 0.2s;
   z-index: -1;
 }
 .horizontal-border:hover {
@@ -41,6 +40,7 @@
 .horizontal-border {
   border: none;
 }
+
 .horizontal-border:before {
   content: '';
   display: block;
@@ -52,6 +52,7 @@
   background: #000;
   transform: translateX(100%);
 }
+
 .horizontal-border:after {
   content: '';
   display: block;
@@ -63,10 +64,80 @@
   background: #000;
   transform: translateX(-100%);
 }
+
 .horizontal-border:hover {
   letter-spacing: 2px;
   color: #000;
 }
+
 .horizontal-border:hover:before, .horizontal-border:hover:after {
   transform: translateX(0%);
+}
+
+.simple-btn {
+    display: inline-block;
+    cursor: pointer;
+    padding: 5px;
+    margin: 10px;
+    border: 2px solid black;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-family: Jura;
+    background-color: #eee;
+}
+
+.simple-btn:hover {
+    background-color: #ccc;
+}
+
+.simple-btn:active {
+    background-color: #aaa;
+}
+
+.red {
+    background-color: #D55;
+}
+
+.red:hover {
+    background-color: #B44;
+}
+
+.red:active {
+    background-color: #933;
+}
+
+.green {
+    background-color: #5D5;
+}
+
+.green:hover {
+    background-color: #4B4;
+}
+
+.green:active {
+    background-color: #393;
+}
+
+.blue {
+    background-color: #55D;
+}
+
+.blue:hover {
+    background-color: #44B;
+}
+
+.blue:active {
+    background-color: #339;
+}
+
+.yellow {
+    background-color: #DD5;
+}
+
+.yellow:hover {
+    background-color: #BB4;
+}
+
+.yellow:active {
+    background-color: #993;
 }

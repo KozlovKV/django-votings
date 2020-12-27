@@ -5,8 +5,8 @@ from django.shortcuts import render
 import django.contrib.auth.forms as auth_forms
 import django_registration.forms as reg_forms
 
-# Create your views here.
 from django_registration.views import RegistrationView
+# from menu_app.forms import AuthWithPlHolders
 
 
 def get_menu_context(request):
@@ -16,15 +16,15 @@ def get_menu_context(request):
     ]
     if request.user.is_authenticated:
         menu_context.append({'url': '/report/test/', 'label': 'Поддержка'})
-    else:
-        menu_context.append({'url': '/account/register', 'label': 'Регистрация'})
+    # else:
+    #     menu_context.append({'url': '/account/register', 'label': 'Регистрация'})
     return menu_context
 
 
 def get_profile_menu_context(request):
     if request.user.is_authenticated:
         profile_menu_context = [
-            {'url': '/profile/test/', 'label': 'Профиль'},
+            {'url': '/profile/test/', 'label': request.user},
             {'url': '/logout/', 'label': 'Выход'}
         ]
     else:
