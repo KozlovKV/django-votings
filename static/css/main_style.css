@@ -46,22 +46,3 @@ h2 {
 .hidden-right {
     transform: translateX(1000px);
 }
-
-.simple-btn {
-    display: inline-block;
-    padding: 5px;
-    margin: 10px;
-    border: 2px solid black;
-    border-radius: 5px;
-    font-size: 1.1rem;
-    font-family: Jura;
-    background-color: #eee;
-}
-
-.simple-btn:hover {
-    background-color: #ccc;
-}
-
-.simple-btn:active {
-    background-color: #aaa;
-}
