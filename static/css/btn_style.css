@@ -29,6 +29,7 @@
   transition: 0.2s;
   z-index: -1;
 }
+
 .horizontal-border:hover {
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
   cursor: pointer;
@@ -76,12 +77,14 @@
 
 .simple-btn {
     display: inline-block;
+    text-decoration: none;
     cursor: pointer;
     padding: 5px;
     margin: 10px;
     border: 2px solid black;
     border-radius: 5px;
     font-size: 1.1rem;
+    color: black;
     font-family: Jura;
     background-color: #eee;
 }
@@ -119,15 +122,15 @@
 }
 
 .blue {
-    background-color: #55D;
+    background-color: #9BF;
 }
 
 .blue:hover {
-    background-color: #44B;
+    background-color: #8AD;
 }
 
 .blue:active {
-    background-color: #339;
+    background-color: #79B;
 }
 
 .yellow {
