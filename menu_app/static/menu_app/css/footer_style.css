@@ -1,0 +1,17 @@
+.footer-block {
+    position: relative;
+    left: -8px;
+    bottom: -8px;
+    padding: 20px;
+    width: 100%;
+    height: 60px;
+    background-color: #888;
+}
+
+.footer-block p {
+    margin: 5px;
+}
+
+.footer-block a {
+    color: black;
+}

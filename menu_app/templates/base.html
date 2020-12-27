@@ -8,8 +8,18 @@
     {% endblock %}
 </head>
 <body>
-    {% include 'menu.html' %}
-    {% block body %}
-    {% endblock %}
+    <header>
+        {% include 'menu.html' %}
+        {% block header %}
+        {% endblock %}
+    </header>
+    <main class="content-block">
+        {% block main %}
+        {% endblock %}
+    </main>
+    <footer>
+        {% block footer %}
+        {% endblock %}
+    </footer>
 </body>
 </html>

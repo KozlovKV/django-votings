@@ -9,10 +9,14 @@
 
 body {
     padding: 0;
-    padding: 6% 20%;
+    padding-top: 4%;
     height: 100%;
-    font-size: 1.2rem;
     font-family: Roboto;
+}
+
+.content-block {
+    margin: 0 20%;
+    font-size: 1.2rem;
 }
 
 h1,
@@ -43,12 +47,21 @@ h2 {
     transform: translateX(1000px);
 }
 
-button {
+.simple-btn {
     display: inline-block;
+    padding: 5px;
+    margin: 10px;
     border: 2px solid black;
     border-radius: 5px;
     font-size: 1.1rem;
-    padding: 5px;
-    margin: 10px;
     font-family: Jura;
+    background-color: #eee;
+}
+
+.simple-btn:hover {
+    background-color: #ccc;
+}
+
+.simple-btn:active {
+    background-color: #aaa;
 }

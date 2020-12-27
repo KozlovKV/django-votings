@@ -10,6 +10,7 @@
     height: 8%;
     background-color: #AAA;
     font-size: 1.3rem;
+    font-weight: 900;
     font-family: Jura;
 }
 
@@ -51,8 +52,11 @@
     justify-content: center;
 }
 
-.login-profile-block label {
-    display: none;
+.login-profile-block {
+    display: flex;
+    justify-content: space;
+    position: absolute;
+    right: 5px;
 }
 
 input {
