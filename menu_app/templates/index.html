@@ -24,12 +24,7 @@
         <button class="simple-btn blue" id="red_btn_on_index">Регистрация</button>
     </div>
     <script>
-        reg_btn = document.getElementById('red_btn_on_index');
-        reg_block = document.getElementById('reg_block');
-        bg = document.getElementById('window_bg');
-        reg_btn.addEventListener('click', (e) => {
-            reg_block.classList.toggle('hidden-top');
-            bg.classList.toggle('active-bg')
-        });
+        red_btn_on_index = document.getElementById('red_btn_on_index');
+        red_btn_on_index.addEventListener('click', toggle_reg_form);
     </script>
 {% endblock %}
