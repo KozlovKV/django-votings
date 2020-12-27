@@ -14,3 +14,5 @@ class Reports(models.Model):
     element = models.IntegerField(null=True)  # id модели, соответствующей теме жалобы
     content = models.TextField()
     status = models.IntegerField(choices=STATUSES)
+    create_date = models.DateTimeField(auto_now_add=True)
+    close_date = models.DateTimeField()
