@@ -26,12 +26,13 @@ import report_app.views as report
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', menu.index_page),
-    path('login/', menu.LoginViewDetailed.as_view()),
-    path('logout/', auth_views.LogoutView.as_view()),
+    # path('login/', menu.LoginViewDetailed.as_view()),
+    # path('logout/', auth_views.LogoutView.as_view()),
     path('vote/test/', vote.test_page),
     path('profile/test/', profile.test_page),
     path('report/test/', report.test_page),
 
-    path('account/', include('django_registration.backends.one_step.urls')),
-    # path('register/', menu.RegistrationViewDetailed.as_view()),
+    # path('account/', include('django_registration.backends.one_step.urls')),
+    path('account/', include('django.contrib.auth.urls')),
+    path('account/', include('django_registration.backends.activation.urls')),
 ]

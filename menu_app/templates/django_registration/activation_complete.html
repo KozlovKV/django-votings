@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Успешная активация</title>
+{% endblock %}
+
+{% block main %}
+    <h1>Активация прошла успешно</h1>
+    <h2>Теперь вам доступен весь функционал нашего сайта ;)</h2>
+    <div class="horizontal-centering">
+        <a href="/vote/test/" class="simple-btn yellow">Голосования</a>
+        <a href="/vote/test/" class="simple-btn green">Создать голосование</a>
+        <a href="/profile/test/" class="simple-btn blue">Профиль</a>
+    </div>
+{% endblock %}

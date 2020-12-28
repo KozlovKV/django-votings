@@ -22,7 +22,7 @@
         </div>
     {% else %}
         <div class="login-profile-block">
-            <form action="/login/" method="post">
+            <form action="/account/login/" method="post">
                 {% csrf_token %} {{ login_form.username }} {{ login_form.password }}
                 <input class="simple-btn green" type="submit" value="Войти">
             </form>
@@ -31,27 +31,17 @@
     {% endif %}
 </div>
 {% if not request.user.is_authenticated %}
-<div class="block hidden-top" id="reg_block">
-    <h2>Регистрация</h2>
-    <form action="/account/register/" method="post">
-        {% csrf_token %}
-        {{ reg_form.username }}
-        {{ reg_form.email }}
-        {{ reg_form.password1 }}
-        {{ reg_form.password2 }}
-        <input type="submit" value="Зарегистрироваться" class="simple-btn green">
-    </form>
-</div>
-<script>
-    usr_input = document.getElementById('id_username');
-    email_input = document.getElementById('id_email');
-    pswd1_input = document.getElementById('id_password1');
-    pswd2_input = document.getElementById('id_password2');
-    usr_input.placeholder = 'Логин'
-    email_input.placeholder = 'Электронная почта'
-    pswd1_input.placeholder = 'Пароль'
-    pswd2_input.placeholder = 'Повторите ароль'
-</script>
+    <div class="block hidden-top" id="reg_block">
+        <h2>Регистрация</h2>
+        <form action="/account/register/" method="post">
+            {% csrf_token %}
+            {{ reg_form.username }}
+            {{ reg_form.email }}
+            {{ reg_form.password1 }}
+            {{ reg_form.password2 }}
+            <input type="submit" value="Зарегистрироваться" class="simple-btn green">
+        </form>
+    </div>
 {% endif %}
 <div id="window_bg" class="window-around-bg"></div>
 <script>

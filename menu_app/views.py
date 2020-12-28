@@ -25,7 +25,7 @@ def get_profile_menu_context(request):
     if request.user.is_authenticated:
         profile_menu_context = [
             {'url': '/profile/test/', 'label': request.user},
-            {'url': '/logout/', 'label': 'Выход'}
+            {'url': '/account/logout/', 'label': 'Выход'}
         ]
     else:
         form = auth_forms.AuthenticationForm(request.POST)
