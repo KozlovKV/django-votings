@@ -23,7 +23,9 @@
     {% else %}
         <div class="login-profile-block">
             <form action="/account/login/" method="post">
-                {% csrf_token %} {{ login_form.username }} {{ login_form.password }}
+                {% csrf_token %}
+                {{ login_form.username }}
+                {{ login_form.password }}
                 <input class="simple-btn green" type="submit" value="Войти">
             </form>
             <button class="simple-btn yellow" id="reg_btn">Регистрация</button>
