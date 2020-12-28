@@ -146,5 +146,5 @@ REGISTRATION_OPEN = True
 
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'postmaster@sandboxd3c46c7368ea4602af38a648782ac65c.mailgun.org'
-EMAIL_HOST_PASSWORD = '80fd368da7342615cab16f61d3e9a336-c50a0e68-519a0660'
+EMAIL_HOST_USER = 'postmaster@sandboxcc0c1edf5a144fed8a744c229b140210.mailgun.org'
+EMAIL_HOST_PASSWORD = '41b8fa769abc8101b934584c10270bab-c50a0e68-fb3d0ea6'

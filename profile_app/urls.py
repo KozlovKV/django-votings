@@ -9,10 +9,10 @@ urlpatterns = auth_urls.urlpatterns
 urlpatterns[0] = path('login/', menu.LoginViewDetailed.as_view(), name='login')
 
 reg_patterns = reg_urls.urlpatterns
-reg_patterns[2] = path(
-        "register/",
-        menu.RegistrationViewDetailed.as_view(),
-        name="django_registration_register",
-    )
+# reg_patterns[2] = path(
+#         "register/",
+#         menu.RegistrationViewDetailed.as_view(),
+#         name="django_registration_register",
+#     )
 
 urlpatterns += reg_patterns

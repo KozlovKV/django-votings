@@ -18,7 +18,7 @@ class ModifiedAuthenticationForm(auth_forms.AuthenticationForm):
 
 class ModifiedRegistrationForm(reg_forms.RegistrationFormUniqueEmail):
     username = auth_forms.UsernameField(widget=forms.TextInput(attrs={'placeholder': 'Логин'}))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': 'Электронная почта'}))
+    # email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': 'Электронная почта'}))
     password1 = forms.CharField(
         label='Пароль',
         strip=False,

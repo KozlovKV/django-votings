@@ -40,6 +40,7 @@ def get_full_menu_context(request):
     if not request.user.is_authenticated:
         context['login_form'] = profile_forms.ModifiedAuthenticationForm(request.POST)
         context['reg_form'] = profile_forms.ModifiedRegistrationForm(request.POST)
+        # context['reg_form'] = reg_forms.RegistrationFormUniqueEmail(request.POST)
     return context
 
 
@@ -57,11 +58,13 @@ class LoginViewDetailed(LoginView):
         context['profile_menu'] = get_profile_menu_context(self.request)
         context['login_form'] = profile_forms.ModifiedAuthenticationForm(self.request.POST)
         context['reg_form'] = profile_forms.ModifiedRegistrationForm(self.request.POST)
+        # context['reg_form'] = reg_forms.RegistrationFormUniqueEmail(self.request.POST)
         return context
 
 
 class RegistrationViewDetailed(RegistrationView, ABC):
     form_class = profile_forms.ModifiedRegistrationForm
+    # form_class = reg_forms.RegistrationFormUniqueEmail
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -69,4 +72,5 @@ class RegistrationViewDetailed(RegistrationView, ABC):
         context['profile_menu'] = get_profile_menu_context(self.request)
         context['login_form'] = profile_forms.ModifiedAuthenticationForm(self.request.POST)
         context['reg_form'] = profile_forms.ModifiedRegistrationForm(self.request.POST)
+        # context['reg_form'] = reg_forms.RegistrationFormUniqueEmail(self.request.POST)
         return context
