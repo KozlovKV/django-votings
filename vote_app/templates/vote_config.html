@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Редактирование голосований</title>
+{% endblock %}
+
+{% block main %}
+    <h1 class="test">Создай меня! Я знаю, ты сможешь!</h1>
+    <h2 class="test">Создай меня! Я знаю, ты сможешь!</h2>
+    <h3 class="test">Создай меня! Я знаю, ты сможешь!</h3>
+    <h4 class="test">Создай меня! Я знаю, ты сможешь!</h4>
+    <h5 class="test">Создай меня! Я знаю, ты сможешь!</h5>
+    <h6 class="test">Создай меня! Я знаю, ты сможешь!</h6>
+    <form method="POST">
+            {% csrf_token %}
+        <table>
+            {{ form }}
+        </table>
+        <input type="submit" value="Создать">
+    </form>
+    <p><a href="/vote/test/">К тестовой странице</a> </p>
+{% endblock %}

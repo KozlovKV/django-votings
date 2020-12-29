@@ -31,4 +31,5 @@ urlpatterns = [
     path('vote/test/', vote.test_page),
     path('profile/test/', profile.test_page),
     path('report/test/', report.test_page),
+    path('vote/config/', vote.vote_config_page),
 ]
