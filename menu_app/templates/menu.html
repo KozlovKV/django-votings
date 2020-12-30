@@ -22,28 +22,39 @@
         </div>
     {% else %}
         <div class="login-profile-block">
-            <form action="/login/" method="post">
-                {% csrf_token %} {{ form.username }} {{ form.password }}
+            <form action="/account/login/" method="post">
+                {% csrf_token %}
+                {{ login_form.username }}
+                {{ login_form.password }}
                 <input class="simple-btn green" type="submit" value="Войти">
             </form>
             <button class="simple-btn yellow" id="reg_btn">Регистрация</button>
         </div>
     {% endif %}
 </div>
-<div class="block hidden-top" id="reg_block">
-    <h2>Регистрация</h2>
-</div>
+{% if not request.user.is_authenticated %}
+    <div class="block hidden-top" id="reg_block">
+        <h2>Регистрация</h2>
+        <form action="/account/register/" method="post">
+            {% csrf_token %}
+            {{ reg_form.username }}
+            {{ reg_form.email }}
+            {{ reg_form.password1 }}
+            {{ reg_form.password2 }}
+            <input type="submit" value="Зарегистрироваться" class="simple-btn green">
+        </form>
+    </div>
+{% endif %}
 <div id="window_bg" class="window-around-bg"></div>
 <script>
+    let toggle_reg_form = function(e) {
+        reg_block.classList.toggle('hidden-top');
+        bg.classList.toggle('active-bg')
+    }
+
     reg_btn = document.getElementById('reg_btn');
     reg_block = document.getElementById('reg_block');
     bg = document.getElementById('window_bg');
-    reg_btn.addEventListener('click', (e) => {
-        reg_block.classList.toggle('hidden-top');
-        bg.classList.toggle('active-bg')
-    });
-    bg.addEventListener('click', (e) => {
-        reg_block.classList.toggle('hidden-top');
-        bg.classList.toggle('active-bg')
-    });
+    reg_btn.addEventListener('click', toggle_reg_form);
+    bg.addEventListener('click', toggle_reg_form);
 </script>

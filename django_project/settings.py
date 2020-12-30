@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django_registration',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -133,7 +134,17 @@ STATICFILES_DIRS = [
 ]
 
 
-LOGIN_URL = '/login/'
-LOGOUT_URL = '/logout/'
+LOGIN_URL = '/account/login/'
+LOGOUT_URL = '/account/logout/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+
+ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_OPEN = True
+
+
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'postmaster@sandboxcc0c1edf5a144fed8a744c229b140210.mailgun.org'
+EMAIL_HOST_PASSWORD = '41b8fa769abc8101b934584c10270bab-c50a0e68-fb3d0ea6'

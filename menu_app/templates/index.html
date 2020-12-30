@@ -1,35 +1,50 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block head %}
     <title>Главная</title>
-    <style>
-        .horizontal-centering .simple-btn {
-            font-size: 1.6rem;
-            padding: 10px;
-            border-radius: 10px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'menu_app/css/index_style.css' %}">
 {% endblock %}
 
 {% block main %}
-    <h1>Проект “Своё мнение”</h1>
+    <h1>Проект ''Своё мнение''</h1>
     <h2>Здесь каждый голос действительно важен</h2>
     <p>
         На нашем сайте у вас есть возможность принимать участие уже существующих голосованиях и создавать новые.
         Зарегистрировавшись, вы получите возможность просматривать всю свою прошлую активность и принимать участие
         в голосваниях, требующих авторизации на сайте.
     </p>
+    <h2>Отзывы</h2>
+    <div class="horizontal-centering">
+        <div class="block feedback">
+            <h3>10 из 10</h3>
+            <img src="https://i.ytimg.com/vi/JjMV29bmKZs/maxresdefault.jpg">
+            <blockquote>"Нет! 12/10! Просто на кончиках пальцев. Бест оф зе бест голосовалка!!!"</blockquote>
+            <p>Владыка верхнего интернета</p>
+        </div>
+        <div class="block feedback">
+            <h3>Мяу!</h3>
+            <img src="https://www.ponedelnikmag.com/users/16692/masteram_pera/01.gif">
+            <blockquote>"М-р-р-р-р-р-р-р-р-р-р-р-р-р-р-р-р-р-р ^ↀᴥↀ^"</blockquote>
+            <p>Кот</p>
+        </div>
+        <div class="block feedback">
+            <h3>Матан вас разоблачил</h3>
+            <img src="https://pbs.twimg.com/media/EcB2RSKWsAcZmfw.jpg">
+            <blockquote>"Ну тут как бы всё ясно... ¯\_(ツ)_/¯"</blockquote>
+            <p>Шпилькин</p>
+        </div>
+    </div>
     <div class="horizontal-centering">
         <a href="/vote/test/" class="simple-btn yellow">Голосования</a>
-        <button class="simple-btn blue" id="red_btn_on_index">Регистрация</button>
+        {% if user.is_authenticated %}
+            <a href="/vote/test/" class="simple-btn green">Создать голосование</a>
+        {% else %}
+            <button class="simple-btn blue" id="red_btn_on_index">Регистрация</button>
+        {% endif %}
     </div>
     <script>
-        reg_btn = document.getElementById('red_btn_on_index');
-        reg_block = document.getElementById('reg_block');
-        bg = document.getElementById('window_bg');
-        reg_btn.addEventListener('click', (e) => {
-            reg_block.classList.toggle('hidden-top');
-            bg.classList.toggle('active-bg')
-        });
+        red_btn_on_index = document.getElementById('red_btn_on_index');
+        red_btn_on_index.addEventListener('click', toggle_reg_form);
     </script>
 {% endblock %}

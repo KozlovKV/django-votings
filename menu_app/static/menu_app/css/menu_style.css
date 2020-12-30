@@ -45,8 +45,8 @@ input {
     position: fixed;
     background-color: white;
     text-align: center;
-    width: 400px;
-    left: calc(50% - 200px);
+    width: 600px;
+    left: calc(50% - 300px);
     top: 30%;
 }
 
