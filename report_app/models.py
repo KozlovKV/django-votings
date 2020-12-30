@@ -15,4 +15,4 @@ class Reports(models.Model):
     content = models.TextField()
     status = models.IntegerField(choices=STATUSES)
     create_date = models.DateTimeField(auto_now_add=True)
-    close_date = models.DateTimeField()
+    close_date = models.DateTimeField(null=True)
