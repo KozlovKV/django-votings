@@ -1,5 +1,7 @@
 from django import forms
 
+from vote_app.models import Votings
+
 
 class VoteConfigForm(forms.Form):
     title = forms.CharField(max_length=256, empty_value='Заголовок')
@@ -37,4 +39,29 @@ class VoteConfigForm(forms.Form):
     when_see.label = 'Когда видны результаты?'
     anons_can.label = 'Анонимы могут голосовать'
 
+
+class ModeledVoteConfigForm(forms.ModelForm):
+    class Meta:
+        model = Votings
+        fields = [
+            'Title', 'Image', 'Description',
+            'Type', 'AnonsCanVote',
+            'ResultSeeWho', 'ResultSeeWhen',
+            'EndDate',
+        ]
+        labels = {
+            'Title': 'Заголовок',
+            'Image': 'Картинка',
+            'Description': 'Описание',
+            'Type': 'Тип голосования',
+            'AnonsCanVote': 'Разрешить голосовать анонимам',
+            'ResultSeeWho': 'Кому видны результаты',
+            'ResultSeeWhen': 'Когда видные результаты',
+            'EndDate': 'Дата окончания (пусто - бессрочно)',
+        }
+        widgets = {
+            'Type': forms.RadioSelect,
+            'ResultSeeWho': forms.RadioSelect,
+            'ResultSeeWhen': forms.RadioSelect,
+        }
 

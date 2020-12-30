@@ -26,10 +26,16 @@ import report_app.views as report
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', menu.index_page),
+
     path('login/', menu.LoginViewDetailed.as_view()),
     path('logout/', auth_views.LogoutView.as_view()),
+
     path('vote/test/', vote.test_page),
+    # path('vote/create/', vote.vote_create_page),
+    path('vote/create/', vote.vote_create_page_alt),
+    path('vote/<int:voting_id>/edit/', vote.vote_edit_page),
+
     path('profile/test/', profile.test_page),
+
     path('report/test/', report.test_page),
-    path('vote/config/', vote.vote_config_page),
 ]
