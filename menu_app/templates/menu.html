@@ -26,9 +26,9 @@
                 {% csrf_token %}
                 {{ login_form.username }}
                 {{ login_form.password }}
-                <input class="simple-btn green" type="submit" value="Войти">
+                <input class="small-btn green" type="submit" value="Войти">
             </form>
-            <button class="simple-btn yellow" id="reg_btn">Регистрация</button>
+            <button class="small-btn yellow" id="reg_btn">Регистрация</button>
         </div>
     {% endif %}
 </div>
@@ -41,7 +41,7 @@
             {{ reg_form.email }}
             {{ reg_form.password1 }}
             {{ reg_form.password2 }}
-            <input type="submit" value="Зарегистрироваться" class="simple-btn green">
+            <input type="submit" value="Зарегистрироваться" class="medium-btn green">
         </form>
     </div>
 {% endif %}

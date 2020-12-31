@@ -75,7 +75,7 @@
   transform: translateX(0%);
 }
 
-.simple-btn {
+.small-btn, .medium-btn, .big-btn {
     display: inline-block;
     text-decoration: none;
     cursor: pointer;
@@ -87,6 +87,18 @@
     color: black;
     font-family: Jura;
     background-color: #eee;
+}
+
+.medium-btn {
+    font-size: 1.4rem;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.big-btn {
+    font-size: 1.7rem;
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .simple-btn:hover {

@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Профиль</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'profile_app/css/profile_style.css' %}">
+{% endblock %}
+
+{% block main %}
+    <h1>Профиль пользователя {{ user }}</h1>
+    <div class="horizontal-centering">
+        <div class="block">
+            <h2>Редактировать данные</h2>
+            Вводите значения только в поля, которые хотите изменить
+            <form method="post" action="/profile/view/">
+                <div class="centering">
+                    <input type="text" placeholder="Фамилия">
+                    <input type="text" placeholder="Имя">
+                    <input type="text" placeholder="Отчество">
+                    <input type="text" placeholder="Логин">
+                    <input type="text" placeholder="Эл. почта">
+                    <div>Описание произошедших ошибок</div>
+                    <input type="submit" value="Изменить" class="medium-btn green">
+                </div>
+            </form>
+        </div>
+        <div class="block">
+            <h2>Актуальные данные</h2>
+            <div>
+                <p>Фамилия</p>
+                <p>Имя</p>
+                <p>Отчество</p>
+            </div>
+            <div>
+                <p>Логин: l000gin</p>
+                <p>E-mail: example@site.z</p>
+            </div>
+            <div>
+                <p>Создано голосований: 1337</p>
+                <p>Отдано голосов: 9999</p>
+            </div>
+        </div>
+    </div>
+    <div class="horizontal-centering">
+        <div class="block">
+            <h2>Изменение пароля</h2>
+            <form method="post" action="/account/password_change/" class="centering">
+                <div class="centering">
+                    <div class="horizontal-centering">
+                        <input type="text" placeholder="Новый пароль">
+                        <input type="text" placeholder="Повторите пароль">
+                    </div>
+                    <input type="submit" value="Изменить" class="medium-btn yellow">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="horizontal-centering">
+        <div class="block">
+            <h2>Созданные голосования</h2>
+            <div class="list-elem">
+                <h4>Заголовок голосования</h4>
+                <div>
+                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                </div>
+            </div>
+            <div class="list-elem">
+                <h4>Заголовок голосования</h4>
+                <div>
+                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                </div>
+            </div>
+            <div class="list-elem">
+                <h4>Заголовок голосования</h4>
+                <div>
+                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                </div>
+            </div>
+        </div>
+        <div class="block">
+            <h2>Участвовал в голсованиях</h2>
+            <div class="list-elem">
+                <div>
+                    <h4>Заголовок голосования</h4>
+                    <p>Выбранный вариант</p>
+                </div>
+                <div>
+                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                </div>
+            </div>
+            <div class="list-elem">
+                <div>
+                    <h4>Заголовок голосования</h4>
+                    <p>Выбранный вариант</p>
+                </div>
+                <div>
+                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                </div>
+            </div>
+            <div class="list-elem">
+                <div>
+                    <h4>Заголовок голосования</h4>
+                    <p>Выбранный вариант</p>
+                </div>
+                <div>
+                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
