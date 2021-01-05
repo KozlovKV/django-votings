@@ -7,23 +7,25 @@
 {% endblock %}
 
 {% block main %}
-    <h1>Профиль пользователя {{ user }}</h1>
+    <h1>Профиль пользователя {{ profile_user }}</h1>
     <div class="horizontal-centering">
-        <div class="block">
-            <h2>Редактировать данные</h2>
-            Вводите значения только в поля, которые хотите изменить
-            <form method="post" action="/profile/view/">
-                <div class="centering">
-                    <input type="text" placeholder="Фамилия">
-                    <input type="text" placeholder="Имя">
-                    <input type="text" placeholder="Отчество">
-                    <input type="text" placeholder="Логин">
-                    <input type="text" placeholder="Эл. почта">
-                    <div>Описание произошедших ошибок</div>
-                    <input type="submit" value="Изменить" class="medium-btn green">
-                </div>
-            </form>
-        </div>
+        {% if profile_user == user %}
+            <div class="block">
+                <h2>Редактировать данные</h2>
+                Вводите значения только в поля, которые хотите изменить
+                <form method="post" action="/profile/view/">
+                    <div class="centering">
+                        <input type="text" placeholder="Фамилия" class="profile-input">
+                        <input type="text" placeholder="Имя" class="profile-input">
+                        <input type="text" placeholder="Отчество" class="profile-input">
+                        <input type="text" placeholder="Логин" class="profile-input">
+                        <input type="text" placeholder="Эл. почта" class="profile-input">
+                        <div  class="profile-input">Описание произошедших ошибок</div>
+                        <input type="submit" value="Изменить" class="medium-btn green profile-input">
+                    </div>
+                </form>
+            </div>
+        {% endif %}
         <div class="block">
             <h2>Актуальные данные</h2>
             <div>
@@ -42,18 +44,20 @@
         </div>
     </div>
     <div class="horizontal-centering">
-        <div class="block">
-            <h2>Изменение пароля</h2>
-            <form method="post" action="/account/password_change/" class="centering">
-                <div class="centering">
-                    <div class="horizontal-centering">
-                        <input type="text" placeholder="Новый пароль">
-                        <input type="text" placeholder="Повторите пароль">
+        {% if profile_user == user %}
+            <div class="block">
+                <h2>Изменение пароля</h2>
+                <form method="post" action="/account/password_change/" class="centering">
+                    <div class="centering">
+                        <div class="horizontal-centering">
+                            <input type="text" placeholder="Новый пароль" class="profile-input">
+                            <input type="text" placeholder="Повторите пароль" class="profile-input">
+                        </div>
+                        <input type="submit" value="Изменить" class="medium-btn yellow profile-input">
                     </div>
-                    <input type="submit" value="Изменить" class="medium-btn yellow">
-                </div>
-            </form>
-        </div>
+                </form>
+            </div>
+        {% endif %}
     </div>
     <div class="horizontal-centering">
         <div class="block">
@@ -77,35 +81,37 @@
                 </div>
             </div>
         </div>
-        <div class="block">
-            <h2>Участвовал в голсованиях</h2>
-            <div class="list-elem">
-                <div>
-                    <h4>Заголовок голосования</h4>
-                    <p>Выбранный вариант</p>
+        {% if profile_user == user %}
+            <div class="block">
+                <h2>Участвовал в голсованиях</h2>
+                <div class="list-elem">
+                    <div>
+                        <h4>Заголовок голосования</h4>
+                        <p>Выбранный вариант</p>
+                    </div>
+                    <div>
+                        <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                    </div>
                 </div>
-                <div>
-                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                <div class="list-elem">
+                    <div>
+                        <h4>Заголовок голосования</h4>
+                        <p>Выбранный вариант</p>
+                    </div>
+                    <div>
+                        <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                    </div>
+                </div>
+                <div class="list-elem">
+                    <div>
+                        <h4>Заголовок голосования</h4>
+                        <p>Выбранный вариант</p>
+                    </div>
+                    <div>
+                        <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                    </div>
                 </div>
             </div>
-            <div class="list-elem">
-                <div>
-                    <h4>Заголовок голосования</h4>
-                    <p>Выбранный вариант</p>
-                </div>
-                <div>
-                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
-                </div>
-            </div>
-            <div class="list-elem">
-                <div>
-                    <h4>Заголовок голосования</h4>
-                    <p>Выбранный вариант</p>
-                </div>
-                <div>
-                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
-                </div>
-            </div>
-        </div>
+        {% endif %}
     </div>
 {% endblock %}
