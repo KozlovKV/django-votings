@@ -37,6 +37,38 @@ h1, h2, h3 {
     flex-wrap: wrap;
 }
 
+.medium-block {
+    width: 42%;
+    margin: 10px;
+    padding: 20px;
+    background-color: #DDD;
+}
+
+.list-elem {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #BBB;
+    border: 2px solid black;
+    border-radius: 20px;
+    margin: 10px 0;
+    padding: 0 10px;
+}
+
+.input {
+    display: inline-block;
+    border: 2px solid black;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    padding: 5px;
+    margin: 5px;
+    font-family: Jura;
+}
+
+.wide {
+    width: 80%;
+}
+
 .hidden-top {
     transform: translateY(-1000px);
 }

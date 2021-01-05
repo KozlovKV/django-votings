@@ -36,7 +36,7 @@ urlpatterns = [
 
     path('moderation/test/', report.test_page),
     path('moderation/manage/', report.test_page),
-    path('moderation/send/', report.test_page),
+    path('moderation/send/', report.send_page),
 
     path('account/', include('profile_app.urls')),
 ]

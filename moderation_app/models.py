@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 
 class Reports(models.Model):
     STATUSES = [
-        (0, 'IN_PROCESS'),
-        (1, 'RESOLVED'),
-        (2, 'REJECTED')
+        (0, 'Обрабатывается'),
+        (1, 'Решена'),
+        (2, 'Отклонена')
     ]
 
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)

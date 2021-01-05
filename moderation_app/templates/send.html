@@ -1,9 +1,45 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>Отправить жалобу</title>
+    <title>Жалобы</title>
 {% endblock %}
 
 {% block main %}
-    <h1>Отправить жалобу</h1>
+    {% if not user.is_authenticated %}
+        <h1>Только авторизованные пользователи могут оставлять жалобы</h1>
+    {% else %}
+        <h1>Страница жалоб</h1>
+        <div class="horizontal-centering">
+            <div class="medium-block">
+                <h2>Отправить жалобу</h2>
+                <form method="post" action="/moderation/send/">
+                    <div class="horizontal-centering">
+                        <label>Тема жалобы</label>
+                        <select class="input wide">
+                          <option>Сложный выбор</option>
+                          <option>Некорректные формуллировки</option>
+                          <option>Автора купил Запад</option>
+                        </select>
+                        <textarea
+                                placeholder="Содержание жалобы (подробное описание значительно повышает шанс на адекватный ответ)"
+                                class="input wide">
+                        </textarea>
+                        <input type="submit" value="Изменить" class="medium-btn green input wide">
+                    </div>
+                </form>
+            </div>
+            <div class="medium-block">
+                <h2>Отправленные жалобы</h2>
+                <div class="list-elem">
+                    <div>Жалоба №1 - решена</div>
+                </div>
+                <div class="list-elem">
+                    <div>Жалоба №13 - отлконена</div>
+                </div>
+                <div class="list-elem">
+                    <div>Жалоба №99 - обрабатывается</div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

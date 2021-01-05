@@ -4,9 +4,9 @@ from django.db import models
 
 class AdditionUserInfo(models.Model):
     RIGHTS = (
-        (0, 'SIMPLE'),
-        (1, 'MODERATOR'),
-        (2, 'ADMIN'),
+        (0, 'Обычный'),
+        (1, 'Модератор'),
+        (2, 'Администратор'),
     )
 
     User_id = models.OneToOneField(to=User, on_delete=models.CASCADE)

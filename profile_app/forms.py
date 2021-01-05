@@ -5,13 +5,19 @@ from django.contrib.auth import password_validation
 
 
 class ModifiedAuthenticationForm(auth_forms.AuthenticationForm):
-    username = auth_forms.UsernameField(widget=forms.TextInput(attrs={'placeholder': 'Логин'}))
+    username = auth_forms.UsernameField(
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Логин',
+            'class': 'input',
+        }
+    ))
     password = forms.CharField(
         label='Пароль',
         strip=False,
         widget=forms.PasswordInput(attrs={
             'autocomplete': 'current-password',
-            'placeholder': 'Пароль'
+            'placeholder': 'Пароль',
+            'class': 'input',
         }),
     )
 
