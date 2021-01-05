@@ -16,7 +16,7 @@ def get_menu_context(request):
         {'url': '/vote/test/', 'label': 'Голосования'},
     ]
     if request.user.is_authenticated:
-        menu_context.append({'url': '/report/test/', 'label': 'Поддержка'})
+        menu_context.append({'url': '/moderation/send/', 'label': 'Поддержка'})
     # else:
     #     menu_context.append({'url': '/account/register', 'label': 'Регистрация'})
     return menu_context

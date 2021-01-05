@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'menu_app',
     'vote_app',
     'profile_app',
-    'report_app',
+    'moderation_app',
 ]
 
 MIDDLEWARE = [
@@ -63,7 +63,7 @@ TEMPLATES = [
             'menu_app/templates',
             'vote_app/templates',
             'profile_app/templates',
-            'report_app/templates',
+            'moderation_app/templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {

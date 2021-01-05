@@ -19,7 +19,7 @@ from django.urls import path, include
 import menu_app.views as menu
 import vote_app.views as vote
 import profile_app.views as profile
-import report_app.views as report
+import moderation_app.views as report
 
 
 urlpatterns = [
@@ -34,7 +34,9 @@ urlpatterns = [
     path('profile/test/', profile.test_page),
     path('profile/view/<int:profile_id>/', profile.view_profile),
 
-    path('report/test/', report.test_page),
+    path('moderation/test/', report.test_page),
+    path('moderation/manage/', report.test_page),
+    path('moderation/send/', report.test_page),
 
     path('account/', include('profile_app.urls')),
 ]
