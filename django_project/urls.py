@@ -29,7 +29,7 @@ urlpatterns = [
     path('vote/test/', vote.test_page),
     # path('vote/create/', vote.vote_create_page),
     path('vote/create/', vote.vote_create_page_alt),
-    path('vote/<int:voting_id>/edit/', vote.vote_edit_page),
+    path('vote/edit/<int:voting_id>/', vote.vote_edit_page),
 
     path('profile/test/', profile.test_page),
     path('profile/view/<int:profile_id>/', profile.view_profile),
