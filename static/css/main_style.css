@@ -24,6 +24,12 @@ h1, h2, h3 {
     text-align: center;
 }
 
+.horizontal-centering {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
 .block {
     border: 3px solid black;
     border-radius: 30px;
@@ -31,17 +37,14 @@ h1, h2, h3 {
     transition: 1s ease-in-out;
 }
 
-.horizontal-centering {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-}
-
 .medium-block {
+    border: 2px solid black;
+    border-radius: 20px;
     width: 42%;
     margin: 10px;
     padding: 20px;
     background-color: #DDD;
+    transition: 1s ease-in-out;
 }
 
 .list-elem {

@@ -23,14 +23,23 @@ class ModifiedAuthenticationForm(auth_forms.AuthenticationForm):
 
 
 class ModifiedRegistrationForm(reg_forms.RegistrationFormUniqueEmail):
-    username = auth_forms.UsernameField(widget=forms.TextInput(attrs={'placeholder': 'Логин'}))
-    # email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': 'Электронная почта'}))
+    username = auth_forms.UsernameField(
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Логин',
+            'class': 'input',
+        }))
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'Электронная почта',
+            'class': 'input',
+        }))
     password1 = forms.CharField(
         label='Пароль',
         strip=False,
         widget=forms.PasswordInput(attrs={
             'autocomplete': 'new-password',
             'placeholder': 'Пароль',
+            'class': 'input',
         }),
         help_text=password_validation.password_validators_help_text_html(),
     )
@@ -39,6 +48,7 @@ class ModifiedRegistrationForm(reg_forms.RegistrationFormUniqueEmail):
         widget=forms.PasswordInput(attrs={
             'autocomplete': 'new-password',
             'placeholder': 'Подтвердите пароль',
+            'class': 'input',
         }),
         strip=False,
         help_text="Enter the same password as before, for verification.",

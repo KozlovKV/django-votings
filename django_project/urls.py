@@ -24,19 +24,19 @@ import moderation_app.views as report
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', menu.index_page),
+    path('', menu.IndexView.as_view()),
 
     path('vote/test/', vote.test_page),
     # path('vote/create/', vote.vote_create_page),
     path('vote/create/', vote.vote_create_page_alt),
     path('vote/edit/<int:voting_id>/', vote.vote_edit_page),
 
-    path('profile/test/', profile.test_page),
-    path('profile/view/<int:profile_id>/', profile.view_profile),
+    path('profile/test/', profile.TestProfileView.as_view()),
+    path('profile/view/<int:profile_id>/', profile.ProfilePageView.as_view()),
 
-    path('moderation/test/', report.test_page),
-    path('moderation/manage/', report.test_page),
-    path('moderation/send/', report.send_page),
+    path('moderation/test/', report.TestModerView.as_view()),
+    path('moderation/manage/', report.TestModerView.as_view()),
+    path('moderation/send/', report.SendReportView.as_view()),
 
     path('account/', include('profile_app.urls')),
 ]

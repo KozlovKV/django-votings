@@ -1,16 +1,10 @@
-from django.shortcuts import render
-
-# Create your views here.
-from menu_app.views import get_full_menu_context
+from menu_app.view_subclasses import TemplateViewWithMenu
 
 
-def test_page(request):
-    context = get_full_menu_context(request)
-    return render(request, 'report_test.html', context)
+class TestModerView(TemplateViewWithMenu):
+    template_name = 'report_test.html'
 
 
-def send_page(request):
-    context = {}
-    context.update(get_full_menu_context(request))
-    return render(request, 'send.html', context)
+class SendReportView(TemplateViewWithMenu):  # TODO: https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/
+    template_name = 'send.html'
 
