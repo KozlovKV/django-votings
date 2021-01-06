@@ -11,6 +11,8 @@ def test_page(request):
     return render(request, 'vote_test.html', context)
 
 
+# TODO: САМЫЙ ОПТИМАЛЬНЫЙ ВАРИАНТ - https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/
+
 def vote_create_page(request):
     context = {'voting_id': -1}
     vote = VoteConfigForm()

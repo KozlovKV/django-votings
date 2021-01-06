@@ -10,6 +10,14 @@ class TestProfileView(TemplateViewWithMenu):
 class ProfilePageView(TemplateViewWithMenu):
     template_name = 'profile_page.html'
 
+    def get(self, request, *args, **kwargs):
+        """
+            Добавление уникального для GET-запроса контекста в self.extra_context
+            Логика работы с БД
+            Да в общем всё что душе угодно (При ненадобности можно вообще удалить)
+        """
+        return super(ProfilePageView, self).get(self, request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
