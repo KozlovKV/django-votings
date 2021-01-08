@@ -29,4 +29,5 @@ def get_full_menu_context(request):
     if not request.user.is_authenticated:
         context['login_form'] = profile_forms.ModifiedAuthenticationForm(request.POST)
         context['reg_form'] = profile_forms.ModifiedRegistrationForm(request.POST)
+    context['reset_form'] = profile_forms.ModifiedPasswordResetForm(request.POST)
     return context

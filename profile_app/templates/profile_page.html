@@ -42,22 +42,9 @@
             </div>
         </div>
     </div>
-    <div class="horizontal-centering">
-        {% if profile_user == user %}
-            <div class="medium-block">
-                <h2>Изменение пароля</h2>
-                <form method="post" action="/account/password_change/" class="horizontal-centering">
-                    <div class="horizontal-centering">
-                        <div class="horizontal-centering">
-                            <input type="text" placeholder="Новый пароль" class="input wide">
-                            <input type="text" placeholder="Повторите пароль" class="input wide">
-                        </div>
-                        <input type="submit" value="Изменить" class="medium-btn yellow input wide">
-                    </div>
-                </form>
-            </div>
-        {% endif %}
-    </div>
+    {% if profile_user == user %}
+        {% include 'registration/pswd_reset_form_integratable.html' %}
+    {% endif %}
     <div class="horizontal-centering">
         <div class="medium-block">
             <h2>Созданные голосования</h2>

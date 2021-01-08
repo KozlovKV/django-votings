@@ -1,0 +1,10 @@
+<div class="horizontal-centering">
+    <div class="medium-block">
+        <h2>Сброс пароля</h2>
+        <form action="/account/password_reset/" method="post" class="horizontal-centering">
+            {% csrf_token %}
+            {{ reset_form.email }}
+            <input type="submit" value="Отправить письмо" class="medium-btn yellow">
+        </form>
+    </div>
+</div>
