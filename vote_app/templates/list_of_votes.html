@@ -1,0 +1,237 @@
+<!doctype html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Список голосований</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'main_style.css' %}">
+    <style>
+
+        header{
+            width:100%;
+            position: fixed;
+            top:0px;
+            left:0px;
+            background-color: white;
+            z-index: 555;
+        }
+
+        nav{
+            position: relative;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            max-width:100%;
+            min-height: 100px;
+            max-height: 200px;
+        }
+
+        .logo{
+            position: absolute;
+            top: 0;
+            left: 0;
+            text-align: center;
+            width: 100px;
+            height: 100px;
+            border-radius: 5px;
+            background-color: lightgreen;
+        }
+        .logo__name{
+            padding-top: 0;
+            font-weight: bold;
+            font-size: 30px;
+        }
+        .logo__online{
+            width: 70px;
+            border: 1px solid black;
+            border-radius: 40%;
+            margin: 0 auto;
+            margin-top: -25px;
+        }
+
+        .main__header{
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+        .main__header a{
+            padding-left: 50px;
+            text-decoration:none;
+            color: black;
+            font-weight: bold;
+        }
+        .main__header a:hover{
+            color: green;
+        }
+
+        .authorization__header{
+            margin-top: 35px;
+        }
+
+        .authorization__header a{
+            padding-left: 70px;
+            text-decoration: none;
+            color: black;
+            line-height: 50px;
+            font-weight: bold;
+        }
+
+        .authorization__header a:hover{
+            color: green;
+        }
+
+
+        main{
+            margin-top: 200px;
+            margin-left: 110px;
+        }
+
+        button{
+            background-color: #239821;
+            border: 2px solid black;
+            border-radius: 5px;
+            width: 335px;
+            height: 64px;
+            font-size: 24px;
+        }
+
+        section{
+            position: relative;
+            max-width: 1329px;
+            min-height: 367px;
+            background-color: #dddddd;
+            border: 2px solid black;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        h3{
+            text-align: center;
+        }
+
+        .question{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .question__text{
+            margin-left: 20px;
+        }
+        .question__img{
+            width: 596px;
+            min-height: 193px;
+            background-color: white;
+            margin: 30px;
+            border-radius: 5px;
+            color: #717171;
+            text-align: center;
+        }
+        .question__img p{
+             margin-top: 80px;
+        }
+
+        .klyauza{
+            position: absolute;
+            width: 38px;
+            height: 33px;
+            left: 1336px;
+            top: 347px;
+            background: url(klyauza.png);
+            }
+
+
+        footer{
+            background-color: #c4c4c4;
+            max-height: 147px;
+            padding: 20px 30px;
+            margin: 50px 0 0 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <p class="logo__name">SV-1</p>
+                <p class="logo__online">online</p>
+            </div>
+            <div class="main__header">
+                <a href="#">Главная</a>
+                <a href="#">Голосования</a>
+            </div>
+            <div class="authorization__header">
+                <a href="#">Вход</a>
+                <a href="#">Регистрация</a>
+                <a href="#">Поддержка</a>
+                <a href="#">Профиль</a>
+                <a href="#">Выйти</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <button>Создать голосование</button>
+        <section>
+            <h3>Заголовок голосования</h3>
+            <img src="#" alt="">
+            <div class="question">
+                <div class="question__text">
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                </div>
+                <div class="question__img">
+                    <p>Область для картинки</p>
+                </div>
+            </div>
+            <div class="klyauza"></div>
+        </section>
+         <section>
+            <h3>Заголовок голосования</h3>
+            <img src="#" alt="">
+            <div class="question">
+                <div class="question__text">
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                </div>
+                <div class="question__img">
+                    <p>Область для картинки</p>
+                </div>
+            </div>
+             <div class="klyauza"></div>
+        </section>
+         <section>
+            <h3>Заголовок голосования</h3>
+            <img src="#" alt="">
+            <div class="question">
+                <div class="question__text">
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                    <p>Суть выносимого на голосование вопроса.</p>
+                </div>
+                <div class="question__img">
+                    <p>Область для картинки</p>
+                </div>
+            </div>
+             <div class="klyauza"></div>
+        </section>
+    </main>
+
+    <footer>
+        <address>(C)2020-2021. Первая подгруппа четвёртой группы онлайн-отделения ШП (online.informatics.ru)<br>
+Gitlab-репозиторий проекта - https://gitlab.informatics.ru/2020-2021/online/s101/group-04/simple-votings-1/simple-votings-1</address>
+    </footer>
+</body>
+</html>

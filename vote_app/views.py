@@ -10,6 +10,8 @@ def test_page(request):
     context = get_full_menu_context(request)
     return render(request, 'vote_test.html', context)
 
+def list_of_votes(request):
+    return render(request, 'list_of_votes.html')
 
 # TODO: САМЫЙ ОПТИМАЛЬНЫЙ ВАРИАНТ - https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/
 
