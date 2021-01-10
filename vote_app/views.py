@@ -4,6 +4,7 @@ from vote_app.forms import VoteConfigForm, ModeledVoteConfigForm
 
 # Create your views here.
 from vote_app.models import Votings
+from vote_app.models import VoteVariants
 
 
 def test_page(request):
@@ -86,3 +87,17 @@ def vote_create_page_alt(request):
     # context.update({'history': Votings.objects.all()})
     return render(request, 'vote_config.html', context)
 
+
+def get_variants_context(id, request):
+    res = []
+    vote_variants = VoteVariants.objects.filter(ID_voting=id)
+    voting = Votings.get(pk=id)
+    for variant in vote_variants:
+        variant_dict = {'serial_number': VoteVariants.Serial_number,
+                        'description': VoteVariants.Description,
+                        'votes_count': VoteVariants.Counts_of_votes,
+                        'percent': (VoteVariants.Counts_of_votes*100)/voting.Votes,
+                        }
+        res.append(variant_dict)
+    res.sort(key=lambda x: x['serial_number'])
+    return res
