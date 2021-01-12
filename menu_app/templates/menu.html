@@ -2,9 +2,13 @@
 <!--<link rel="stylesheet" type="text/css" href="{% static 'css/border_animation.css' %}">-->
 <link rel="stylesheet" type="text/css" href="{% static 'css/btn_style.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'menu_app/css/menu_style.css' %}">
-<div class="menu">
+<nav class="menu">
+<!--    <a href="/" class="logo">-->
+<!--        <img src="{% static 'menu_app/logo.png' %}" alt="logo">-->
+<!--    </a>-->
     <a href="/" class="logo">
-        <img src="{% static 'menu_app/logo.png' %}" alt="logo">
+        <div class="logo__name">SV-1</div>
+        <div class="logo__online">Online-4</div>
     </a>
     {% for item in menu %}
         <a href="{{ item.url }}" class="anim-btn horizontal-border">
@@ -13,7 +17,6 @@
     {% endfor %}
     {% if request.user.is_authenticated %}
         <div class="login-profile-block">
-<!--                <span>Пользователь: {{ request.user }}</span>-->
             {% for item in profile_menu %}
                 <a href="{{ item.url }}" class="anim-btn horizontal-border">
                     {{ item.label }}
@@ -31,7 +34,7 @@
             <button class="small-btn yellow" id="reg_btn">Регистрация</button>
         </div>
     {% endif %}
-</div>
+</nav>
 {% if not request.user.is_authenticated %}
     <div class="block hidden-top" id="reg_block">
         <h2>Регистрация</h2>
@@ -49,10 +52,6 @@
 <script>
     let toggle_reg_form = function(e) {
         reg_block.classList.toggle('hidden-top');
-        bg.classList.toggle('active-bg')
-    }
-    let toggle_reset_form = function(e) {
-        reset_block.classList.toggle('hidden-top');
         bg.classList.toggle('active-bg')
     }
 

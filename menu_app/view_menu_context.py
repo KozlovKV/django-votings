@@ -4,7 +4,7 @@ import profile_app.forms as profile_forms
 def get_menu_context(request):
     menu_context = [
         {'url': '/', 'label': 'Главная'},
-        {'url': '/vote/test/', 'label': 'Голосования'},
+        {'url': '/vote/list/', 'label': 'Голосования'},
     ]
     if request.user.is_authenticated:
         menu_context.append({'url': '/moderation/send/', 'label': 'Поддержка'})

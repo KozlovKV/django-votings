@@ -101,11 +101,11 @@
     border-radius: 10px;
 }
 
-.simple-btn:hover {
+.small-btn:hover, .medium-btn:hover, .big-btn:hover {
     background-color: #ccc;
 }
 
-.simple-btn:active {
+.small-btn:active, .medium-btn:active, .big-btn:active {
     background-color: #aaa;
 }
 
