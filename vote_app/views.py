@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from menu_app.views import get_full_menu_context
+from menu_app.view_menu_context import get_full_menu_context
+from menu_app.view_subclasses import TemplateViewWithMenu
 from vote_app.forms import VoteConfigForm, ModeledVoteConfigForm
 
 # Create your views here.
@@ -11,6 +12,9 @@ def test_page(request):
     context = get_full_menu_context(request)
     return render(request, 'vote_test.html', context)
 
+
+class VoteListPageView(TemplateViewWithMenu):
+    template_name = 'vote_list.html'
 
 # TODO: САМЫЙ ОПТИМАЛЬНЫЙ ВАРИАНТ - https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/
 

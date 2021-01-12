@@ -1,15 +1,24 @@
+from django.contrib.auth import views
 from django.urls import path
 
-import django_registration.backends.activation.urls as reg_urls
-import django.contrib.auth.urls as auth_urls
-
-import django_registration.backends.activation.views as reg_act_views
 import profile_app.view_subclasses as reg_subclasses
 import menu_app.view_subclasses as menu_subclasses
 
 
-urlpatterns = auth_urls.urlpatterns
-urlpatterns[0] = path('login/', reg_subclasses.LoginViewDetailed.as_view(), name='login')
+urlpatterns = [
+    path('login/', reg_subclasses.LoginViewDetailed.as_view(), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
+
+    # path('password_change/', views.PasswordChangeView.as_view(), name='password_change'),
+    # path('password_change/done/', views.PasswordChangeDoneView.as_view(), name='password_change_done'),
+
+    path('password_reset/', reg_subclasses.PasswordResetViewDetailed.as_view(), name='password_reset'),
+    path('password_reset/done/', menu_subclasses.TemplateViewWithMenu.as_view(
+        template_name='registration/password_reset_done.html'), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', reg_subclasses.PasswordResetConfirmViewDetailed.as_view(),
+         name='password_reset_confirm'),
+    path('reset/done/', menu_subclasses.TemplateViewWithMenu.as_view(
+        template_name='registration/password_reset_complete.html'), name='password_reset_complete'),]
 
 reg_patterns = [
     path(
