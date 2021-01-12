@@ -18,6 +18,7 @@ class VoteListPageView(TemplateViewWithMenu):
 
 # TODO: САМЫЙ ОПТИМАЛЬНЫЙ ВАРИАНТ - https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/
 
+
 def vote_create_page(request):
     context = {'voting_id': -1}
     vote = VoteConfigForm()
@@ -92,15 +93,15 @@ def vote_create_page_alt(request):
     return render(request, 'vote_config.html', context)
 
 
-def get_variants_context(id, request):
+def get_variants_context(voting_id, request):
     res = []
-    vote_variants = VoteVariants.objects.filter(ID_voting=id)
-    voting = Votings.get(pk=id)
+    vote_variants = VoteVariants.objects.filter(ID_voting=voting_id)
+    voting = Votings.get(pk=voting_id)
     for variant in vote_variants:
-        variant_dict = {'serial_number': VoteVariants.Serial_number,
-                        'description': VoteVariants.Description,
-                        'votes_count': VoteVariants.Counts_of_votes,
-                        'percent': (VoteVariants.Counts_of_votes*100)/voting.Votes,
+        variant_dict = {'serial_number': variant.Serial_number,
+                        'description': variant.Description,
+                        'votes_count': variant.Counts_of_votes,
+                        'percent': (variant.Counts_of_votes*100)/voting.Votes,
                         }
         res.append(variant_dict)
     res.sort(key=lambda x: x['serial_number'])
