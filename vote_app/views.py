@@ -16,9 +16,8 @@ def test_page(request):
 class VoteListPageView(TemplateViewWithMenu):
     template_name = 'vote_list.html'
 
+
 # TODO: САМЫЙ ОПТИМАЛЬНЫЙ ВАРИАНТ - https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/
-
-
 def vote_create_page(request):
     context = {'voting_id': -1}
     vote = VoteConfigForm()

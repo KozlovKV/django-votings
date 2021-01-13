@@ -41,5 +41,8 @@
                 </div>
             </div>
         </div>
+        {% if rights != 0 %}
+            <a href="/moderation/manege/" class="big-btn blue">Панель модератора</a>
+        {% endif %}
     {% endif %}
 {% endblock %}

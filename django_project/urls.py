@@ -35,9 +35,12 @@ urlpatterns = [
     path('profile/test/', profile.TestProfileView.as_view()),
     path('profile/view/<int:profile_id>/', profile.ProfilePageView.as_view()),
 
-    path('moderation/test/', report.TestModerView.as_view()),
-    path('moderation/manage/', report.TestModerView.as_view()),
-    path('moderation/send/', report.SendReportView.as_view()),
-
     path('account/', include('profile_app.urls')),
+
+    path('moderation/test/', report.TestModerView.as_view()),
+    path('moderation/send/', report.SendReportView.as_view()),
+    path('moderation/manage/', report.ModerationPanelView.as_view()),
+    path('moderation/manage/reports/list/', report.TestModerView.as_view()),
+    path('moderation/manage/change_request/list/', report.TestModerView.as_view()),
+
 ]
