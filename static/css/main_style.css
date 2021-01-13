@@ -85,6 +85,16 @@ h1, h2, h3 {
     width: 80%;
 }
 
+.center {
+    text-align: center;
+}
+
+.meta-data {
+    text-align: right;
+    font-family: jura;
+    font-size: 1rem;
+}
+
 .hidden-top {
     transform: translateY(-1000px);
 }

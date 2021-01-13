@@ -1,41 +1,36 @@
-{% extends 'base.html' %}
+{% extends 'moder_base.html' %}
 {% load static %}
 
 {% block head %}
     <title>Панель модератора</title>
 {% endblock %}
 
-{% block main %}
-    {% if rights != 0 %}
-        <h1>Панель модератора</h1>
-        <div class="horizontal-centering">
-            <div class="medium-block">
-                <h2>Жалобы</h2>
-                <div>
-                    <p>Количество: 668</p>
-                </div>
-                <div>
-                    <p>Обработано: 667</p>
-                    <p>Решено: 666</p>
-                    <p>Отклонено: 1</p>
-                </div>
-                <a href="/moderation/manage/reports/" class="big-btn blue">К списку</a>
+{% block for_moder %}
+    <h1>Панель модератора</h1>
+    <div class="horizontal-centering">
+        <div class="medium-block">
+            <h2>Жалобы</h2>
+            <div>
+                <p>Количество: 668</p>
             </div>
-            <div class="medium-block">
-                <h2>Запросы на редактирование</h2>
-                <div>
-                    <p>Количество: 1337</p>
-                </div>
-                <div>
-                    <p>Обработано: 1000</p>
-                    <p>Решено: 999</p>
-                    <p>Отклонено: 1</p>
-                </div>
-                <a href="/moderation/manage/change_request/" class="big-btn blue">К списку</a>
+            <div>
+                <p>Обработано: 667</p>
+                <p>Решено: 666</p>
+                <p>Отклонено: 1</p>
             </div>
+            <a href="/moderation/manage/reports/list/" class="big-btn blue">К списку</a>
         </div>
-    {% else %}
-        <h1>Вам отказано в доступе на эту страницу</h1>
-    {% endif %}
-    <a href="/" class="big-btn yellow">На главную</a>
+        <div class="medium-block">
+            <h2>Запросы на редактирование</h2>
+            <div>
+                <p>Количество: 1337</p>
+            </div>
+            <div>
+                <p>Обработано: 1000</p>
+                <p>Решено: 999</p>
+                <p>Отклонено: 1</p>
+            </div>
+            <a href="/moderation/manage/change_request/list/" class="big-btn blue">К списку</a>
+        </div>
+    </div>
 {% endblock %}

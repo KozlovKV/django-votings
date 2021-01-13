@@ -40,7 +40,10 @@ urlpatterns = [
     path('moderation/test/', report.TestModerView.as_view()),
     path('moderation/send/', report.SendReportView.as_view()),
     path('moderation/manage/', report.ModerationPanelView.as_view()),
-    path('moderation/manage/reports/list/', report.TestModerView.as_view()),
-    path('moderation/manage/change_request/list/', report.TestModerView.as_view()),
+    path('moderation/manage/reports/list/', report.ReportsListView.as_view()),
+    path('moderation/manage/reports/submit/<int:voting_id>/', report.TestModerView.as_view()),
+    path('moderation/manage/reports/reject/<int:voting_id>/', report.TestModerView.as_view()),
+    path('moderation/manage/change_request/list/', report.ChangeRequestsListView.as_view()),
+    path('moderation/manage/change_request/<int:voting_id>/', report.TestModerView.as_view()),
 
 ]

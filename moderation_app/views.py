@@ -9,6 +9,14 @@ class ModerationPanelView(TemplateViewWithMenu):
     template_name = 'moderation_main.html'
 
 
+class ChangeRequestsListView(TemplateViewWithMenu):
+    template_name = 'change_requests_list.html'
+
+
+class ReportsListView(TemplateViewWithMenu):
+    template_name = 'reports_list.html'
+
+
 class SendReportView(TemplateViewWithMenu):  # TODO: https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/
     template_name = 'send.html'
 
