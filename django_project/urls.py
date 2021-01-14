@@ -45,6 +45,5 @@ urlpatterns = [
     path('moderation/manage/reports/reject/<int:voting_id>/', report.TestModerView.as_view()),
     path('moderation/manage/change_request/list/', report.ChangeRequestsListView.as_view()),
     path('moderation/manage/change_request/<int:voting_id>/', report.ChangeRequestFormView.as_view()),
-    path('moderation/manage/change_request/close/<int:voting_id>/', report.ChangeRequestFormView.as_view()),
 
 ]

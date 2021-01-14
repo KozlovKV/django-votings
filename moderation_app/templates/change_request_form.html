@@ -47,8 +47,8 @@
     </div>
     <div class="block">
         <h2>Действия</h2>
-        <form method="post" action="/moderation/manage/change_request/close/{{ voting_id }}/">
-            {{ csrf_token }}
+        <form method="post" action="/moderation/manage/change_request/{{ voting_id }}/">
+            {% csrf_token %}
             <textarea name="comment" class="input wide" placeholder="Комментарий к решению (необязательно"></textarea>
             <label class="input">
                 Обнулить голоса (только при одобрении)
