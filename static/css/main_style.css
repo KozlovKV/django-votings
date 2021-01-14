@@ -85,6 +85,14 @@ h1, h2, h3 {
     width: 80%;
 }
 
+.medium {
+    width: 42%;
+}
+
+.small {
+    width: 22%;
+}
+
 .center {
     text-align: center;
 }

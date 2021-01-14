@@ -13,6 +13,14 @@ class ChangeRequestsListView(TemplateViewWithMenu):
     template_name = 'change_requests_list.html'
 
 
+class ChangeRequestFormView(TemplateViewWithMenu):
+    template_name = 'change_request_form.html'
+
+    def get(self, request, *args, **kwargs):
+        self.extra_context = kwargs
+        return super(ChangeRequestFormView, self).get(self, request, *args, **kwargs)
+
+
 class ReportsListView(TemplateViewWithMenu):
     template_name = 'reports_list.html'
 
