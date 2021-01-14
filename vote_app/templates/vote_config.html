@@ -16,7 +16,7 @@
         {% if voting_id != -1 %}
             <h2>Страница редактирования голосования номер {{ voting_id }}</h2>
         {% endif %}
-        <form method="POST">
+        <form method="POST" action="/vote/create/view/">
             {% csrf_token %}
             <div class="horizontal-centering">
                 <div class="input">
@@ -61,6 +61,12 @@
             <div class="block">
                 Варианты...
             </div>
+            {% if form.errors %}
+            <div class="block">
+                <h2>Ошибки</h2>
+                {{ form.errors }}
+            </div>
+            {% endif %}
             <input type="submit" value="Сохранить" class="big-btn green">
         </form>
     </div>

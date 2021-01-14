@@ -28,8 +28,8 @@ urlpatterns = [
 
     path('vote/test/', vote.test_page),
     # path('vote/create/', vote.vote_create_page),
-    path('vote/create/', vote.vote_create_page_alt),
-    path('vote/edit/<int:voting_id>/', vote.vote_edit_page),
+    path('vote/create/', vote.CreateVotingView.as_view()),
+    path('vote/edit/<int:voting_id>/', vote.test_page),
     path('vote/list/', vote.VoteListPageView.as_view()),
 
     path('profile/test/', profile.TestProfileView.as_view()),

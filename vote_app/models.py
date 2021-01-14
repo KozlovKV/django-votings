@@ -4,11 +4,11 @@ from django.contrib.auth.models import User
 
 class Votings(models.Model):
     Title = models.CharField(max_length=256)
-    Image = models.ImageField(upload_to='images/')  # FileField()
+    Image = models.ImageField(upload_to='images/', blank=True, null=True)  # FileField()
     Description = models.TextField()
     Author = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True)
     CreationDate = models.DateTimeField(auto_now_add=True)
-    EndDate = models.DateTimeField()
+    EndDate = models.DateTimeField(blank=True, null=True)
     ABSENT = 0
     IN_PROGRESS = 1
     BANNED = 2

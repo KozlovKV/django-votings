@@ -1,4 +1,6 @@
 from django.shortcuts import render
+import django.views.generic.edit as generic_edit
+
 from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
 from vote_app.forms import VoteConfigForm, ModeledVoteConfigForm
@@ -41,55 +43,17 @@ def vote_create_page(request):
     return render(request, 'vote_config.html', context)
 
 
-def vote_edit_page(request, voting_id):
-    context = {'voting_id': voting_id}
+class CreateVotingView(TemplateViewWithMenu, generic_edit.CreateView):
+    template_name = 'vote_config.html'
+    object = None
+    model = Votings
+    form_class = ModeledVoteConfigForm
+    success_url = '/vote/list/'
 
-    # TODO: Тут надо будет выгружать в форму данные из Votings
-    vote = VoteConfigForm()
+    def post(self, request, *args, **kwargs):
+        # TODO: Добавить сохранение вариантов голосования
+        return super(CreateVotingView, self).post(self, request, *args, **kwargs)
 
-    context.update(get_full_menu_context(request))
-    context.update({'form': vote})
-    if request.POST:
-        record = Votings(
-            Title=request.POST.get('title'),
-            Image=request.POST.get('image'),
-            Description=request.POST.get('description'),
-            Author=request.POST.get('user'),
-            ComplaintState=0,
-            ResultSeeWho=request.POST.get('see_who'),
-            ResultSeeWhen=request.POST.get('see_when'),
-            AnonsCanVote=(request.POST.get('anons_can') == 'True'),
-            Type=request.POST.get('type'),
-            Votes=0
-        )
-        record.save()
-    # context.update({'history': Votings.objects.all()})
-    return render(request, 'vote_config.html', context)
-
-
-def vote_create_page_alt(request):
-    context = {'voting_id': -1}
-    vote = ModeledVoteConfigForm()
-    context.update(get_full_menu_context(request))
-    context.update({'form': vote})
-    if request.POST:
-        # TODO: сохранение реализуется очень просто, но это чекни в доках сам
-        pass
-        # record = Votings(
-        #     Title=request.POST.get('title'),
-        #     Image=request.POST.get('image'),
-        #     Description=request.POST.get('description'),
-        #     Author=request.POST.get('user'),
-        #     ComplaintState=0,
-        #     ResultSeeWho=request.POST.get('see_who'),
-        #     ResultSeeWhen=request.POST.get('see_when'),
-        #     AnonsCanVote=(request.POST.get('anons_can') == 'True'),
-        #     Type=request.POST.get('type'),
-        #     Votes=0
-        # )
-        # record.save()
-    # context.update({'history': Votings.objects.all()})
-    return render(request, 'vote_config.html', context)
 
 
 def get_variants_context(voting_id, request):
