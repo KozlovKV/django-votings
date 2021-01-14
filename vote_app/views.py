@@ -55,7 +55,6 @@ class CreateVotingView(TemplateViewWithMenu, generic_edit.CreateView):
         return super(CreateVotingView, self).post(self, request, *args, **kwargs)
 
 
-
 def get_variants_context(voting_id, request):
     res = []
     vote_variants = VoteVariants.objects.filter(ID_voting=voting_id)

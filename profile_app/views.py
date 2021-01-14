@@ -7,7 +7,7 @@ class TestProfileView(TemplateViewWithMenu):
     template_name = 'profile_test.html'
 
 
-class ProfilePageView(TemplateViewWithMenu):
+class ProfilePageView(TemplateViewWithMenu):  # TODO: унаследовать UpdateView - https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/#django.views.generic.edit.UpdateView
     template_name = 'profile_page.html'
 
     def get(self, request, *args, **kwargs):
