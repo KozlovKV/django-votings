@@ -11,24 +11,24 @@
         <div class="medium-block">
             <h2>Жалобы</h2>
             <div>
-                <p>Количество: 668</p>
+                <p>Количество: {{ reports.all }}</p>
             </div>
             <div>
-                <p>Обработано: 667</p>
-                <p>Решено: 666</p>
-                <p>Отклонено: 1</p>
+                <p>Обработано: {{ reports.processed }}</p>
+                <p>Решено: {{ reports.submitted }}</p>
+                <p>Отклонено: {{ reports.rejected }}</p>
             </div>
             <a href="{% url 'moder_reports_list' %}" class="big-btn blue">К списку</a>
         </div>
         <div class="medium-block">
             <h2>Запросы на редактирование</h2>
             <div>
-                <p>Количество: 1337</p>
+                <p>Количество: {{ change_request.all }}</p>
             </div>
             <div>
-                <p>Обработано: 1000</p>
-                <p>Решено: 999</p>
-                <p>Отклонено: 1</p>
+                <p>Обработано: {{ change_request.processed }}</p>
+                <p>Решено: {{ change_request.submitted }}</p>
+                <p>Отклонено: {{ change_request.rejected }}</p>
             </div>
             <a href="{% url 'moder_change_request_list' %}" class="big-btn blue">К списку</a>
         </div>
