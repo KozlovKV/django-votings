@@ -30,7 +30,7 @@ urlpatterns = [
     # path('vote/create/', vote.vote_create_page),
     path('vote/list/', vote.VoteListPageView.as_view(), name='vote_list'),
     path('vote/create/', vote.CreateVotingView.as_view(), name='vote_create'),
-    path('vote/edit/<int:voting_id>/', vote.test_page, name='vote_edit'),
+    path('vote/edit/<int:voting_id>/', vote.EditVotingView.as_view(), name='vote_edit'),
     path('vote/view/<int:voting_id>/', vote.test_page, name='vote_view'),
 
     path('profile/test/', profile.TestProfileView.as_view()),

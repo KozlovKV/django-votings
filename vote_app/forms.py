@@ -40,7 +40,7 @@ class VoteConfigForm(forms.Form):
     anons_can.label = 'Анонимы могут голосовать'
 
 
-class ModeledVoteConfigForm(forms.ModelForm):
+class ModeledVoteCreateForm(forms.ModelForm):
     class Meta:
         model = Votings
         fields = [
@@ -60,8 +60,44 @@ class ModeledVoteConfigForm(forms.ModelForm):
             'EndDate': 'Дата окончания (пусто - бессрочно)',
         }
         widgets = {
+            'Description': forms.Textarea(attrs={
+                'style': 'width: 95%',
+            }),
             'Type': forms.RadioSelect,
             'ResultSeeWho': forms.RadioSelect,
             'ResultSeeWhen': forms.RadioSelect,
         }
 
+
+class ModeledVoteEditForm(forms.ModelForm):
+    comment = forms.CharField(label='Комментарий для модератора',
+                              widget=forms.Textarea(attrs={
+                                  'style': 'width: 95%',
+                              }))
+
+    class Meta:
+        model = Votings
+        fields = [
+            'Title', 'Image', 'Description',
+            'Type', 'AnonsCanVote',
+            'ResultSeeWho', 'ResultSeeWhen',
+            'EndDate',
+        ]
+        labels = {
+            'Title': 'Заголовок',
+            'Image': 'Картинка',
+            'Description': 'Описание',
+            'Type': 'Тип голосования',
+            'AnonsCanVote': 'Разрешить голосовать анонимам',
+            'ResultSeeWho': 'Кому видны результаты',
+            'ResultSeeWhen': 'Когда видные результаты',
+            'EndDate': 'Дата окончания (пусто - бессрочно)',
+        }
+        widgets = {
+            'Description': forms.Textarea(attrs={
+                'style': 'width: 95%',
+            }),
+            'Type': forms.RadioSelect,
+            'ResultSeeWho': forms.RadioSelect,
+            'ResultSeeWhen': forms.RadioSelect,
+        }

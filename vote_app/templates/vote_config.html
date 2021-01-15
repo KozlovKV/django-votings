@@ -16,7 +16,7 @@
         {% if voting_id != -1 %}
             <h2>Страница редактирования голосования номер {{ voting_id }}</h2>
         {% endif %}
-        <form method="POST" action="{% url 'vote_create' %}">
+        <form method="POST" action="{{ context_url }}">
             {% csrf_token %}
             <div class="horizontal-centering">
                 <div class="input">
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="horizontal-centering">
-                <div class="input">
+                <div class="input wide">
                     <label>{{ form.Description.label }}</label><br>
                     {{ form.Description }}
                 </div>
@@ -61,6 +61,12 @@
             <div class="block">
                 Варианты...
             </div>
+            {% if voting_id != -1 %}
+                <div class="block">
+                    <h4>{{ form.comment.label }}</h4>
+                    {{ form.comment }}
+                </div>
+            {% endif %}
             {% if form.errors %}
             <div class="block">
                 <h2>Ошибки</h2>
