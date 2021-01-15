@@ -19,21 +19,21 @@
                 <h4>Заголовок голосования</h4>
                 <span class="meta-data">01.01.0000</span>
                 <div>
-                    <a href="/moderation/manage/change_request/0/" class="medium-btn yellow">Просмотр изменений</a>
+                    <a href="{# url_from_context #}{% url 'moder_change_request_form' 0 %}" class="medium-btn yellow">Просмотр изменений</a>
                 </div>
             </div>
             <div class="list-elem">
                 <h4>Заголовок голосования</h4>
                 <span class="meta-data">01.01.0000</span>
                 <div>
-                    <a href="/moderation/manage/change_request/0/" class="medium-btn yellow">Просмотр изменений</a>
+                    <a href="{# url_from_context #}{% url 'moder_change_request_form' 0 %}" class="medium-btn yellow">Просмотр изменений</a>
                 </div>
             </div>
             <div class="list-elem">
                 <h4>Заголовок голосования</h4>
                 <span class="meta-data">01.01.0000</span>
                 <div>
-                    <a href="/moderation/manage/change_request/0/" class="medium-btn yellow">Просмотр изменений</a>
+                    <a href="{# url_from_context #}{% url 'moder_change_request_form' 0 %}" class="medium-btn yellow">Просмотр изменений</a>
                 </div>
             </div>
         </div>
@@ -41,6 +41,6 @@
 {% endblock %}
 
 {% block moder_bottom %}
-    <a href="/moderation/manage/" class="big-btn blue">Панель модератора</a>
+    <a href="{% url 'moder_manage' %}" class="big-btn blue">Панель модератора</a>
 {% endblock %}
 

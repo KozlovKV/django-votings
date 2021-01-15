@@ -21,8 +21,8 @@
                     <p class="meta-data">01.01.0000</p>
                 </div>
                 <div>
-                    <a href="/moderation/manage/reports/submit/<voting_id>/" class="medium-btn green center wide">Принять</a>
-                    <a href="/moderation/manage/reports/reject/<voting_id>/" class="medium-btn red center wide">Отклонить</a>
+                    <a href="{# url_from_context #}{% url 'moder_report_submit' 0 %}" class="medium-btn green center wide">Принять</a>
+                    <a href="{# url_from_context #}{% url 'moder_report_reject' 0 %}" class="medium-btn red center wide">Отклонить</a>
                 </div>
             </div>
             <div class="list-elem">
@@ -32,8 +32,8 @@
                     <p class="meta-data">01.01.0000</p>
                 </div>
                 <div>
-                    <a href="/moderation/manage/reports/submit/<voting_id>/" class="medium-btn green center wide">Принять</a>
-                    <a href="/moderation/manage/reports/reject/<voting_id>/" class="medium-btn red center wide">Отклонить</a>
+                    <a href="{# url_from_context #}{% url 'moder_report_submit' 0 %}" class="medium-btn green center wide">Принять</a>
+                    <a href="{# url_from_context #}{% url 'moder_report_reject' 0 %}" class="medium-btn red center wide">Отклонить</a>
                 </div>
             </div>
             <div class="list-elem">
@@ -43,8 +43,8 @@
                     <p class="meta-data">01.01.0000</p>
                 </div>
                 <div>
-                    <a href="/moderation/manage/reports/submit/<voting_id>/" class="medium-btn green center wide">Принять</a>
-                    <a href="/moderation/manage/reports/reject/<voting_id>/" class="medium-btn red center wide">Отклонить</a>
+                    <a href="{# url_from_context #}{% url 'moder_report_submit' 0 %}" class="medium-btn green center wide">Принять</a>
+                    <a href="{# url_from_context #}{% url 'moder_report_reject' 0 %}" class="medium-btn red center wide">Отклонить</a>
                 </div>
             </div>
         </div>
@@ -52,5 +52,5 @@
 {% endblock %}
 
 {% block moder_bottom %}
-    <a href="/moderation/manage/" class="big-btn blue">Панель модератора</a>
+    <a href="{% url 'moder_manage' %}" class="big-btn blue">Панель модератора</a>
 {% endblock %}

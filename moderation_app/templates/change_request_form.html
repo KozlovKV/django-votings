@@ -47,7 +47,7 @@
     </div>
     <div class="block">
         <h2>Действия</h2>
-        <form method="post" action="/moderation/manage/change_request/{{ voting_id }}/">
+        <form method="post" action="{% url 'moder_change_request_form' 0 %}">
             {% csrf_token %}
             <textarea name="comment" class="input wide" placeholder="Комментарий к решению (необязательно"></textarea>
             <label class="input">
@@ -63,7 +63,7 @@
 {% endblock %}
 
 {% block moder_bottom %}
-    <a href="/moderation/manage/" class="big-btn blue">Панель модератора</a>
-    <a href="/moderation/manage/change_request/list/" class="big-btn green">Список запросов на изменения</a>
+    <a href="{% url 'moder_manage' %}" class="big-btn blue">Панель модератора</a>
+    <a href="{% url 'moder_change_request_list' %}" class="big-btn green">Список запросов на изменения</a>
 {% endblock %}
 

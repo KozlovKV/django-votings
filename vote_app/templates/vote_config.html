@@ -16,7 +16,7 @@
         {% if voting_id != -1 %}
             <h2>Страница редактирования голосования номер {{ voting_id }}</h2>
         {% endif %}
-        <form method="POST" action="/vote/create/view/">
+        <form method="POST" action="{% url 'vote_create' %}">
             {% csrf_token %}
             <div class="horizontal-centering">
                 <div class="input">

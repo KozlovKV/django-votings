@@ -15,9 +15,9 @@
         в голосваниях, требующих авторизации на сайте.
     </p>
     <div class="horizontal-centering">
-        <a href="/vote/test/" class="big-btn yellow">Голосования</a>
+        <a href="{% url 'vote_list' %}" class="big-btn yellow">Голосования</a>
         {% if user.is_authenticated %}
-            <a href="/vote/test/" class="big-btn green">Создать голосование</a>
+            <a href="{% url 'vote_create' %}" class="big-btn green">Создать голосование</a>
         {% else %}
             <button class="big-btn blue" id="red_btn_on_index">Регистрация</button>
         {% endif %}

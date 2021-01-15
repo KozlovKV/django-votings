@@ -54,7 +54,7 @@
 {% endblock %}
 
 {% block main %}
-    <a href="/vote/create/" class="medium-btn green">Создать голосование</a>
+    <a href="{% url 'vote_create' %}" class="medium-btn green">Создать голосование</a>
     <section>
         <h3>Заголовок голосования</h3>
         <img src="#" alt="">

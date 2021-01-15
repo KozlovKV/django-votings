@@ -18,7 +18,7 @@
                 <p>Решено: 666</p>
                 <p>Отклонено: 1</p>
             </div>
-            <a href="/moderation/manage/reports/list/" class="big-btn blue">К списку</a>
+            <a href="{% url 'moder_reports_list' %}" class="big-btn blue">К списку</a>
         </div>
         <div class="medium-block">
             <h2>Запросы на редактирование</h2>
@@ -30,7 +30,7 @@
                 <p>Решено: 999</p>
                 <p>Отклонено: 1</p>
             </div>
-            <a href="/moderation/manage/change_request/list/" class="big-btn blue">К списку</a>
+            <a href="{% url 'moder_change_request_list' %}" class="big-btn blue">К списку</a>
         </div>
     </div>
 {% endblock %}

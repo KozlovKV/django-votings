@@ -12,7 +12,7 @@
         <div class="horizontal-centering">
             <div class="medium-block">
                 <h2>Отправить жалобу</h2>
-                <form method="post" action="/moderation/send/">
+                <form method="post" action="{% url 'moder_report_send' %}">
                     <div class="horizontal-centering">
                         <label>Тема жалобы</label>
                         <select class="input wide">
@@ -42,7 +42,7 @@
             </div>
         </div>
         {% if rights != 0 %}
-            <a href="/moderation/manage/" class="big-btn blue">Панель модератора</a>
+            <a href="{% url 'moder_manage' %}" class="big-btn blue">Панель модератора</a>
         {% endif %}
     {% endif %}
 {% endblock %}

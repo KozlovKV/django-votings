@@ -12,7 +12,7 @@
             <div class="medium-block">
                 <h2>Редактировать данные</h2>
                 Вводите значения только в поля, которые хотите изменить
-                <form method="post" action="/profile/view/">
+                <form method="post" action="{% url 'profile_view' 0 %}">
                     <div class="horizontal-centering">
                         <input type="text" placeholder="Фамилия" class="input wide">
                         <input type="text" placeholder="Имя" class="input wide">
@@ -54,19 +54,19 @@
             <div class="list-elem">
                 <h4>Заголовок голосования</h4>
                 <div>
-                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                    <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue">></a>
                 </div>
             </div>
             <div class="list-elem">
                 <h4>Заголовок голосования</h4>
                 <div>
-                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                    <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue">></a>
                 </div>
             </div>
             <div class="list-elem">
                 <h4>Заголовок голосования</h4>
                 <div>
-                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                    <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue">></a>
                 </div>
             </div>
         </div>
@@ -79,7 +79,7 @@
                         <p>Выбранный вариант</p>
                     </div>
                     <div>
-                        <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                        <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue">></a>
                     </div>
                 </div>
                 <div class="list-elem">
@@ -88,7 +88,7 @@
                         <p>Выбранный вариант</p>
                     </div>
                     <div>
-                        <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                        <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue">></a>
                     </div>
                 </div>
                 <div class="list-elem">
@@ -97,7 +97,7 @@
                         <p>Выбранный вариант</p>
                     </div>
                     <div>
-                        <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                        <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue">></a>
                     </div>
                 </div>
             </div>
