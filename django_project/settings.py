@@ -33,13 +33,15 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django_registration',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'menu_app',
     'vote_app',
     'profile_app',
-    'report_app',
+    'moderation_app',
 ]
 
 MIDDLEWARE = [
@@ -58,9 +60,10 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+            'menu_app/templates',
             'vote_app/templates',
             'profile_app/templates',
-            'report_app/templates',
+            'moderation_app/templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -110,9 +113,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -127,5 +130,21 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    BASE_DIR / "static",
 ]
+
+
+LOGIN_URL = '/account/login/'
+LOGOUT_URL = '/account/logout/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+
+ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_OPEN = True
+
+
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'postmaster@sandboxcc0c1edf5a144fed8a744c229b140210.mailgun.org'
+EMAIL_HOST_PASSWORD = '41b8fa769abc8101b934584c10270bab-c50a0e68-fb3d0ea6'

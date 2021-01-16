@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&family=Jura:wght@700&family=Roboto:wght@500&display=swap');
+
+/*
+    Импортируемые шрифты:
+    font-family: 'Comfortaa', cursive;
+    font-family: 'Jura', sans-serif;
+    font-family: 'Roboto', sans-serif;
+*/
+
+body {
+    margin: 0;
+    padding: 0;
+    padding-top: 4%;
+    height: 100%;
+    font-family: Roboto;
+}
+
+.main-content {
+    margin: 0 20%;
+    font-size: 1.5rem;
+}
+
+h1, h2, h3 {
+    font-family: Comfortaa, cursive;
+    text-align: center;
+}
+
+.horizontal-centering {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.block {
+    border: 3px solid black;
+    background-color: #DDD;
+    border-radius: 30px;
+    padding: 25px;
+    margin: 10px;
+    transition: 1s ease-in-out;
+}
+
+.medium-block {
+    border: 2px solid black;
+    border-radius: 20px;
+    width: 42%;
+    margin: 10px;
+    padding: 20px;
+    background-color: #DDD;
+    transition: 1s ease-in-out;
+}
+
+.small-block {
+    border: 2px solid black;
+    border-radius: 15px;
+    width: 22%;
+    margin: 10px;
+    padding: 10px;
+    background-color: #DDD;
+    transition: 1s ease-in-out;
+}
+
+.list-elem {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #BBB;
+    border: 2px solid black;
+    border-radius: 20px;
+    margin: 10px 0;
+    padding: 0 10px;
+}
+
+.input {
+    display: inline-block;
+    border: 2px solid black;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    padding: 5px;
+    margin: 5px;
+    font-family: Jura;
+}
+
+.wide {
+    width: 80%;
+}
+
+.medium {
+    width: 42%;
+}
+
+.small {
+    width: 22%;
+}
+
+.center {
+    text-align: center;
+}
+
+.meta-data {
+    text-align: right;
+    font-family: jura;
+    font-size: 1rem;
+}
+
+.hidden-top {
+    transform: translateY(-1000px);
+}
+
+.hidden-left {
+    transform: translateX(-1000px);
+}
+
+.hidden-bottom {
+    transform: translateY(1000px);
+}
+
+.hidden-right {
+    transform: translateX(1000px);
+}

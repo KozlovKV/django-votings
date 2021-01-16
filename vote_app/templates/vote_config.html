@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Редактирование голосований</title>
+    <style>
+        .input {
+            margin: 10px;
+            padding: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <h1>Создай меня! Я знаю, ты сможешь!</h1>
+    <div class="block">
+        {% if voting_id != -1 %}
+            <h2>Страница редактирования голосования номер {{ voting_id }}</h2>
+        {% endif %}
+        <form method="POST" action="{{ context_url }}">
+            {% csrf_token %}
+            <div class="horizontal-centering">
+                <div class="input">
+                    <label>{{ form.Title.label }}</label>
+                    {{ form.Title }}
+                </div>
+                <div class="input">
+                    <label>{{ form.Image.label }}</label>
+                    {{ form.Image }}
+                </div>
+            </div>
+            <div class="horizontal-centering">
+                <div class="input wide">
+                    <label>{{ form.Description.label }}</label><br>
+                    {{ form.Description }}
+                </div>
+            </div>
+            <div class="horizontal-centering">
+                <div class="input">
+                    <label>{{ form.Type.label }}</label>
+                    {{ form.Type }}
+                </div>
+                <div class="input">
+                    <label>{{ form.ResultSeeWho.label }}</label>
+                    {{ form.ResultSeeWho }}
+                </div>
+                <div class="input">
+                    <label>{{ form.ResultSeeWhen.label }}</label>
+                    {{ form.ResultSeeWhen }}
+                </div>
+            </div>
+            <div class="horizontal-centering">
+                <div class="input">
+                    <label>{{ form.AnonsCanVote.label }}</label>
+                    {{ form.AnonsCanVote }}
+                </div>
+                <div class="input">
+                    <label>{{ form.EndDate.label }}</label>
+                    {{ form.EndDate }}
+                </div>
+            </div>
+            <div class="block">
+                Варианты...
+            </div>
+            {% if voting_id != -1 %}
+                <div class="block">
+                    <h4>{{ form.comment.label }}</h4>
+                    {{ form.comment }}
+                </div>
+            {% endif %}
+            {% if form.errors %}
+            <div class="block">
+                <h2>Ошибки</h2>
+                {{ form.errors }}
+            </div>
+            {% endif %}
+            <input type="submit" value="Сохранить" class="big-btn green">
+        </form>
+    </div>
+{% endblock %}

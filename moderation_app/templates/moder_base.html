@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+    {% if rights != 0 %}
+        {% block for_moder %}
+        {% endblock %}
+    {% else %}
+        <h1>Вам отказано в доступе на эту страницу</h1>
+    {% endif %}
+    <div class="horizontal-centering">
+        {% if rights != 0 %}
+            {% block moder_bottom %}
+            {% endblock %}
+        {% endif %}
+        <a href="{% url 'menu' %}" class="big-btn yellow">На главную</a>
+    </div>
+{% endblock %}

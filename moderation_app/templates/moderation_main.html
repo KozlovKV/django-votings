@@ -1,0 +1,36 @@
+{% extends 'moder_base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Панель модератора</title>
+{% endblock %}
+
+{% block for_moder %}
+    <h1>Панель модератора</h1>
+    <div class="horizontal-centering">
+        <div class="medium-block">
+            <h2>Жалобы</h2>
+            <div>
+                <p>Количество: {{ reports.all }}</p>
+            </div>
+            <div>
+                <p>Обработано: {{ reports.processed }}</p>
+                <p>Одобрено: {{ reports.submitted }}</p>
+                <p>Отклонено: {{ reports.rejected }}</p>
+            </div>
+            <a href="{% url 'moder_reports_list' %}" class="big-btn blue">К списку</a>
+        </div>
+        <div class="medium-block">
+            <h2>Запросы на редактирование</h2>
+            <div>
+                <p>Количество: {{ change_request.all }}</p>
+            </div>
+            <div>
+                <p>Обработано: {{ change_request.processed }}</p>
+                <p>Одобрено: {{ change_request.submitted }}</p>
+                <p>Отклонено: {{ change_request.rejected }}</p>
+            </div>
+            <a href="{% url 'moder_change_request_list' %}" class="big-btn blue">К списку</a>
+        </div>
+    </div>
+{% endblock %}

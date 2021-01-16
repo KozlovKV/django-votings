@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Список голосований</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/btn_style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'vote_app/css/vote_list_style.css' %}">
+    <style>
+
+        section{
+            position: relative;
+            max-width: 1329px;
+            min-height: 367px;
+            background-color: #dddddd;
+            border: 2px solid black;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .question{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .question__text{
+            margin-left: 20px;
+        }
+
+        .question__img{
+            width: 596px;
+            min-height: 193px;
+            background-color: white;
+            margin: 30px;
+            border-radius: 5px;
+            color: #717171;
+            text-align: center;
+        }
+
+        .question__img p{
+             margin-top: 80px;
+        }
+
+        .klyauza{
+            position: absolute;
+            width: 38px;
+            height: 33px;
+            left: 1336px;
+            top: 347px;
+            background: url(klyauza.png);
+        }
+
+    </style>
+{% endblock %}
+
+{% block main %}
+    <a href="{% url 'vote_create' %}" class="medium-btn green">Создать голосование</a>
+    <section>
+        <h3>Заголовок голосования</h3>
+        <img src="#" alt="">
+        <div class="question">
+            <div class="question__text">
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+            </div>
+            <div class="question__img">
+                <p>Область для картинки</p>
+            </div>
+        </div>
+        <div class="klyauza"></div>
+    </section>
+    <section>
+        <h3>Заголовок голосования</h3>
+        <img src="#" alt="">
+        <div class="question">
+            <div class="question__text">
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+            </div>
+            <div class="question__img">
+                <p>Область для картинки</p>
+            </div>
+        </div>
+         <div class="klyauza"></div>
+    </section>
+    <section>
+        <h3>Заголовок голосования</h3>
+        <img src="#" alt="">
+        <div class="question">
+            <div class="question__text">
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+                <p>Суть выносимого на голосование вопроса.</p>
+            </div>
+            <div class="question__img">
+                <p>Область для картинки</p>
+            </div>
+        </div>
+        <div class="klyauza"></div>
+    </section>
+{% endblock %}

@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>TEST</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'main_style.css' %}">
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Поддержка</title>
+{% endblock %}
+
+{% block main %}
     <h1 class="test">Тестовая страница приложения голосований</h1>
-</body>
-</html>
+    <a href="/vote/create/" class="medium-btn green">Создать голосование</a>
+    <a href="/vote/edit/1/" class="medium-btn yellow">
+        Редактировать голосование номер... (измени номер в ссылке на нужный тебе id)
+    </a>
+{% endblock %}

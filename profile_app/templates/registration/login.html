@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Вход</title>
+{% endblock %}
+
+{% block main %}
+    <h1>Произошла ошибка!</h1>
+        {{ form.errors }}
+    <h2>Повторите попытку или сбросьте пароль</h2>
+    {% include 'registration/pswd_reset_form_integratable.html' %}
+{% endblock %}

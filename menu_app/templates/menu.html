@@ -1,0 +1,63 @@
+{% load static %}
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/border_animation.css' %}">-->
+<link rel="stylesheet" type="text/css" href="{% static 'css/btn_style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'menu_app/css/menu_style.css' %}">
+<nav class="menu">
+<!--    <a href="/" class="logo">-->
+<!--        <img src="{% static 'menu_app/logo.png' %}" alt="logo">-->
+<!--    </a>-->
+    <a href="{% url 'menu' %}" class="logo">
+        <div class="logo__name">SV-1</div>
+        <div class="logo__online">Online-4</div>
+    </a>
+    {% for item in menu %}
+        <a href="{{ item.url }}" class="anim-btn horizontal-border">
+            {{ item.label }}
+        </a>
+    {% endfor %}
+    {% if request.user.is_authenticated %}
+        <div class="login-profile-block">
+            {% for item in profile_menu %}
+                <a href="{{ item.url }}" class="anim-btn horizontal-border">
+                    {{ item.label }}
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="login-profile-block">
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                {{ login_form.username }}
+                {{ login_form.password }}
+                <input class="small-btn green" type="submit" value="Войти">
+            </form>
+            <button class="small-btn yellow" id="reg_btn">Регистрация</button>
+        </div>
+    {% endif %}
+</nav>
+{% if not request.user.is_authenticated %}
+    <div class="block hidden-top" id="reg_block">
+        <h2>Регистрация</h2>
+        <form action="{% url 'django_registration_register' %}" method="post">
+            {% csrf_token %}
+            {{ reg_form.username }}
+            {{ reg_form.email }}
+            {{ reg_form.password1 }}
+            {{ reg_form.password2 }}
+            <input type="submit" value="Зарегистрироваться" class="medium-btn green">
+        </form>
+    </div>
+{% endif %}
+<div id="window_bg" class="window-around-bg"></div>
+<script>
+    let toggle_reg_form = function(e) {
+        reg_block.classList.toggle('hidden-top');
+        bg.classList.toggle('active-bg')
+    }
+
+    reg_btn = document.getElementById('reg_btn');
+    reg_block = document.getElementById('reg_block');
+    bg = document.getElementById('window_bg');
+    reg_btn.addEventListener('click', toggle_reg_form);
+    bg.addEventListener('click', toggle_reg_form);
+</script>

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Профиль</title>
+{% endblock %}
+
+{% block main %}
+    <h1>Профиль пользователя {{ profile_user }}</h1>
+    <div class="horizontal-centering">
+        {% if profile_user == user %}
+            <div class="medium-block">
+                <h2>Редактировать данные</h2>
+                Вводите значения только в поля, которые хотите изменить
+                <form method="post" action="{% url 'profile_view' 0 %}">
+                    <div class="horizontal-centering">
+                        <input type="text" placeholder="Фамилия" class="input wide">
+                        <input type="text" placeholder="Имя" class="input wide">
+                        <input type="text" placeholder="Отчество" class="input wide">
+                        <input type="text" placeholder="Логин" class="input wide">
+                        <input type="text" placeholder="Эл. почта" class="input wide">
+                        <div class="input wide">Описание произошедших ошибок</div>
+                        <input type="submit" value="Изменить" class="medium-btn green input wide">
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+        <div class="medium-block">
+            <h2>Актуальные данные</h2>
+            <div>
+                <p>Фамилия</p>
+                <p>Имя</p>
+                <p>Отчество</p>
+            </div>
+            <div>
+                <p>Логин: l000gin</p>
+                <p>E-mail: example@site.z</p>
+            </div>
+            <div>
+                <p>Создано голосований: 1337</p>
+                <p>Отдано голосов: 9999</p>
+            </div>
+            <div>
+                <p>Статус - {{ status }}</p>
+            </div>
+        </div>
+    </div>
+    {% if profile_user == user %}
+        {% include 'registration/pswd_reset_form_integratable.html' %}
+    {% endif %}
+    <div class="horizontal-centering">
+        <div class="medium-block">
+            <h2>Созданные голосования</h2>
+            <div class="list-elem">
+                <h4>Заголовок голосования</h4>
+                <div>
+                    <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue">></a>
+                </div>
+            </div>
+            <div class="list-elem">
+                <h4>Заголовок голосования</h4>
+                <div>
+                    <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue">></a>
+                </div>
+            </div>
+            <div class="list-elem">
+                <h4>Заголовок голосования</h4>
+                <div>
+                    <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue">></a>
+                </div>
+            </div>
+        </div>
+        {% if profile_user == user %}
+            <div class="medium-block">
+                <h2>Участвовал в голсованиях</h2>
+                <div class="list-elem">
+                    <div>
+                        <h4>Заголовок голосования</h4>
+                        <p>Выбранный вариант</p>
+                    </div>
+                    <div>
+                        <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue">></a>
+                    </div>
+                </div>
+                <div class="list-elem">
+                    <div>
+                        <h4>Заголовок голосования</h4>
+                        <p>Выбранный вариант</p>
+                    </div>
+                    <div>
+                        <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue">></a>
+                    </div>
+                </div>
+                <div class="list-elem">
+                    <div>
+                        <h4>Заголовок голосования</h4>
+                        <p>Выбранный вариант</p>
+                    </div>
+                    <div>
+                        <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue">></a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
