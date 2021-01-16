@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>Одобрение жалобы</title>
+    <title>Отклонение жалобы</title>
 {% endblock %}
 
 {% block main %}
-    <h1>Жалоба почти одобрена!</h1>
+    <h1>Жалоба почти отклонена!</h1>
     <h2>Добавьте комментарий к письму, которое будет отправлено заявителю</h2>
     <div class="block">
         <form method="POST" action="{{ context_url }}" class="horizontal-centering">
             {% csrf_token %}
             {{ form.comment }}
-            <input type="submit" value="Одобрить жалобу и отправить письмо" class="big-btn green">
+            <input type="submit" value="Отклонить жалобу и отправить письмо" class="big-btn red">
         </form>
     </div>
 {% endblock %}
