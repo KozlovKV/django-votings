@@ -1,11 +1,12 @@
-from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 import django.views.generic.edit as generic_edit
+from django.utils import timezone
 
-from menu_app.view_subclasses import TemplateViewWithMenu
+from menu_app.view_menu_context import get_full_site_url
+from menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
 from moderation_app.forms import CommentForm
 from moderation_app.models import Reports
+from moderation_app.view_subclasses import ReportCloseTemplateView
 
 
 class TestModerView(TemplateViewWithMenu):
@@ -56,7 +57,7 @@ class ReportsListView(TemplateViewWithMenu):
         for model_note in model_list:
             dict_note = {
                 'id': model_note.id,
-                'theme': model_note.theme,
+                'theme': model_note.get_humanity_theme_name(),
                 'object_url': model_note.get_object_url_from_report(),
                 'content': model_note.content,
                 'author': model_note.author,
@@ -75,31 +76,16 @@ class ReportsListView(TemplateViewWithMenu):
         return context
 
 
-class ReportSubmitView(TemplateViewWithMenu, generic_edit.FormView):
+class ReportSubmitView(ReportCloseTemplateView):
     template_name = 'report/report_submit.html'
-    form_class = CommentForm
-    success_url = reverse_lazy('moder_manage')
-    # email_subject_template = 'report/email_subject.txt'
-    # email_body_template = 'report/email_body.txt'
-
-    def get_email_context(self):
-        report_id = self.kwargs['report_id']
-        report = Reports.objects.get(pk=report_id)
-        context = {
-            'status': 'Одобрена',
-            'comment': self.form_class.comment,
-            'moder': self.extra_context['user'],
-            'date': report.close_date
-        }
-
-    # def form_valid(self, form):
-    #     super(ReportSubmitView, self).form_valid(form)
-
-    def post(self, request, *args, **kwargs):
-        post_resp = super(ReportSubmitView, self).post(self, request, *args, **kwargs)
-        print(post_resp)
+    new_status = 1
+    new_status_name = 'Одобрена'
 
 
+class ReportRejectView(ReportCloseTemplateView):
+    template_name = 'report/report_reject.html'
+    new_status = 2
+    new_status_name = 'Отклонена'
 
 
 class SendReportView(TemplateViewWithMenu):  # TODO: https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/

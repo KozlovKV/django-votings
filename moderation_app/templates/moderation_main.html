@@ -15,7 +15,7 @@
             </div>
             <div>
                 <p>Обработано: {{ reports.processed }}</p>
-                <p>Решено: {{ reports.submitted }}</p>
+                <p>Одобрено: {{ reports.submitted }}</p>
                 <p>Отклонено: {{ reports.rejected }}</p>
             </div>
             <a href="{% url 'moder_reports_list' %}" class="big-btn blue">К списку</a>
@@ -27,7 +27,7 @@
             </div>
             <div>
                 <p>Обработано: {{ change_request.processed }}</p>
-                <p>Решено: {{ change_request.submitted }}</p>
+                <p>Одобрено: {{ change_request.submitted }}</p>
                 <p>Отклонено: {{ change_request.rejected }}</p>
             </div>
             <a href="{% url 'moder_change_request_list' %}" class="big-btn blue">К списку</a>

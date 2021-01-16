@@ -18,8 +18,9 @@ class TemplateEmailSender(EmailMessage):
     context = {}
     request = None
 
-    def get_email_context(self):
-        pass
+    def send(self, fail_silently=False):
+        self.update_from_templates()
+        super(TemplateEmailSender, self).send(fail_silently)
 
     def update_from_templates(self):
         self.subject = render_to_string(
@@ -27,8 +28,6 @@ class TemplateEmailSender(EmailMessage):
             context=self.context,
             request=self.request,
         )
-        # Force subject to a single line to avoid header-injection
-        # issues.
         self.subject = "".join(self.subject.splitlines())
         self.body = render_to_string(
             template_name=self.body_template,
