@@ -14,39 +14,24 @@
     <h1>Список жалоб</h1>
     <div class="horizontal-centering">
         <div class="block">
-            <div class="list-elem">
-                <div>
-                    <h4>Тема жалобы</h4>
-                    <p>Описание жалобы. Описание жалобы. Описание жалобы. Описание жалобы. Описание жалобы. Описание жалобы. </p>
-                    <p class="meta-data">01.01.0000</p>
+            {% for report in reports %}
+                <div class="list-elem">
+                    <div>
+                        <h4>{{ report.theme }}</h4>
+                        <p>{{ report.content }}<br>{{ report.object_url }}</p>
+                        <p class="meta-data">
+                            <a href="{% url 'profile_view' report.author.id %}">
+                                {{ report.author }}
+                            </a>
+                        </p>
+                        <p class="meta-data">{{ report.date }}</p>
+                    </div>
+                    <div>
+                        <a href="{# url_from_context #}{% url 'moder_report_submit' 0 %}" class="medium-btn green center wide">Принять</a>
+                        <a href="{# url_from_context #}{% url 'moder_report_reject' 0 %}" class="medium-btn red center wide">Отклонить</a>
+                    </div>
                 </div>
-                <div>
-                    <a href="{# url_from_context #}{% url 'moder_report_submit' 0 %}" class="medium-btn green center wide">Принять</a>
-                    <a href="{# url_from_context #}{% url 'moder_report_reject' 0 %}" class="medium-btn red center wide">Отклонить</a>
-                </div>
-            </div>
-            <div class="list-elem">
-                <div>
-                    <h4>Тема жалобы</h4>
-                    <p>Описание жалобы. Описание жалобы. Описание жалобы. Описание жалобы. Описание жалобы. Описание жалобы. </p>
-                    <p class="meta-data">01.01.0000</p>
-                </div>
-                <div>
-                    <a href="{# url_from_context #}{% url 'moder_report_submit' 0 %}" class="medium-btn green center wide">Принять</a>
-                    <a href="{# url_from_context #}{% url 'moder_report_reject' 0 %}" class="medium-btn red center wide">Отклонить</a>
-                </div>
-            </div>
-            <div class="list-elem">
-                <div>
-                    <h4>Тема жалобы</h4>
-                    <p>Описание жалобы. Описание жалобы. Описание жалобы. Описание жалобы. Описание жалобы. Описание жалобы. </p>
-                    <p class="meta-data">01.01.0000</p>
-                </div>
-                <div>
-                    <a href="{# url_from_context #}{% url 'moder_report_submit' 0 %}" class="medium-btn green center wide">Принять</a>
-                    <a href="{# url_from_context #}{% url 'moder_report_reject' 0 %}" class="medium-btn red center wide">Отклонить</a>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

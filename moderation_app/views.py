@@ -43,9 +43,30 @@ class ChangeRequestFormView(TemplateViewWithMenu):
 class ReportsListView(TemplateViewWithMenu):
     template_name = 'reports_list.html'
 
+    @staticmethod
+    def get_reports_list():
+        res = []
+        model_list = Reports.objects.filter(status=0)
+        for model_note in model_list:
+            dict_note = {
+                'theme': model_note.theme,
+                'object_url': model_note.get_object_url_from_report(),
+                'content': model_note.content,
+                'author': model_note.author,
+                'date': model_note.create_date,
+            }
+            res.append(dict_note)
+        return res
 
-class SendReportView(
-    TemplateViewWithMenu):  # TODO: https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/
+    def get_context_data(self, **kwargs):
+        context = super(ReportsListView, self).get_context_data(**kwargs)
+        context.update({
+            'reports': self.get_reports_list()
+        })
+        return context
+
+
+class SendReportView(TemplateViewWithMenu):  # TODO: https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/
     template_name = 'send.html'
 
     def get(self, request, *args, **kwargs):
