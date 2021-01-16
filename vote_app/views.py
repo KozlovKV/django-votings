@@ -6,7 +6,7 @@ from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
 from vote_app.forms import VoteConfigForm, ModeledVoteCreateForm, ModeledVoteEditForm
 
-# Create your views here.
+
 from vote_app.models import Votings
 from vote_app.models import VoteVariants
 
