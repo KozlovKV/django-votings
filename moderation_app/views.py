@@ -1,4 +1,10 @@
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.urls import reverse, reverse_lazy
+import django.views.generic.edit as generic_edit
+
 from menu_app.view_subclasses import TemplateViewWithMenu
+from moderation_app.forms import CommentForm
 from moderation_app.models import Reports
 
 
@@ -41,7 +47,7 @@ class ChangeRequestFormView(TemplateViewWithMenu):
 
 
 class ReportsListView(TemplateViewWithMenu):
-    template_name = 'reports_list.html'
+    template_name = 'report/reports_list.html'
 
     @staticmethod
     def get_reports_list():
@@ -49,11 +55,14 @@ class ReportsListView(TemplateViewWithMenu):
         model_list = Reports.objects.filter(status=0)
         for model_note in model_list:
             dict_note = {
+                'id': model_note.id,
                 'theme': model_note.theme,
                 'object_url': model_note.get_object_url_from_report(),
                 'content': model_note.content,
                 'author': model_note.author,
                 'date': model_note.create_date,
+                'submit_url': reverse('moder_report_submit', args=(model_note.id,)),
+                'reject_url': reverse('moder_report_reject', args=(model_note.id,)),
             }
             res.append(dict_note)
         return res
@@ -64,6 +73,33 @@ class ReportsListView(TemplateViewWithMenu):
             'reports': self.get_reports_list()
         })
         return context
+
+
+class ReportSubmitView(TemplateViewWithMenu, generic_edit.FormView):
+    template_name = 'report/report_submit.html'
+    form_class = CommentForm
+    success_url = reverse_lazy('moder_manage')
+    # email_subject_template = 'report/email_subject.txt'
+    # email_body_template = 'report/email_body.txt'
+
+    def get_email_context(self):
+        report_id = self.kwargs['report_id']
+        report = Reports.objects.get(pk=report_id)
+        context = {
+            'status': 'Одобрена',
+            'comment': self.form_class.comment,
+            'moder': self.extra_context['user'],
+            'date': report.close_date
+        }
+
+    # def form_valid(self, form):
+    #     super(ReportSubmitView, self).form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        post_resp = super(ReportSubmitView, self).post(self, request, *args, **kwargs)
+        print(post_resp)
+
+
 
 
 class SendReportView(TemplateViewWithMenu):  # TODO: https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/

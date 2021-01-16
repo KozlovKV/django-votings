@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 import django.views.generic.edit as generic_edit
 
 from menu_app.view_menu_context import get_full_menu_context
@@ -49,7 +49,7 @@ class CreateVotingView(TemplateViewWithMenu, generic_edit.CreateView):
     object = None
     model = Votings
     form_class = ModeledVoteEditForm
-    success_url = '/vote/list/'
+    success_url = reverse_lazy('vote_list')
 
     def get_context_data(self, **kwargs):
         context = super(CreateVotingView, self).get_context_data(**kwargs)
@@ -69,7 +69,7 @@ class EditVotingView(TemplateViewWithMenu, generic_edit.FormView):
     object = None  # TODO: принимать существующую запись
     model = Votings
     form_class = ModeledVoteEditForm
-    success_url = '/vote/list/'
+    success_url = reverse_lazy('vote_list')
 
     def get_context_data(self, **kwargs):
         context = super(EditVotingView, self).get_context_data(**kwargs)

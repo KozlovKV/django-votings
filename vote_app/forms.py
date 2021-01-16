@@ -70,7 +70,7 @@ class ModeledVoteCreateForm(forms.ModelForm):
 
 
 class ModeledVoteEditForm(forms.ModelForm):
-    comment = forms.CharField(label='Комментарий для модератора',
+    comment = forms.CharField(required=False, label='Комментарий для модератора',
                               widget=forms.Textarea(attrs={
                                   'style': 'width: 95%',
                               }))
