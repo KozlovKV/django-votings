@@ -97,3 +97,33 @@ def get_variants_context(voting_id, request):
         res.append(variant_dict)
     res.sort(key=lambda x: x['serial_number'])
     return res
+
+class VotingView(TemplateViewWithMenu, generic_edit.FormView):
+    template_name = 'vote_config.html'
+    object = None  # TODO: принимать существующую запись
+    model = Votings
+    form_class = ModeledVoteEditForm
+    success_url = '/vote/list/'
+    def get_context_data(self, **kwargs):
+        context = super(VotingView, self).get_context_data(**kwargs)
+        voting_id = kwargs["voting_id"]
+        voting_note = Votings.objects.get(pk=voting_id)
+        context.update({
+            'voting_id': kwargs["voting_id"],
+            'context_url': reverse('vote_create', args=(kwargs["voting_id"],)),
+            'vote_header' : voting_note.Title,
+            'Description': voting_note.Description,
+            'Author': voting_note.Author,
+            'Status': voting_note.ComplaintState,
+            'Image' : voting_note.Image,
+            'ResultSeeWho': voting_note.ResultSeeWho,
+            'ResultSeeWhen': voting_note.ResultSeeWhen,
+            'Vote_counts': voting_note.Votes,
+            'End_date' : voting_note.EndDate,
+            'vote_variants' : get_variants_context(voting_id, self.request)
+        })
+        return context
+
+    def post(self, request, *args, **kwargs):
+        # TODO: Добавить сохранение вариантов голосования и создание записи в модели запросов на редактирование
+        return super(VotingView, self).post(self, request, *args, **kwargs)
