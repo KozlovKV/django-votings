@@ -3,6 +3,8 @@ from audioop import reverse
 from django.db import models
 from django.contrib.auth.models import User
 
+from vote_app.models import Votings
+
 
 class Reports(models.Model):
     THEMES = [
@@ -33,3 +35,10 @@ class Reports(models.Model):
                 return reverse('vote_view', atrs=(self.element,))
         else:
             return ''
+
+
+class VoteChangeRequest(models.Model):
+    voting_id = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
+    Change = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    comment = models.TextField()

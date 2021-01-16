@@ -55,12 +55,3 @@ class Votes(models.Model):
     Votings_id = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
     Choices_id = models.ForeignKey(to=VoteVariants, on_delete=models.CASCADE)
     Date_vote = models.DateTimeField(auto_now_add=True)
-
-
-class VoteChangeRequest(models.Model):
-    voting_id = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
-    Change = models.TextField()
-    date = models.DateTimeField(auto_now_add=True)
-    comment = models.TextField()
-
-
