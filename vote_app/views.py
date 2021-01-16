@@ -97,14 +97,13 @@ def get_variants_context(voting_id):
     return res
 
 
-class VotingView(TemplateViewWithMenu, generic_edit.FormView):
+class VotingView(TemplateViewWithMenu):
     template_name = 'vote_test.html'
 
     def get_context_data(self, **kwargs):
         context = super(VotingView, self).get_context_data(**kwargs)
         voting_id = kwargs["voting_id"]
         voting_note = Votings.objects.get(pk=voting_id)
-        self.success_url = reverse_lazy('vote_view', args=(voting_id,))
         context.update({
             'voting_id': kwargs["voting_id"],
             'title': voting_note.Title,
@@ -112,14 +111,10 @@ class VotingView(TemplateViewWithMenu, generic_edit.FormView):
             'author': voting_note.Author,
             'status': voting_note.Complaint_state,
             'image': voting_note.Image,
-            'resultSeeWho': voting_note.Result_see_who,
-            'resultSeeWhen': voting_note.Result_see_when,
+            'result_see_who': voting_note.Result_see_who,
+            'result_see_when': voting_note.Result_see_when,
             'votes_count': voting_note.Vote_variants,
             'end_date': voting_note.End_date,
             'vote_variants': get_variants_context(voting_id)
         })
         return context
-
-    def post(self, request, *args, **kwargs):
-        # TODO: Добавить сохранение вариантов голосования и создание записи в модели запросов на редактирование
-        return super(VotingView, self).post(self, request, *args, **kwargs)
