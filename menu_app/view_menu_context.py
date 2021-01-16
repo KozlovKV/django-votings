@@ -1,3 +1,4 @@
+from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 
 import profile_app.forms as profile_forms
@@ -24,6 +25,11 @@ def get_profile_menu_context(request):
     return profile_menu_context
 
 
+def get_full_site_url(req):
+    scheme = 'http://' if not req.is_secure() else 'https://'
+    return scheme + str(get_current_site(req))
+
+
 def get_full_menu_context(request):
     context = {
         'menu': get_menu_context(request),
@@ -39,4 +45,5 @@ def get_full_menu_context(request):
         context['rights'] = info.user_rights
         context['status'] = info.get_right_name()
     context['reset_form'] = profile_forms.ModifiedPasswordResetForm(request.POST)
+    context['main_url'] = get_full_site_url(request)
     return context

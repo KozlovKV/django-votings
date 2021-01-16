@@ -2,8 +2,10 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 import django.views.generic.edit as generic_edit
+from django.utils import timezone
 
-from menu_app.view_subclasses import TemplateViewWithMenu
+from menu_app.view_menu_context import get_full_site_url
+from menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
 from moderation_app.forms import CommentForm
 from moderation_app.models import Reports
 
@@ -56,7 +58,7 @@ class ReportsListView(TemplateViewWithMenu):
         for model_note in model_list:
             dict_note = {
                 'id': model_note.id,
-                'theme': model_note.theme,
+                'theme': model_note.get_humanity_theme_name(),
                 'object_url': model_note.get_object_url_from_report(),
                 'content': model_note.content,
                 'author': model_note.author,
@@ -79,26 +81,46 @@ class ReportSubmitView(TemplateViewWithMenu, generic_edit.FormView):
     template_name = 'report/report_submit.html'
     form_class = CommentForm
     success_url = reverse_lazy('moder_manage')
-    # email_subject_template = 'report/email_subject.txt'
-    # email_body_template = 'report/email_body.txt'
+    new_status = 'Одобрена'
 
     def get_email_context(self):
         report_id = self.kwargs['report_id']
         report = Reports.objects.get(pk=report_id)
         context = {
-            'status': 'Одобрена',
-            'comment': self.form_class.comment,
-            'moder': self.extra_context['user'],
-            'date': report.close_date
+            'report_id': report_id,
+            'status': self.new_status,
+            'comment': self.request.POST.get('comment', ''),
+            'moder': self.request.user,
+            'author': report.author,
+            'theme': report.get_humanity_theme_name(),
+            'main_url': get_full_site_url(self.request),
+            'date': report.close_date,
         }
+        return context
 
-    # def form_valid(self, form):
-    #     super(ReportSubmitView, self).form_valid(form)
+    def send_close_email(self):
+        report_id = self.kwargs['report_id']
+        report = Reports.objects.get(pk=report_id)
+
+        email = TemplateEmailSender(to=[(report.author.email)])
+        email.subject_template = 'report/email_subject.txt'
+        email.body_template = 'report/email_body.txt'
+        email.context = self.get_email_context()
+        email.request = self.request
+        email.send()
 
     def post(self, request, *args, **kwargs):
         post_resp = super(ReportSubmitView, self).post(self, request, *args, **kwargs)
-        print(post_resp)
+        save_closed_report(self.kwargs['report_id'], 1)
+        self.send_close_email()
+        return post_resp
 
+
+def save_closed_report(report_id, status):
+    report = Reports.objects.get(pk=report_id)
+    report.close_date = timezone.now()
+    report.status = status
+    report.save()
 
 
 
