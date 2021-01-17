@@ -1,9 +1,7 @@
 .footer-block {
     position: relative;
-    left: -8px;
-    bottom: -8px;
     padding: 20px;
-    width: 100%;
+    width: calc(100%-40px);
     height: 60px;
     background-color: #888;
 }

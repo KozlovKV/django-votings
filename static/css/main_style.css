@@ -8,6 +8,7 @@
 */
 
 body {
+    margin: 0;
     padding: 0;
     padding-top: 4%;
     height: 100%;
@@ -82,6 +83,24 @@ h1, h2, h3 {
 
 .wide {
     width: 80%;
+}
+
+.medium {
+    width: 42%;
+}
+
+.small {
+    width: 22%;
+}
+
+.center {
+    text-align: center;
+}
+
+.meta-data {
+    text-align: right;
+    font-family: jura;
+    font-size: 1rem;
 }
 
 .hidden-top {

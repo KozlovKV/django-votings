@@ -8,8 +8,5 @@
 {% block main %}
     <h1>Активация прошла успешно</h1>
     <h2>Теперь вам доступен весь функционал нашего сайта ;)</h2>
-    <div class="horizontal-centering">
-        <a href="/" class="big-btn green">Главная</a>
-        <a href="/vote/test/" class="big-btn yellow">Голосования</a>
-    </div>
+    <a href="{% url 'menu' %}" class="medium-btn yellow">На главную</a>
 {% endblock %}
