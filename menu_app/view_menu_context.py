@@ -44,6 +44,8 @@ def get_full_menu_context(request):
         info = AdditionUserInfo.objects.get(User_id=request.user)
         context['rights'] = info.user_rights
         context['status'] = info.get_right_name()
+        if info.user_rights == 2:
+            context['profile_menu'].append({'url': '/admin', 'label': 'Админ'})
     context['reset_form'] = profile_forms.ModifiedPasswordResetForm(request.POST)
     context['main_url'] = get_full_site_url(request)
     return context

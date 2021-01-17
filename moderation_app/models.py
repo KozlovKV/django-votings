@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 
+from vote_app.models import Votings
+
 
 class Reports(models.Model):
     THEMES = [
@@ -40,3 +42,10 @@ class Reports(models.Model):
             if THEME[0] == self.theme:
                 return THEME[1]
         return 'Ошибочная тема'
+
+
+class VoteChangeRequest(models.Model):
+    voting_id = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
+    Change = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    comment = models.TextField()
