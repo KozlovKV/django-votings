@@ -4,11 +4,11 @@ from django.contrib.auth.models import User
 
 class Votings(models.Model):
     Title = models.CharField(max_length=256)
-    Image = models.ImageField(upload_to='images/', blank=True, null=True)  # FileField()
+    Image = models.ImageField(upload_to='voting_images/', blank=True, null=True)  # FileField()
     Description = models.TextField()
     Author = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True)
-    CreationDate = models.DateTimeField(auto_now_add=True)
-    EndDate = models.DateTimeField(blank=True, null=True)
+    Creation_date = models.DateTimeField(auto_now_add=True)
+    End_date = models.DateTimeField(blank=True, null=True)
     ABSENT = 0
     IN_PROGRESS = 1
     BANNED = 2
@@ -17,22 +17,22 @@ class Votings(models.Model):
         (IN_PROGRESS, 'На рассмотрении'),
         (BANNED, 'Забанено'),
     ]
-    ComplaintState = models.IntegerField(default=0, choices=COMPL_STATE_CHOICES)
+    Complaint_state = models.IntegerField(default=0, choices=COMPL_STATE_CHOICES)
     ALL = 0
     VOTED = 1
     SEE_WHO_CHOICES = [
         (ALL, 'Всем'),
         (VOTED, 'Проголосовавшим'),
     ]
-    ResultSeeWho = models.IntegerField(null=True, default=0, choices=SEE_WHO_CHOICES)
+    Result_see_who = models.IntegerField(null=True, default=0, choices=SEE_WHO_CHOICES)
     ANYTIME = 0
     BY_TIMER = 1
     SEE_WHEN_CHOICES = [
         (ANYTIME, 'В любое время'),
         (BY_TIMER, 'После окончания'),
     ]
-    ResultSeeWhen = models.IntegerField(null=True, default=0, choices=SEE_WHEN_CHOICES)
-    AnonsCanVote = models.BooleanField(default=False)
+    Result_see_when = models.IntegerField(null=True, default=0, choices=SEE_WHEN_CHOICES)
+    Anons_can_vote = models.BooleanField(default=False)
     ONE = 0
     MANY = 1
     VOTING_TYPE = [
@@ -40,20 +40,18 @@ class Votings(models.Model):
         (MANY, 'Много вариантов'),
     ]
     Type = models.IntegerField(default=0, choices=VOTING_TYPE)
-    Votes = models.IntegerField(default=0)
+    Vote_variants = models.IntegerField(default=0)
 
 
 class VoteVariants(models.Model):
     ID_voting = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
     Serial_number = models.IntegerField()
     Description = models.TextField()
-    Counts_of_votes = models.IntegerField()
+    Votes_count = models.IntegerField()
 
 
 class Votes(models.Model):
     User_id = models.ForeignKey(to=User, on_delete=models.DO_NOTHING)
-    Votings_id = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
-    Choices_id = models.ForeignKey(to=VoteVariants, on_delete=models.CASCADE)
+    Voting_id = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
+    Variant_id = models.ForeignKey(to=VoteVariants, on_delete=models.CASCADE)
     Date_vote = models.DateTimeField(auto_now_add=True)
-
-

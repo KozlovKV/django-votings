@@ -14,13 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf.urls.static import static
 from django.urls import path, include
 
 import menu_app.views as menu
 import vote_app.views as vote
 import profile_app.views as profile
 import moderation_app.views as report
-
+from django_project import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -51,4 +52,4 @@ urlpatterns = [
     path('moderation/manage/change_request/<int:voting_id>/', report.ChangeRequestFormView.as_view(),
          name='moder_change_request_form'),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
