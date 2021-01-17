@@ -86,13 +86,13 @@ def get_variants_list(request):
 def get_variants_context(voting_id):
     res = []
     vote_variants = VoteVariants.objects.filter(ID_voting=voting_id)
-    voting = Votings.get(pk=voting_id)
+    voting = Votings.objects.get(pk=voting_id)
     for variant in vote_variants:
         variant_dict = {
             'serial_number': variant.Serial_number,
             'description': variant.Description,
             'votes_count': variant.Votes_count,
-            'percent': (variant.Votes_count * 100) / voting.Vote_variants,
+            'percent': (variant.Votes_count * 100) / voting.Votes_count,
         }
         res.append(variant_dict)
     res.sort(key=lambda x: x['serial_number'])
@@ -100,7 +100,7 @@ def get_variants_context(voting_id):
 
 
 class VotingView(TemplateViewWithMenu):
-    template_name = 'vote_test.html'
+    template_name = 'vote_one.html'
 
     def get_context_data(self, **kwargs):
         context = super(VotingView, self).get_context_data(**kwargs)
@@ -108,9 +108,11 @@ class VotingView(TemplateViewWithMenu):
         voting_note = Votings.objects.get(pk=voting_id)
         context.update({
             'voting_id': kwargs["voting_id"],
+            'edit_url': reverse_lazy('vote_edit', args=(kwargs["voting_id"],)),
             'title': voting_note.Title,
             'description': voting_note.Description,
             'author': voting_note.Author,
+            'author_url': reverse_lazy('profile_view', args=(voting_note.Author.id,)),
             'status': voting_note.Complaint_state,
             'image': voting_note.Image,
             'result_see_who': voting_note.Result_see_who,

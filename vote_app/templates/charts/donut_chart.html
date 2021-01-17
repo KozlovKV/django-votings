@@ -1,0 +1,23 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Варианты', 'Кол-во голосов'],
+            {% for variant in vote_variants %}
+            ['{{ variant.description }}', {{ variant.votes_count }}],
+            {% endfor %}
+    ]);
+
+    var options = {
+        title: '',
+        pieHole: 0.4,
+        backgroundColor: 'none',
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+    }
+</script>
+<div id="donutchart" style="width: 100%; height: 800px;"></div>

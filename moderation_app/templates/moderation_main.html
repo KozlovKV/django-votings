@@ -8,7 +8,7 @@
 {% block for_moder %}
     <h1>Панель модератора</h1>
     <div class="horizontal-centering">
-        <div class="medium-block">
+        <div class="medium-block medium">
             <h2>Жалобы</h2>
             <div>
                 <p>Количество: {{ reports.all }}</p>
@@ -20,7 +20,7 @@
             </div>
             <a href="{% url 'moder_reports_list' %}" class="big-btn blue">К списку</a>
         </div>
-        <div class="medium-block">
+        <div class="medium-block medium">
             <h2>Запросы на редактирование</h2>
             <div>
                 <p>Количество: {{ change_request.all }}</p>

@@ -9,7 +9,7 @@
     <h1>Профиль пользователя {{ profile_user }}</h1>
     <div class="horizontal-centering">
         {% if profile_user == user %}
-            <div class="medium-block">
+            <div class="medium-block medium">
                 <h2>Редактировать данные</h2>
                 Вводите значения только в поля, которые хотите изменить
                 <form method="post" action="{% url 'profile_view' 0 %}">
@@ -25,7 +25,7 @@
                 </form>
             </div>
         {% endif %}
-        <div class="medium-block">
+        <div class="medium-block medium">
             <h2>Актуальные данные</h2>
             <div>
                 <p>Фамилия</p>
@@ -49,7 +49,7 @@
         {% include 'registration/pswd_reset_form_integratable.html' %}
     {% endif %}
     <div class="horizontal-centering">
-        <div class="medium-block">
+        <div class="medium-block medium">
             <h2>Созданные голосования</h2>
             <div class="list-elem">
                 <h4>Заголовок голосования</h4>
@@ -71,7 +71,7 @@
             </div>
         </div>
         {% if profile_user == user %}
-            <div class="medium-block">
+            <div class="medium-block medium">
                 <h2>Участвовал в голсованиях</h2>
                 <div class="list-elem">
                     <div>
