@@ -3,8 +3,11 @@ let add_btn = document.getElementById('add_vote_variant')
 let variants_container = document.getElementById('vote_variants')
 
 let variant_blocks = variants_container.getElementsByClassName('list-elem')
-let varinats_count = document.getElementById('variants_count')
-let saved_variant_block = variant_blocks[0]
+let variants_count = document.getElementById('variants_count')
+
+let saved_variant_block = variant_blocks[0].cloneNode(true)
+variant_blocks[0].remove()
+update_variants_context()
 
 function delete_variant_block(event) {
     event.target.parentNode.remove()
@@ -28,7 +31,7 @@ function add_new_variant(event) {
 }
 
 function update_variants_context() {
-    varinats_count.value = variant_blocks.length
+    variants_count.value = variant_blocks.length
     for (let i = 0; i < variant_blocks.length; ++i) {
         block = variant_blocks[i]
         block.getElementsByTagName('button')[0].addEventListener('click', delete_variant_block)
