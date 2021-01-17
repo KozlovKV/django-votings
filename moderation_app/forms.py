@@ -9,12 +9,13 @@ class CommentForm(forms.Form):
             'class': 'input wide',
         }))
 
+
 class EditRequestForm(forms.Form):
-    description = forms.CharField(label = 'Комментарий к решению', widget = forms.Textarea(attrs={
+    description = forms.CharField(label='Комментарий к решению', widget=forms.Textarea(attrs={
         'placeholder': 'Комментарий к решению',
-        'class' : 'input',
+        'class': 'input',
     }))
-    reset_votes = forms.BooleanField(required=False, label='Обнулить ли голоса', widget = forms.NullBooleanSelect(attrs={
+    reset_votes = forms.BooleanField(required=False, label='Обнулить ли голоса', widget=forms.NullBooleanSelect(attrs={
         'class': 'input'
     }))
 
