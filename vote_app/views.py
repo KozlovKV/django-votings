@@ -11,6 +11,8 @@ def test_page(request):
     context = get_full_menu_context(request)
     return render(request, 'vote_test.html', context)
 
+class separateVote(TemplateViewWithMenu):
+    template_name = 'separate_vote.html'
 
 class VoteListPageView(TemplateViewWithMenu):
     template_name = 'vote_list.html'

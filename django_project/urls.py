@@ -22,6 +22,8 @@ import profile_app.views as profile
 import moderation_app.views as report
 
 
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', menu.IndexView.as_view()),
@@ -31,6 +33,7 @@ urlpatterns = [
     path('vote/create/', vote.vote_create_page_alt),
     path('vote/edit/<int:voting_id>/', vote.vote_edit_page),
     path('vote/list/', vote.VoteListPageView.as_view()),
+    path('vote/separate/', vote.separateVote.as_view()),
 
     path('profile/test/', profile.TestProfileView.as_view()),
     path('profile/view/<int:profile_id>/', profile.ProfilePageView.as_view()),
