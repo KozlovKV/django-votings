@@ -40,7 +40,8 @@ class Votings(models.Model):
         (MANY, 'Много вариантов'),
     ]
     Type = models.IntegerField(default=0, choices=VOTING_TYPE)
-    Vote_variants = models.IntegerField(default=0)
+    Votes_count = models.IntegerField(default=0)
+    Variants_count = models.IntegerField(default=2)
 
 
 class VoteVariants(models.Model):
