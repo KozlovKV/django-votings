@@ -115,7 +115,7 @@ class VotingView(TemplateViewWithMenu):
             'image': voting_note.Image,
             'result_see_who': voting_note.Result_see_who,
             'result_see_when': voting_note.Result_see_when,
-            'votes_count': voting_note.Vote_variants,
+            'votes_count': voting_note.Votes_count,
             'end_date': voting_note.End_date,
             'vote_variants': get_variants_context(voting_id)
         })

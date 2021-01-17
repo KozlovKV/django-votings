@@ -10,7 +10,7 @@ class ModeledVoteCreateForm(forms.ModelForm):
             'Title', 'Image', 'Description',
             'Type', 'Anons_can_vote',
             'Result_see_who', 'Result_see_when',
-            'End_date',
+            'End_date', 'Variants_count',
         ]
         labels = {
             'Title': 'Заголовок',
@@ -29,7 +29,13 @@ class ModeledVoteCreateForm(forms.ModelForm):
             'Type': forms.RadioSelect,
             'Result_see_who': forms.RadioSelect,
             'Result_see_when': forms.RadioSelect,
-            'End_date': forms.DateTimeInput,
+            'End_date': forms.DateTimeInput(attrs={
+                'type': 'datetime',
+            }),
+            'Variants_count': forms.NumberInput(attrs={
+                'type': 'hidden',
+                'id': 'variants_count',
+            }),
         }
 
 
@@ -64,5 +70,7 @@ class ModeledVoteEditForm(forms.ModelForm):
             'Type': forms.RadioSelect,
             'Result_see_who': forms.RadioSelect,
             'Result_see_when': forms.RadioSelect,
-            'End_date': forms.DateTimeInput,
+            'End_date': forms.DateTimeInput(attrs={
+                'type': 'datetime',
+            }),
         }
