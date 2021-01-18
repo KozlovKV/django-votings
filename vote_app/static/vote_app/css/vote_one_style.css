@@ -1,0 +1,9 @@
+.medium {
+    width: 50%;
+    margin: 15px;
+}
+
+.main__img {
+    padding: 0;
+    border-radius: 10px;
+}

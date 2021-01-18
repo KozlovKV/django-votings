@@ -14,10 +14,29 @@
         title: '',
         pieHole: 0.4,
         backgroundColor: 'none',
+        chartArea: {
+            width: '100%',
+            height: '90%',
+        },
+        legend: {
+            position: 'right',
+            textStyle: {
+                fontSize: 16,
+                fontName: 'Roboto',
+            },
+        },
     };
 
     var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
         chart.draw(data, options);
+        document.querySelector('#download_chart').href = chart.getImageURI()
     }
+
 </script>
-<div id="donutchart" style="width: 100%; height: 800px;"></div>
+
+<div class="horizontal-centering medium">
+    <div id="donutchart" class="small-block grey-3 chart_block ultra-wide"></div>
+    <div class="horizontal-centering">
+        <a href="" class="medium-btn yellow" id="download_chart">Загрузить картинку графика</a>
+    </div>
+</div>
