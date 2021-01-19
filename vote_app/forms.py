@@ -10,7 +10,7 @@ class ModeledVoteCreateForm(forms.ModelForm):
             'Title', 'Image', 'Description',
             'Type', 'Anons_can_vote',
             'Result_see_who', 'Result_see_when',
-            'End_date', 'Variants_count',
+            'End_date', 'Variants_count', 'Author',
         ]
         labels = {
             'Title': 'Заголовок',
@@ -35,6 +35,10 @@ class ModeledVoteCreateForm(forms.ModelForm):
             'Variants_count': forms.NumberInput(attrs={
                 'type': 'hidden',
                 'id': 'variants_count',
+            }),
+            'Author': forms.TextInput(attrs={
+                'type': 'hidden',
+                'id': 'author',
             }),
         }
 

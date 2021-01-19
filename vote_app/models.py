@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse_lazy
 
 
 class Votings(models.Model):
@@ -39,9 +40,16 @@ class Votings(models.Model):
         (ONE, 'Один вариант'),
         (MANY, 'Много вариантов'),
     ]
+    TYPE_REFS = {
+        ONE: 'radio',
+        MANY: 'checkbox',
+    }
     Type = models.IntegerField(default=0, choices=VOTING_TYPE)
     Votes_count = models.IntegerField(default=0)
     Variants_count = models.IntegerField(default=2)
+
+    def get_absolute_url(self):
+        return reverse_lazy('vote_view', args=(self.pk, ))
 
 
 class VoteVariants(models.Model):

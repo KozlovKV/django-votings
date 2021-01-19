@@ -28,6 +28,7 @@
         <div class="medium-block grey-2">
             {% for vote_variant in vote_variants %}
                 <div class="list-elem grey-3">
+                    <input type="{{ type_ref }}" name="variants" value="variant_{{ vote_variant.serial_number }}" id="variant_{{ vote_variant.serial_number }}">
                     <strong class="wide">{{ vote_variant.description }}</strong>
                     <span>{{ vote_variant.votes_count }} - {{ vote_variant.percent | floatformat }}%</span>
                 </div>

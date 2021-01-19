@@ -25,6 +25,7 @@
         {% endif %}
         <form method="POST" action="{{ context_url }}">
             {% csrf_token %}
+            {{ form.Author }}
             <div class="horizontal-centering">
                 <div class="input">
                     <label>{{ form.Title.label }}</label>
@@ -96,4 +97,9 @@
         </form>
     </div>
     <script src="{% static 'vote_app/js/variants_script.js' %}"></script>
+    {% if voting_id == -1 %}
+        <script>
+            document.querySelector('#author').value = {{ user.id }}
+        </script>
+    {% endif %}
 {% endblock %}

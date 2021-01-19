@@ -1,3 +1,4 @@
+from django import forms
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 import django.views.generic.edit as generic_edit
@@ -5,7 +6,6 @@ import django.views.generic.edit as generic_edit
 from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
-
 
 from vote_app.models import Votings
 from vote_app.models import VoteVariants
@@ -15,8 +15,6 @@ def test_page(request):
     context = get_full_menu_context(request)
     return render(request, 'vote_test.html', context)
 
-class separateVote(TemplateViewWithMenu):
-    template_name = 'separate_vote.html'
 
 class VoteListPageView(TemplateViewWithMenu):
     template_name = 'vote_list.html'
@@ -27,7 +25,6 @@ class CreateVotingView(TemplateViewWithMenu, generic_edit.CreateView):
     object = None
     model = Votings
     form_class = ModeledVoteCreateForm
-    success_url = reverse_lazy('vote_list')
 
     def get_context_data(self, **kwargs):
         context = super(CreateVotingView, self).get_context_data(**kwargs)
@@ -52,10 +49,8 @@ class CreateVotingView(TemplateViewWithMenu, generic_edit.CreateView):
 
 class EditVotingView(TemplateViewWithMenu, generic_edit.FormView):
     template_name = 'vote_config.html'
-    object = None  # TODO: принимать существующую запись
     model = Votings
     form_class = ModeledVoteEditForm
-    success_url = reverse_lazy('vote_list')
 
     def get_context_data(self, **kwargs):
         context = super(EditVotingView, self).get_context_data(**kwargs)
@@ -78,7 +73,7 @@ class EditVotingView(TemplateViewWithMenu, generic_edit.FormView):
 
 def get_variants_list(request):
     res = []
-    for serial_num in range(0, int(request.POST.get('variants_count'))):
+    for serial_num in range(0, int(request.POST.get('Variants_count'))):
         res.append(request.POST.get(f'variant_{serial_num}'))
     return res
 
@@ -99,6 +94,22 @@ def get_variants_context(voting_id):
     return res
 
 
+def get_variants_form(variants, type):
+    CHOICES = [(variant['serial_number'], variant['description']) for variant in variants]
+    form = None
+    if type == Votings.ONE:
+        form = forms.ChoiceField(choices=CHOICES)
+        # widget = forms.RadioSelect(attrs={
+        #     'class': 'input',
+        # })
+    elif type == Votings.MANY:
+        form = forms.ChoiceField(choices=CHOICES)
+        # widget = forms.CheckboxSelectMultiple(attrs={
+        #     'class': 'input',
+        # })
+    return form
+
+
 class VotingView(TemplateViewWithMenu):
     template_name = 'vote_one.html'
 
@@ -114,11 +125,13 @@ class VotingView(TemplateViewWithMenu):
             'author': voting_note.Author,
             'author_url': reverse_lazy('profile_view', args=(voting_note.Author.id,)),
             'status': voting_note.Complaint_state,
-            'image': voting_note.Image,
+            'image': (voting_note.Image if not voting_note.Image == '' else ''),
+            'type': voting_note.Type,
+            'type_ref': Votings.TYPE_REFS[voting_note.Type],
             'result_see_who': voting_note.Result_see_who,
             'result_see_when': voting_note.Result_see_when,
             'votes_count': voting_note.Votes_count,
             'end_date': voting_note.End_date,
-            'vote_variants': get_variants_context(voting_id)
+            'vote_variants': get_variants_context(voting_id),
         })
         return context
