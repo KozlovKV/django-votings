@@ -1,4 +1,5 @@
 from django import forms
+from datetime import timezone
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 import django.views.generic.edit as generic_edit
@@ -7,6 +8,7 @@ import django.views.generic.detail as generic_detail
 from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
+
 
 from vote_app.models import Votings, Votes
 from vote_app.models import VoteVariants
@@ -26,6 +28,7 @@ class CreateVotingView(TemplateViewWithMenu, generic_edit.CreateView):
     object = None
     model = Votings
     form_class = ModeledVoteCreateForm
+    success_url = reverse_lazy('vote_list')
 
     def get_context_data(self, **kwargs):
         context = super(CreateVotingView, self).get_context_data(**kwargs)
@@ -39,7 +42,7 @@ class CreateVotingView(TemplateViewWithMenu, generic_edit.CreateView):
         post_response = super(CreateVotingView, self).post(self, request, *args, **kwargs)
 
         # TODO: Добавить сохранение вариантов голосования
-        variants_list = get_variants_description_list(self.request)
+        variants_list = get_variants_list(self.request)
         print(variants_list)
 
         # Записать ID новго голосования для переадресации
@@ -50,8 +53,10 @@ class CreateVotingView(TemplateViewWithMenu, generic_edit.CreateView):
 
 class EditVotingView(TemplateViewWithMenu, generic_edit.FormView):
     template_name = 'vote_config.html'
+    object = None  # TODO: принимать существующую запись
     model = Votings
     form_class = ModeledVoteEditForm
+    success_url = reverse_lazy('vote_list')
 
     def get_context_data(self, **kwargs):
         context = super(EditVotingView, self).get_context_data(**kwargs)
@@ -128,10 +133,27 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
             'end_date': voting_note.End_date,
             'vote_variants': get_variants_context(voting_id),
         })
-        return context
+        if (self.is_ended()== False): context['is_ended'] = False
+        else: context['is_ended'] = True
+        if (self.can_see_result() == False): context['can_watch_res'] = False
+        else: context['can_watch_res'] = True
 
-    def is_ended(self):
-        pass
+
+    def is_ended(self, voting_note=None):
+        if (voting_note.End_date == ""):
+            return False
+        else:
+            if (timezone.now() >= voting_note.End_date):
+                return True
+            elif (timezone.now() < voting_note.End_date):
+                return False
+
+
+    def can_see_result(self, voting_note=None):
+        if (voting_note.Result_see_who == Votings.VOTED):
+            return is_voted(self.request.user)
+        if (voting_note.Result_see_when == Votings.BY_TIMER):
+           return is_ended()
 
     def is_voted(self, user):
         votes = Votes.objects.filter(Voting_id=self.object.pk, User_id=user)
@@ -146,6 +168,4 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         if not self.object.Anons_can_vote and not user.is_authenticated:
             return False
         return True
-
-    def can_see_results(self):
-        pass
+        return context
