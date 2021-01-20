@@ -133,7 +133,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
             'end_date': voting_note.End_date,
             'vote_variants': get_variants_context(voting_id),
         })
-        if (self.is_ended()== False): context['is_ended'] = False
+        if (self.is_ended()== False): context['is_ended'] = self.is_ended()
         else: context['is_ended'] = True
         if (self.can_see_result() == False): context['can_watch_res'] = False
         else: context['can_watch_res'] = True
