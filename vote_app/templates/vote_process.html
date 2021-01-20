@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Отдельное голосование</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/btn_style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'vote_app/css/vote_one_style.css' %}">
+{% endblock %}
+
+{% block main %}
+    <div class="block">
+        <div class="list-elem">
+            <div>
+                <h2>{{ title }}</h2>
+            </div>
+            <div>
+                <p>Автор: <a href="{{ author_url }}">{{ author }}</a></p>
+                <p>Окончание: {{ end_date }}</p>
+                <p>
+                    {% if anons %}
+                        Открытое голосование
+                    {% else %}
+                        Обязательная авторизация
+                    {% endif %}
+                </p>
+                <a href="{% url 'vote_edit' voting_id %}" class="medium-btn yellow">Редактировать</a>
+            </div>
+        </div>
+        <div class="list-elem">
+            {{ errors }}
+        </div>
+    </div>
+{% endblock %}

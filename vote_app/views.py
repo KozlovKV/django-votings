@@ -21,7 +21,7 @@ class VoteListPageView(TemplateViewWithMenu):
     template_name = 'vote_list.html'
 
 
-class CreateVotingView(TemplateViewWithMenu, generic_edit.CreateView):
+class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
     template_name = 'vote_config.html'
     object = None
     model = Votings
@@ -42,13 +42,10 @@ class CreateVotingView(TemplateViewWithMenu, generic_edit.CreateView):
         variants_list = get_variants_description_list(self.request)
         print(variants_list)
 
-        # Записать ID новго голосования для переадресации
-        # voting_id = self.object.id
-        # post_response.url = reverse_lazy('vote_view', args=(voting_id,))
         return post_response
 
 
-class EditVotingView(TemplateViewWithMenu, generic_edit.FormView):
+class EditVotingView(generic_edit.FormView, TemplateViewWithMenu):
     template_name = 'vote_config.html'
     model = Votings
     form_class = ModeledVoteEditForm
@@ -66,9 +63,6 @@ class EditVotingView(TemplateViewWithMenu, generic_edit.FormView):
 
         # TODO: Добавить сохранение вариантов голосования и создание записи в модели запросов на редактирование
 
-        # Записать ID новго голосования для переадресации
-        # voting_id = self.object.id
-        # post_response.url = reverse_lazy('vote_view', args=(voting_id,))
         return post_response
 
 
@@ -98,6 +92,7 @@ def get_variants_context(voting_id):
 class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
     template_name = 'vote_one.html'
     model = Votings
+    object = None
     pk_url_kwarg = 'voting_id'
     variants = []
 
@@ -113,7 +108,6 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         voting_note = self.object
         context.update({
             'voting_id': voting_id,
-            'edit_url': reverse_lazy('vote_edit', args=(voting_id,)),
             'title': voting_note.Title,
             'description': voting_note.Description,
             'author': voting_note.Author,
@@ -149,3 +143,17 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
 
     def can_see_results(self):
         pass
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.can_vote(request.user) and not self.is_ended():
+            variant_id = int(request.POST.get('variants').split('_')[1])
+            variant = self.variants[variant_id-1]
+            new_vote = Votes(User_id=request.user, Voting_id=self.object, Variant_id=variant)
+            new_vote.save()
+            variant.Votes_count += 1
+            variant.save()
+            self.object.Votes_count += 1
+            self.object.save()
+        context = self.get_context_data(**kwargs)
+        return render(self.request, self.template_name, context)

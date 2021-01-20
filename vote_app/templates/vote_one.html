@@ -23,7 +23,7 @@
                         Обязательная авторизация
                     {% endif %}
                 </p>
-                <a href="{{ edit_url }}" class="medium-btn yellow">Редактировать</a>
+                <a href="{% url 'vote_edit' voting_id %}" class="medium-btn yellow">Редактировать</a>
             </div>
         </div>
         <div class="list-elem">
@@ -33,20 +33,23 @@
             <img src="{{ image.url }}" class="medium">
         </div>
         <div class="medium-block grey-2">
-            {% for vote_variant in vote_variants %}
-                <div class="list-elem grey-3">
-                    <input type="{{ type_ref }}" name="variants" value="variant_{{ vote_variant.serial_number }}" id="variant_{{ vote_variant.serial_number }}">
-                    <strong class="wide">{{ vote_variant.description }}</strong>
-                    <span>{{ vote_variant.votes_count }} - {{ vote_variant.percent | floatformat }}%</span>
+            <form method="post" action="{% url 'vote_view' voting_id %}">
+                {% csrf_token %}
+                {% for vote_variant in vote_variants %}
+                    <div class="list-elem grey-3">
+                        <input type="{{ type_ref }}" name="variants" value="variant_{{ vote_variant.serial_number }}" id="variant_{{ vote_variant.serial_number }}">
+                        <strong class="wide">{{ vote_variant.description }}</strong>
+                        <span>{{ vote_variant.votes_count }} - {{ vote_variant.percent | floatformat }}%</span>
+                    </div>
+                {% endfor %}
+                <div class="horizontal-centering">
+                    {% if can_vote %}
+                        <button type="submit" class="big-btn green">Голосовать</button>
+                    {% else %}
+                        <h4>Вы не можете голосовать</h4>
+                    {% endif %}
                 </div>
-            {% endfor %}
-            <div class="horizontal-centering">
-            {% if can_vote %}
-                <button class="big-btn green">Голосовать</button>
-            {% else %}
-                <h4>Вы не можете голосовать</h4>
-            {% endif %}
-            </div>
+            </form>
         </div>
         <div class="medium-block grey-2">
             <h3>Результаты</h3>

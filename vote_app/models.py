@@ -58,9 +58,15 @@ class VoteVariants(models.Model):
     Description = models.TextField()
     Votes_count = models.IntegerField()
 
+    def get_absolute_url(self):
+        return reverse_lazy('vote_view', args=(self.ID_voting, ))
+
 
 class Votes(models.Model):
     User_id = models.ForeignKey(to=User, on_delete=models.DO_NOTHING)
     Voting_id = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
     Variant_id = models.ForeignKey(to=VoteVariants, on_delete=models.CASCADE)
     Date_vote = models.DateTimeField(auto_now_add=True)
+
+    def get_absolute_url(self):
+        return reverse_lazy('vote_view', args=(self.Voting_id, ))
