@@ -1,42 +1,78 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-    google.charts.load("current", {packages:["corechart"]});
-    google.charts.setOnLoadCallback(drawChart);
-    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
+    function loadData() {
+        return google.visualization.arrayToDataTable([
             ['Варианты', 'Кол-во голосов'],
             {% for variant in vote_variants %}
             ['{{ variant.description }}', {{ variant.votes_count }}],
             {% endfor %}
-    ]);
-
-    var options = {
-        title: '',
-        pieHole: 0.4,
-        backgroundColor: 'none',
-        chartArea: {
-            width: '100%',
-            height: '90%',
-        },
-        legend: {
-            position: 'right',
-            textStyle: {
-                fontSize: 16,
-                fontName: 'Roboto',
-            },
-        },
-    };
-
-    var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-        chart.draw(data, options);
-        document.querySelector('#download_chart').href = chart.getImageURI()
+        ]);
     }
+
+    function drawChart() {
+        var data = loadData()
+
+        var options = {
+            title: '',
+            pieHole: 0.4,
+            backgroundColor: 'none',
+            chartArea: {
+                width: '100%',
+                height: '90%',
+            },
+            legend: {
+                position: 'right',
+                textStyle: {
+                    fontSize: 16,
+                    fontName: 'Roboto',
+                },
+            },
+        };
+
+        var chart_block = document.getElementById('donutchart');
+        var chart = new google.visualization.PieChart(chart_block);
+        var download_block = document.querySelector('#download_block');
+
+        google.visualization.events.addListener(chart, 'ready', function () {
+          download_block.innerHTML = '<a href="' + chart.getImageURI() + '" download class="medium-btn yellow" id="download_a">Загрузить картинку графика</a>';
+        });
+
+        chart.draw(data, options);
+    }
+
+<!--    function drawChartForDownload() {-->
+<!--        var data = loadData()-->
+<!--        var download_options = {-->
+<!--            title: {{ title }},-->
+<!--            pieHole: 0.4,-->
+<!--            chartArea: {-->
+<!--                width: '100%',-->
+<!--                height: '90%',-->
+<!--            },-->
+<!--            legend: {-->
+<!--                position: 'right',-->
+<!--                textStyle: {-->
+<!--                    fontSize: 16,-->
+<!--                    fontName: 'Roboto',-->
+<!--                },-->
+<!--            },-->
+<!--        };-->
+<!--        var download_block = document.querySelector('#download_block');-->
+<!--        var download_chart = new google.visualization.PieChart(download_block);-->
+<!--        google.visualization.events.addListener(download_chart, 'ready', function () {-->
+<!--          download_block.innerHTML = '<a href="' + download_chart.getImageURI() + '" download class="medium-btn yellow" id="download_a">Загрузить картинку графика</a>';-->
+<!--        });-->
+<!--        download_chart.draw(data, download_options);-->
+<!--    }-->
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(drawChartForDownload);
 
 </script>
 
 <div class="horizontal-centering medium">
     <div id="donutchart" class="small-block grey-3 chart_block ultra-wide"></div>
-    <div class="horizontal-centering">
-        <a href="" class="medium-btn yellow" id="download_chart">Загрузить картинку графика</a>
+    <div class="horizontal-centering" id="download_block">
     </div>
 </div>
