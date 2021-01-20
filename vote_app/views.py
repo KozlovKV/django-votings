@@ -2,12 +2,13 @@ from django import forms
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 import django.views.generic.edit as generic_edit
+import django.views.generic.detail as generic_detail
 
 from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
 
-from vote_app.models import Votings
+from vote_app.models import Votings, Votes
 from vote_app.models import VoteVariants
 
 
@@ -38,7 +39,7 @@ class CreateVotingView(TemplateViewWithMenu, generic_edit.CreateView):
         post_response = super(CreateVotingView, self).post(self, request, *args, **kwargs)
 
         # TODO: Добавить сохранение вариантов голосования
-        variants_list = get_variants_list(self.request)
+        variants_list = get_variants_description_list(self.request)
         print(variants_list)
 
         # Записать ID новго голосования для переадресации
@@ -71,7 +72,7 @@ class EditVotingView(TemplateViewWithMenu, generic_edit.FormView):
         return post_response
 
 
-def get_variants_list(request):
+def get_variants_description_list(request):
     res = []
     for serial_num in range(0, int(request.POST.get('Variants_count'))):
         res.append(request.POST.get(f'variant_{serial_num}'))
@@ -94,32 +95,25 @@ def get_variants_context(voting_id):
     return res
 
 
-def get_variants_form(variants, type):
-    CHOICES = [(variant['serial_number'], variant['description']) for variant in variants]
-    form = None
-    if type == Votings.ONE:
-        form = forms.ChoiceField(choices=CHOICES)
-        # widget = forms.RadioSelect(attrs={
-        #     'class': 'input',
-        # })
-    elif type == Votings.MANY:
-        form = forms.ChoiceField(choices=CHOICES)
-        # widget = forms.CheckboxSelectMultiple(attrs={
-        #     'class': 'input',
-        # })
-    return form
-
-
-class VotingView(TemplateViewWithMenu):
+class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
     template_name = 'vote_one.html'
+    model = Votings
+    pk_url_kwarg = 'voting_id'
+    variants = []
+
+    def get_object(self, queryset=None):
+        object = super(VotingView, self).get_object(queryset)
+        self.variants = list(VoteVariants.objects.filter(ID_voting=object.pk))
+        self.variants.sort(key=lambda x: x.Serial_number)
+        return object
 
     def get_context_data(self, **kwargs):
         context = super(VotingView, self).get_context_data(**kwargs)
-        voting_id = kwargs["voting_id"]
-        voting_note = Votings.objects.get(pk=voting_id)
+        voting_id = self.object.pk
+        voting_note = self.object
         context.update({
-            'voting_id': kwargs["voting_id"],
-            'edit_url': reverse_lazy('vote_edit', args=(kwargs["voting_id"],)),
+            'voting_id': voting_id,
+            'edit_url': reverse_lazy('vote_edit', args=(voting_id,)),
             'title': voting_note.Title,
             'description': voting_note.Description,
             'author': voting_note.Author,
@@ -128,10 +122,30 @@ class VotingView(TemplateViewWithMenu):
             'image': (voting_note.Image if not voting_note.Image == '' else ''),
             'type': voting_note.Type,
             'type_ref': Votings.TYPE_REFS[voting_note.Type],
-            'result_see_who': voting_note.Result_see_who,
-            'result_see_when': voting_note.Result_see_when,
+            'anons': voting_note.Anons_can_vote,
+            'can_vote': self.can_vote(self.request.user),
             'votes_count': voting_note.Votes_count,
             'end_date': voting_note.End_date,
             'vote_variants': get_variants_context(voting_id),
         })
         return context
+
+    def is_ended(self):
+        pass
+
+    def is_voted(self, user):
+        votes = Votes.objects.filter(Voting_id=self.object.pk, User_id=user)
+        if len(votes) > 0:
+            return True
+        else:
+            return False
+
+    def can_vote(self, user):
+        if self.is_voted(user):
+            return False
+        if not self.object.Anons_can_vote and not user.is_authenticated:
+            return False
+        return True
+
+    def can_see_results(self):
+        pass
