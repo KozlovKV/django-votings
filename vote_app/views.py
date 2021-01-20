@@ -9,7 +9,6 @@ from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
 
-
 from vote_app.models import Votings, Votes
 from vote_app.models import VoteVariants
 
@@ -129,31 +128,28 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
             'type_ref': Votings.TYPE_REFS[voting_note.Type],
             'anons': voting_note.Anons_can_vote,
             'can_vote': self.can_vote(self.request.user),
+            'can_watch_res': self.can_see_result(),
             'votes_count': voting_note.Votes_count,
             'end_date': voting_note.End_date,
+            'is_ended': self.is_ended(),
             'vote_variants': get_variants_context(voting_id),
         })
-        if (self.is_ended()== False): context['is_ended'] = self.is_ended()
-        else: context['is_ended'] = True
-        if (self.can_see_result() == False): context['can_watch_res'] = False
-        else: context['can_watch_res'] = True
-
+        return context
 
     def is_ended(self, voting_note=None):
-        if (voting_note.End_date == ""):
+        if self.object.End_date == "":
             return False
         else:
-            if (timezone.now() >= voting_note.End_date):
+            if timezone.now() >= self.object.End_date:
                 return True
-            elif (timezone.now() < voting_note.End_date):
+            elif timezone.now() < self.object.End_date:
                 return False
 
-
-    def can_see_result(self, voting_note=None):
-        if (voting_note.Result_see_who == Votings.VOTED):
-            return is_voted(self.request.user)
-        if (voting_note.Result_see_when == Votings.BY_TIMER):
-           return is_ended()
+    def can_see_result(self):
+        if self.object.Result_see_when == Votings.BY_TIMER:
+            return self.is_ended()
+        if self.object.Result_see_who == Votings.VOTED:
+            return self.is_voted(self.request.user)
 
     def is_voted(self, user):
         votes = Votes.objects.filter(Voting_id=self.object.pk, User_id=user)
@@ -168,4 +164,3 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         if not self.object.Anons_can_vote and not user.is_authenticated:
             return False
         return True
-        return context
