@@ -29,7 +29,7 @@
                         Обязательная авторизация
                     {% endif %}
                 </p>
-                {% if object.author == request.user or rights == 2 %}
+                {% if can_edit %}
                     <a href="{% url 'vote_edit' object.pk %}" class="medium-btn yellow">Редактировать</a>
                 {% endif %}
             </div>

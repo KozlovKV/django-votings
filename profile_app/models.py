@@ -3,10 +3,13 @@ from django.db import models
 
 
 class AdditionUserInfo(models.Model):
+    SIMPLE = 0
+    MODER = 1
+    ADMIN = 2
     RIGHTS = (
-        (0, 'Обычный'),
-        (1, 'Модератор'),
-        (2, 'Администратор'),
+        (SIMPLE, 'Обычный'),
+        (MODER, 'Модератор'),
+        (ADMIN, 'Администратор'),
     )
 
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)

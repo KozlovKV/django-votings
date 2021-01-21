@@ -7,6 +7,7 @@ import django.views.generic.detail as generic_detail
 
 from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
+from profile_app.models import AdditionUserInfo
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
 
 from vote_app.models import Votings, Votes
@@ -115,6 +116,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         context.update({
             'type_ref': Votings.TYPE_REFS[self.object.type],
             'can_vote': self.can_vote(self.request.user),
+            'can_edit': self.can_edit(self.request.user),
             'can_watch_res': self.can_see_result(),
             'is_ended': self.is_ended(),
             'vote_variants': get_variants_context(self.object),
@@ -159,7 +161,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         elif not user.is_authenticated:
             if not self.object.anons_can_vote:
                 self.extra_context.update({
-                    'reason_cant_vote': 'Вы уже голосовали'
+                    'reason_cant_vote': 'Для этого голосования необходимо авторизоваться'
                 })
             return self.object.anons_can_vote
         elif self.is_voted(user):
@@ -168,6 +170,12 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
             })
             return False
         return True
+
+    def can_edit(self, user):
+        if not user.is_authenticated:
+            return False
+        add_info = AdditionUserInfo.objects.get(user=user)
+        return self.object.author == user or add_info.user_rights == AdditionUserInfo.ADMIN
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
