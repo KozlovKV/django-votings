@@ -69,7 +69,7 @@ class EditVotingView(generic_edit.FormView, TemplateViewWithMenu):
 
 def get_variants_description_list(request):
     res = []
-    for serial_num in range(0, int(request.POST.get('Variants_count'))):
+    for serial_num in range(0, int(request.POST.get('variants_count'))):
         res.append(request.POST.get(f'variant_{serial_num}'))
     return res
 
@@ -80,10 +80,10 @@ def get_variants_context(voting_id):
     voting = Votings.objects.get(pk=voting_id)
     for variant in vote_variants:
         variant_dict = {
-            'serial_number': variant.Serial_number,
-            'description': variant.Description,
-            'votes_count': variant.Votes_count,
-            'percent': (variant.Votes_count * 100) / voting.Votes_count,
+            'serial_number': variant.serial_number,
+            'description': variant.description,
+            'votes_count': variant.voters_count,
+            'percent': (variant.voters_count * 100) / voting.voters_count,
         }
         res.append(variant_dict)
     res.sort(key=lambda x: x['serial_number'])
@@ -107,7 +107,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
     def get_object(self, queryset=None):
         object = super(VotingView, self).get_object(queryset)
         self.variants = list(VoteVariants.objects.filter(ID_voting=object.pk))
-        self.variants.sort(key=lambda x: x.Serial_number)
+        self.variants.sort(key=lambda x: x.serial_number)
         return object
 
     def get_context_data(self, **kwargs):
@@ -116,37 +116,37 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         voting_note = self.object
         context.update({
             'voting_id': voting_id,
-            'title': voting_note.Title,
-            'description': voting_note.Description,
-            'author': voting_note.Author,
-            'author_url': reverse_lazy('profile_view', args=(voting_note.Author.id,)),
-            'status': voting_note.Complaint_state,
-            'image': (voting_note.Image if not voting_note.Image == '' else ''),
-            'type': voting_note.Type,
-            'type_ref': Votings.TYPE_REFS[voting_note.Type],
-            'anons': voting_note.Anons_can_vote,
+            'title': voting_note.title,
+            'description': voting_note.description,
+            'author': voting_note.author,
+            'author_url': reverse_lazy('profile_view', args=(voting_note.author.id,)),
+            'status': voting_note.complaint_state,
+            'image': (voting_note.image if not voting_note.image == '' else ''),
+            'type': voting_note.type,
+            'type_ref': Votings.TYPE_REFS[voting_note.type],
+            'anons': voting_note.anons_can_vote,
             'can_vote': self.can_vote(self.request.user),
             'can_watch_res': self.can_see_result(),
-            'votes_count': voting_note.Votes_count,
-            'end_date': voting_note.End_date,
+            'votes_count': voting_note.voters_count,
+            'end_date': voting_note.end_date,
             'is_ended': self.is_ended(),
             'vote_variants': get_variants_context(voting_id),
         })
         return context
 
     def is_ended(self, voting_note=None):
-        if self.object.End_date == "":
+        if self.object.end_date == "":
             return False
         else:
-            if timezone.now() >= self.object.End_date:
+            if timezone.now() >= self.object.end_date:
                 return True
-            elif timezone.now() < self.object.End_date:
+            elif timezone.now() < self.object.end_date:
                 return False
 
     def can_see_result(self):
-        if self.object.Result_see_when == Votings.BY_TIMER:
+        if self.object.result_see_when == Votings.BY_TIMER:
             return self.is_ended()
-        if self.object.Result_see_who == Votings.VOTED:
+        if self.object.result_see_who == Votings.VOTED:
             return self.is_voted(self.request.user)
 
     def is_voted(self, user):
@@ -159,14 +159,14 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
     def can_vote(self, user):
         if self.is_voted(user):
             return False
-        if not self.object.Anons_can_vote and not user.is_authenticated:
+        if not self.object.anons_can_vote and not user.is_authenticated:
             return False
         return True
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         if self.can_vote(request.user) and not self.is_ended():
-            self.VOTE_PROCESSORS[Votings.TYPE_REFS[self.object.Type]]()
+            self.VOTE_PROCESSORS[Votings.TYPE_REFS[self.object.type]]()
         context = self.get_context_data(**kwargs)
         return render(self.request, self.template_name, context)
 
@@ -175,19 +175,19 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         variant = self.variants[variant_id - 1]
         new_vote = Votes(User_id=self.request.user, Voting_id=self.object, Variant_id=variant)
         new_vote.save()
-        variant.Votes_count += 1
+        variant.voters_count += 1
         variant.save()
-        self.object.Votes_count += 1
+        self.object.voters_count += 1
         self.object.save()
 
     def vote_many_variants_process(self):
-        for i in range(1, self.object.Variants_count+1):
+        for i in range(1, self.object.variants_count + 1):
             input_val = int(self.request.POST.get(f'{i}', -1))
             if input_val != -1:
                 variant = self.variants[input_val - 1]
                 new_vote = Votes(User_id=self.request.user, Voting_id=self.object, Variant_id=variant)
                 new_vote.save()
-                variant.Votes_count += 1
+                variant.voters_count += 1
                 variant.save()
-        self.object.Votes_count += 1
+        self.object.voters_count += 1
         self.object.save()

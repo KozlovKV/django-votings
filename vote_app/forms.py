@@ -7,36 +7,36 @@ class ModeledVoteCreateForm(forms.ModelForm):
     class Meta:
         model = Votings
         fields = [
-            'Title', 'Image', 'Description',
-            'Type', 'Anons_can_vote',
-            'Result_see_who', 'Result_see_when',
-            'End_date', 'Variants_count', 'Author',
+            'title', 'image', 'description',
+            'type', 'anons_can_vote',
+            'result_see_who', 'result_see_when',
+            'end_date', 'variants_count', 'author',
         ]
         labels = {
-            'Title': 'Заголовок',
-            'Image': 'Картинка',
-            'Description': 'Описание',
-            'Type': 'Тип голосования',
-            'Anons_can_vote': 'Разрешить голосовать анонимам',
-            'Result_see_who': 'Кому видны результаты',
-            'Result_see_when': 'Когда видные результаты',
-            'End_date': 'Дата окончания (пусто - бессрочно)',
+            'title': 'Заголовок',
+            'image': 'Картинка',
+            'description': 'Описание',
+            'type': 'Тип голосования',
+            'anons_can_vote': 'Разрешить голосовать анонимам',
+            'result_see_who': 'Кому видны результаты',
+            'result_see_when': 'Когда видные результаты',
+            'end_date': 'Дата окончания (пусто - бессрочно)',
         }
         widgets = {
-            'Description': forms.Textarea(attrs={
+            'description': forms.Textarea(attrs={
                 'style': 'width: 95%',
             }),
-            'Type': forms.RadioSelect,
-            'Result_see_who': forms.RadioSelect,
-            'Result_see_when': forms.RadioSelect,
-            'End_date': forms.DateTimeInput(attrs={
+            'type': forms.RadioSelect,
+            'result_see_who': forms.RadioSelect,
+            'result_see_when': forms.RadioSelect,
+            'end_date': forms.DateTimeInput(attrs={
                 'type': 'datetime',
             }),
-            'Variants_count': forms.NumberInput(attrs={
+            'variants_count': forms.NumberInput(attrs={
                 'type': 'hidden',
                 'id': 'variants_count',
             }),
-            'Author': forms.TextInput(attrs={
+            'author': forms.TextInput(attrs={
                 'type': 'hidden',
                 'id': 'author',
             }),
@@ -52,29 +52,29 @@ class ModeledVoteEditForm(forms.ModelForm):
     class Meta:
         model = Votings
         fields = [
-            'Title', 'Image', 'Description',
-            'Type', 'Anons_can_vote',
-            'Result_see_who', 'Result_see_when',
-            'End_date',
+            'title', 'image', 'description',
+            'type', 'anons_can_vote',
+            'result_see_who', 'result_see_when',
+            'end_date',
         ]
         labels = {
-            'Title': 'Заголовок',
-            'Image': 'Картинка',
-            'Description': 'Описание',
-            'Type': 'Тип голосования',
-            'Anons_can_vote': 'Разрешить голосовать анонимам',
-            'Result_see_who': 'Кому видны результаты',
-            'Result_see_when': 'Когда видные результаты',
-            'End_date': 'Дата окончания (пусто - бессрочно)',
+            'title': 'Заголовок',
+            'image': 'Картинка',
+            'description': 'Описание',
+            'type': 'Тип голосования',
+            'anons_can_vote': 'Разрешить голосовать анонимам',
+            'result_see_who': 'Кому видны результаты',
+            'result_see_when': 'Когда видные результаты',
+            'end_date': 'Дата окончания (пусто - бессрочно)',
         }
         widgets = {
-            'Description': forms.Textarea(attrs={
+            'description': forms.Textarea(attrs={
                 'style': 'width: 95%',
             }),
-            'Type': forms.RadioSelect,
-            'Result_see_who': forms.RadioSelect,
-            'Result_see_when': forms.RadioSelect,
-            'End_date': forms.DateTimeInput(attrs={
+            'type': forms.RadioSelect,
+            'result_see_who': forms.RadioSelect,
+            'result_see_when': forms.RadioSelect,
+            'end_date': forms.DateTimeInput(attrs={
                 'type': 'datetime',
             }),
         }

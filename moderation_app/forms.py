@@ -19,4 +19,3 @@ class EditRequestForm(forms.Form):
         'class': 'input'
     }))
 
-    

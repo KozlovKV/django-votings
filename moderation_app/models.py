@@ -45,7 +45,7 @@ class Reports(models.Model):
 
 
 class VoteChangeRequest(models.Model):
-    voting_id = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
-    Change = models.TextField()
+    voting = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
+    change = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     comment = models.TextField()
