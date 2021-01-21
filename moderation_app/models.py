@@ -19,27 +19,27 @@ class Reports(models.Model):
         (2, 'Отклонена')
     ]
 
-    author = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    theme = models.IntegerField(choices=THEMES)
-    element = models.IntegerField(null=True)  # id модели, соответствующей теме жалобы
-    content = models.TextField()
-    status = models.IntegerField(choices=STATUSES)
-    create_date = models.DateTimeField(auto_now_add=True)
-    close_date = models.DateTimeField(null=True)
+    Author = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    Theme = models.IntegerField(choices=THEMES)
+    Element = models.IntegerField(null=True)  # id модели, соответствующей теме жалобы
+    Content = models.TextField()
+    Status = models.IntegerField(choices=STATUSES)
+    Create_date = models.DateTimeField(auto_now_add=True)
+    Close_date = models.DateTimeField(null=True)
 
     def is_url_need(self):
-        return self.theme == 0
+        return self.Theme == 0
 
     def get_object_url_from_report(self):
         if self.is_url_need():
-            if self.theme == 0:
-                return reverse_lazy('vote_view', args=(self.element,))
+            if self.Theme == 0:
+                return reverse_lazy('vote_view', args=(self.Element,))
         else:
             return ''
 
     def get_humanity_theme_name(self):
         for THEME in self.THEMES:
-            if THEME[0] == self.theme:
+            if THEME[0] == self.Theme:
                 return THEME[1]
         return 'Ошибочная тема'
 

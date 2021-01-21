@@ -13,6 +13,7 @@
             <div class="medium-block medium">
                 <h2>Отправить жалобу</h2>
                 <form method="post" action="{% url 'moder_report_send' %}">
+                    {% csrf_token %}
                     <div class="horizontal-centering">
                         <label>Тема жалобы</label>
                         <select class="input wide">

@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from menu_app.view_menu_context import get_full_site_url
 from menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
-from moderation_app.forms import CommentForm
+from moderation_app.forms import CommentForm, ModeledReportCreateForm
 from moderation_app.models import Reports
 from moderation_app.view_subclasses import ReportCloseTemplateView
 
@@ -21,15 +21,15 @@ class ModerationPanelView(TemplateViewWithMenu):
         context.update({
             'reports': {
                 'all': len(Reports.objects.all()),
-                'submitted': len(Reports.objects.filter(status=1)),
-                'rejected': len(Reports.objects.filter(status=2)),
-                'processed': len(Reports.objects.exclude(status=0)),
+                'submitted': len(Reports.objects.filter(Status=1)),
+                'rejected': len(Reports.objects.filter(Status=2)),
+                'processed': len(Reports.objects.exclude(Status=0)),
             },
             'change_request': {
                 'all': len(Reports.objects.all()),
-                'submitted': len(Reports.objects.filter(status=1)),
-                'rejected': len(Reports.objects.filter(status=2)),
-                'processed': len(Reports.objects.exclude(status=0)),
+                'submitted': len(Reports.objects.filter(Status=1)),
+                'rejected': len(Reports.objects.filter(Status=2)),
+                'processed': len(Reports.objects.exclude(Status=0)),
             },
         })
         return context
@@ -53,7 +53,7 @@ class ReportsListView(TemplateViewWithMenu):
     @staticmethod
     def get_reports_list():
         res = []
-        model_list = Reports.objects.filter(status=0)
+        model_list = Reports.objects.filter(Status=0)
         for model_note in model_list:
             dict_note = {
                 'id': model_note.id,
@@ -88,8 +88,11 @@ class ReportRejectView(ReportCloseTemplateView):
     new_status_name = 'Отклонена'
 
 
-class SendReportView(TemplateViewWithMenu):  # TODO: https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/
+class SendReportView(TemplateViewWithMenu, generic_edit.CreateView):  # TODO: https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/
     template_name = 'send.html'
+    object = None
+    model = Reports
+    form_class = ModeledReportCreateForm
 
     def get(self, request, *args, **kwargs):
         """
@@ -98,3 +101,13 @@ class SendReportView(TemplateViewWithMenu):  # TODO: https://docs.djangoproject.
             Да в общем всё что душе угодно (При ненадобности можно вообще удалить)
         """
         return super(SendReportView, self).get(self, request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        post_response = super(SendReportView, self).post(self, request, *args, **kwargs)
+
+        # TODO: Добавить сохранение вариантов голосования
+
+        # Записать ID новой жалобы для переадресации
+        # report_id = self.object.id
+        # post_response.url = reverse_lazy('vote_view', args=(report_id,))
+        return post_response
