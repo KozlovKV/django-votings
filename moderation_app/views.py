@@ -105,8 +105,6 @@ class SendReportView(TemplateViewWithMenu, generic_edit.CreateView):  # TODO: ht
     def post(self, request, *args, **kwargs):
         post_response = super(SendReportView, self).post(self, request, *args, **kwargs)
 
-        # TODO: Добавить сохранение вариантов голосования
-
         # Записать ID новой жалобы для переадресации
         # report_id = self.object.id
         # post_response.url = reverse_lazy('vote_view', args=(report_id,))

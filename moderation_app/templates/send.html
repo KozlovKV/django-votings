@@ -15,16 +15,9 @@
                 <form method="post" action="{% url 'moder_report_send' %}">
                     {% csrf_token %}
                     <div class="horizontal-centering">
-                        <label>Тема жалобы</label>
-                        <select class="input wide">
-                          <option>Сложный выбор</option>
-                          <option>Некорректные формуллировки</option>
-                          <option>Автора купил Запад</option>
-                        </select>
-                        <textarea
-                                placeholder="Содержание жалобы (подробное описание значительно повышает шанс на адекватный ответ)"
-                                class="input wide">
-                        </textarea>
+                        <label>{{ form.Theme.label }}</label>
+                        {{ form.Theme }}
+                        {{ form.Content }}
                         <input type="submit" value="Изменить" class="medium-btn green input wide">
                     </div>
                 </form>

@@ -19,11 +19,11 @@ class Reports(models.Model):
         (2, 'Отклонена')
     ]
 
-    Author = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    Theme = models.IntegerField(choices=THEMES)
+    Author = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True)
+    Theme = models.IntegerField(choices=THEMES, default=0)
     Element = models.IntegerField(null=True)  # id модели, соответствующей теме жалобы
     Content = models.TextField()
-    Status = models.IntegerField(choices=STATUSES)
+    Status = models.IntegerField(choices=STATUSES, default=0)
     Create_date = models.DateTimeField(auto_now_add=True)
     Close_date = models.DateTimeField(null=True)
 
