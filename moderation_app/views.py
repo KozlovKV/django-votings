@@ -5,7 +5,7 @@ from django.utils import timezone
 from menu_app.view_menu_context import get_full_site_url
 from menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
 from moderation_app.forms import CommentForm
-from moderation_app.models import Reports
+from moderation_app.models import Reports, VoteChangeRequest
 from moderation_app.view_subclasses import ReportCloseTemplateView
 
 
@@ -21,15 +21,12 @@ class ModerationPanelView(TemplateViewWithMenu):
         context.update({
             'reports': {
                 'all': len(Reports.objects.all()),
-                'submitted': len(Reports.objects.filter(status=1)),
-                'rejected': len(Reports.objects.filter(status=2)),
-                'processed': len(Reports.objects.exclude(status=0)),
+                'submitted': len(Reports.objects.filter(status=Reports.SUBMITTED)),
+                'rejected': len(Reports.objects.filter(status=Reports.REJECTED)),
+                'processed': len(Reports.objects.exclude(status=Reports.IN_PROCESS)),
             },
             'change_request': {
-                'all': len(Reports.objects.all()),
-                'submitted': len(Reports.objects.filter(status=1)),
-                'rejected': len(Reports.objects.filter(status=2)),
-                'processed': len(Reports.objects.exclude(status=0)),
+                'all': len(VoteChangeRequest.objects.all()),
             },
         })
         return context

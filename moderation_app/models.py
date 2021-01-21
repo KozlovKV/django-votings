@@ -13,10 +13,13 @@ class Reports(models.Model):
         (1, 'Сообщение об ошибке'),
     ]
 
+    IN_PROCESS = 0
+    SUBMITTED = 1
+    REJECTED = 2
     STATUSES = [
-        (0, 'Обрабатывается'),
-        (1, 'Решена'),
-        (2, 'Отклонена')
+        (IN_PROCESS, 'Обрабатывается'),
+        (SUBMITTED, 'Решена'),
+        (REJECTED, 'Отклонена')
     ]
 
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
