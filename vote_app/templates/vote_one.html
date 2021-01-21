@@ -18,7 +18,13 @@
             <div>
                 <p class="meta-data">Автор: {{ object.author }}<a href="{% url 'profile_view' object.author.id %}"
                                                 class="small-btn blue fas fa-arrow-right"></a></p>
-                <p class="meta-data">Окончание: {{ object.end_date }}</p>
+                <p class="meta-data">
+                    {% if object.end_date is None %}
+                        Бессрочно
+                    {% else %}
+                        Окончание: {{ object.end_date }}
+                    {% endif %}
+                </p>
                 {% if is_ended %}
                     <p>Окончено</p>
                 {% endif %}
@@ -44,7 +50,7 @@
             <div class="main__medium">
                 <p>{{ object.description }}</p>
             </div>
-            <img src="{{ object.image.url }}" class="main__medium">
+            <img src="{{ img_url }}" class="main__medium">
         </div>
         <div class="medium-block grey-2">
             {% if can_vote %}

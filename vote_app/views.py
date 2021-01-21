@@ -121,11 +121,15 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
             'is_ended': self.is_ended(),
             'vote_variants': get_variants_context(self.object),
         })
+        try:
+            context['img_url'] = self.object.image.url
+        except ValueError:
+            context['img_url'] = ''
         context.update(self.extra_context)
         return context
 
     def is_ended(self):
-        if self.object.end_date == "" or self.object.end_date is None:
+        if self.object.end_date is None:
             return False
         else:
             if timezone.now() >= self.object.end_date:
