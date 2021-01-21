@@ -76,14 +76,14 @@ def get_variants_description_list(request):
 
 def get_variants_context(voting_id):
     res = []
-    vote_variants = VoteVariants.objects.filter(ID_voting=voting_id)
+    vote_variants = VoteVariants.objects.filter(voting=voting_id)
     voting = Votings.objects.get(pk=voting_id)
     for variant in vote_variants:
         variant_dict = {
             'serial_number': variant.serial_number,
             'description': variant.description,
-            'votes_count': variant.voters_count,
-            'percent': (variant.voters_count * 100) / voting.voters_count,
+            'votes_count': variant.votes_count,
+            'percent': (variant.votes_count * 100) / (voting.voters_count if voting.voters_count != 0 else 1),
         }
         res.append(variant_dict)
     res.sort(key=lambda x: x['serial_number'])
@@ -98,7 +98,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
     variants = []
 
     def __init__(self):
-        super(VotingView, self).__init__(self)
+        super(VotingView, self).__init__()
         self.VOTE_PROCESSORS = {
             'radio': self.vote_one_variant_process,
             'checkbox': self.vote_many_variants_process,
@@ -106,7 +106,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
 
     def get_object(self, queryset=None):
         object = super(VotingView, self).get_object(queryset)
-        self.variants = list(VoteVariants.objects.filter(ID_voting=object.pk))
+        self.variants = list(VoteVariants.objects.filter(voting=object.pk))
         self.variants.sort(key=lambda x: x.serial_number)
         return object
 
@@ -150,7 +150,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
             return self.is_voted(self.request.user)
 
     def is_voted(self, user):
-        votes = Votes.objects.filter(Voting_id=self.object.pk, User_id=user)
+        votes = Votes.objects.filter(voting=self.object.pk, user=user)
         if len(votes) > 0:
             return True
         else:
@@ -173,9 +173,9 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
     def vote_one_variant_process(self):
         variant_id = int(self.request.POST.get('variants'))
         variant = self.variants[variant_id - 1]
-        new_vote = Votes(User_id=self.request.user, Voting_id=self.object, Variant_id=variant)
+        new_vote = Votes(user=self.request.user, voting=self.object, variant=variant)
         new_vote.save()
-        variant.voters_count += 1
+        variant.votes_count += 1
         variant.save()
         self.object.voters_count += 1
         self.object.save()
@@ -185,9 +185,9 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
             input_val = int(self.request.POST.get(f'{i}', -1))
             if input_val != -1:
                 variant = self.variants[input_val - 1]
-                new_vote = Votes(User_id=self.request.user, Voting_id=self.object, Variant_id=variant)
+                new_vote = Votes(user=self.request.user, voting=self.object, variant=variant)
                 new_vote.save()
-                variant.voters_count += 1
+                variant.votes_count += 1
                 variant.save()
         self.object.voters_count += 1
         self.object.save()

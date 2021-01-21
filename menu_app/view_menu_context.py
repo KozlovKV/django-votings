@@ -41,7 +41,7 @@ def get_full_menu_context(request):
         context['login_form'] = profile_forms.ModifiedAuthenticationForm(request.POST)
         context['reg_form'] = profile_forms.ModifiedRegistrationForm(request.POST)
     else:
-        info = AdditionUserInfo.objects.get(User_id=request.user)
+        info = AdditionUserInfo.objects.get(user=request.user)
         context['rights'] = info.user_rights
         context['status'] = info.get_right_name()
         if info.user_rights == 2:
