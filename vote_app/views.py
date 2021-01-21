@@ -41,10 +41,19 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
         post_response = super(CreateVotingView, self).post(self, request, *args, **kwargs)
 
         # TODO: Добавить сохранение вариантов голосования
-        variants_list = get_variants_description_list(self.request)
-        print(variants_list)
-
+        self.save_vote_variants()
         return post_response
+
+    def save_vote_variants(self):
+        voting_id = self.object.id
+        variants_list = get_variants_description_list(self.request)
+        variants_count = len(variants_list)
+        for serial_number in range(variants_count):
+            record = VoteVariants(voting=voting_id,
+                                  serial_number=serial_number,
+                                  description=variants_list[serial_number],
+                                  votes_count=0,)
+            record.save()
 
 
 class EditVotingView(generic_edit.FormView, TemplateViewWithMenu):
@@ -132,10 +141,11 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         if self.object.end_date is None:
             return False
         else:
-            if timezone.now() >= self.object.end_date:
-                return True
-            elif timezone.now() < self.object.end_date:
-                return False
+            # if timezone.now() >= self.object.end_date:
+            #     return True
+            # elif timezone.now() < self.object.end_date:
+            #     return False
+            return timezone.now() >= self.object.end_date
 
     def can_see_result(self):
         if self.object.result_see_when == Votings.BY_TIMER:
@@ -151,10 +161,11 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
 
     def is_voted(self, user):
         votes = Votes.objects.filter(voting=self.object.pk, user=user)
-        if len(votes) > 0:
-            return True
-        else:
-            return False
+        # if len(votes) > 0:
+        #     return True
+        # else:
+        #     return False
+        return len(votes) > 0
 
     def can_vote(self, user):
         if self.is_ended():
