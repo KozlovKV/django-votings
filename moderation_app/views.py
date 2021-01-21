@@ -1,12 +1,14 @@
 from django.urls import reverse, reverse_lazy
 import django.views.generic.edit as generic_edit
+import django.views.generic.detail as generic_detail
 from django.utils import timezone
 
 from menu_app.view_menu_context import get_full_site_url
 from menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
-from moderation_app.forms import CommentForm
+from moderation_app.forms import CommentForm, EditRequestForm
 from moderation_app.models import Reports, VoteChangeRequest
 from moderation_app.view_subclasses import ReportCloseTemplateView
+from vote_app.models import Votings
 
 
 class TestModerView(TemplateViewWithMenu):
@@ -32,43 +34,69 @@ class ModerationPanelView(TemplateViewWithMenu):
         return context
 
 
+def get_change_requests_list_context():
+    res = []
+    model_list = VoteChangeRequest.objects.all()
+    for model_note in model_list:
+        dict_note = {
+            'title': model_note.voting.title,
+            'date': model_note.date,
+            'form_url': reverse('moder_change_request_form', args=(model_note.pk,)),
+        }
+        res.append(dict_note)
+    return res
+
+
 class ChangeRequestsListView(TemplateViewWithMenu):
     template_name = 'change_requests_list.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(ChangeRequestsListView, self).get_context_data(**kwargs)
+        context.update({
+            'change_requests': get_change_requests_list_context(),
+        })
+        return context
 
-class ChangeRequestFormView(TemplateViewWithMenu):
+
+class ChangeRequestFormView(generic_detail.DetailView, TemplateViewWithMenu):
     template_name = 'change_request_form.html'
+    object = None
+    model = VoteChangeRequest
+    pk_url_kwarg = 'request_id'
 
-    def get(self, request, *args, **kwargs):
-        self.extra_context = kwargs
-        return super(ChangeRequestFormView, self).get(self, request, *args, **kwargs)
+    def get_context_data(self, **kwargs):
+        context = super(ChangeRequestFormView, self).get_context_data(**kwargs)
+        context.update({
+            'form': EditRequestForm
+        })
+        return context
+
+
+def get_reports_list_context():
+    res = []
+    model_list = Reports.objects.filter(status=0)
+    for model_note in model_list:
+        dict_note = {
+            'id': model_note.pk,
+            'theme': model_note.get_humanity_theme_name(),
+            'object_url': model_note.get_object_url_from_report(),
+            'content': model_note.content,
+            'author': model_note.author,
+            'date': model_note.create_date,
+            'submit_url': reverse('moder_report_submit', args=(model_note.pk,)),
+            'reject_url': reverse('moder_report_reject', args=(model_note.pk,)),
+        }
+        res.append(dict_note)
+    return res
 
 
 class ReportsListView(TemplateViewWithMenu):
     template_name = 'report/reports_list.html'
 
-    @staticmethod
-    def get_reports_list():
-        res = []
-        model_list = Reports.objects.filter(status=0)
-        for model_note in model_list:
-            dict_note = {
-                'id': model_note.id,
-                'theme': model_note.get_humanity_theme_name(),
-                'object_url': model_note.get_object_url_from_report(),
-                'content': model_note.content,
-                'author': model_note.author,
-                'date': model_note.create_date,
-                'submit_url': reverse('moder_report_submit', args=(model_note.id,)),
-                'reject_url': reverse('moder_report_reject', args=(model_note.id,)),
-            }
-            res.append(dict_note)
-        return res
-
     def get_context_data(self, **kwargs):
         context = super(ReportsListView, self).get_context_data(**kwargs)
         context.update({
-            'reports': self.get_reports_list()
+            'reports': get_reports_list_context()
         })
         return context
 

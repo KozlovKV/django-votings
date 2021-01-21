@@ -125,7 +125,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         return context
 
     def is_ended(self):
-        if self.object.end_date == "":
+        if self.object.end_date == "" or self.object.end_date is None:
             return False
         else:
             if timezone.now() >= self.object.end_date:

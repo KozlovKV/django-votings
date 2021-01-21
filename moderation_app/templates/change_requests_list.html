@@ -16,25 +16,17 @@
     <div class="horizontal-centering">
         <div class="block">
             <div class="list-elem">
-                <h4>Заголовок голосования</h4>
-                <span class="meta-data">01.01.0000</span>
-                <div>
-                    <a href="{# url_from_context #}{% url 'moder_change_request_form' 0 %}" class="medium-btn yellow">Просмотр изменений</a>
-                </div>
-            </div>
-            <div class="list-elem">
-                <h4>Заголовок голосования</h4>
-                <span class="meta-data">01.01.0000</span>
-                <div>
-                    <a href="{# url_from_context #}{% url 'moder_change_request_form' 0 %}" class="medium-btn yellow">Просмотр изменений</a>
-                </div>
-            </div>
-            <div class="list-elem">
-                <h4>Заголовок голосования</h4>
-                <span class="meta-data">01.01.0000</span>
-                <div>
-                    <a href="{# url_from_context #}{% url 'moder_change_request_form' 0 %}" class="medium-btn yellow">Просмотр изменений</a>
-                </div>
+                {% if change_requests|length == 0 %}
+                    <h4 class="center">Список пуст</h4>
+                {% else %}
+                    {% for request in change_requests %}
+                        <h4>{{ request.title }}</h4>
+                        <span class="meta-data">{{ request.date }}</span>
+                        <div>
+                            <a href="{{ request.form_url }}" class="medium-btn yellow">Просмотр изменений</a>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
     </div>
