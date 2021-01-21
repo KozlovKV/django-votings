@@ -11,31 +11,34 @@
 
 {% block main %}
     <div class="block">
-        <div class="list-elem">
+        <div class="list-elem ">
             <div>
                 <h2>{{ object.title }}</h2>
             </div>
             <div>
-                <p>Автор: {{ object.author }}<a href="{% url 'profile_view' object.author.id %}"
+                <p class="meta-data">Автор: {{ object.author }}<a href="{% url 'profile_view' object.author.id %}"
                                                 class="small-btn blue fas fa-arrow-right"></a></p>
-                <p>Окончание: {{ object.end_date }}</p>
+                <p class="meta-data">Окончание: {{ object.end_date }}</p>
                 {% if is_ended %}
                     <p>Окончено</p>
                 {% endif %}
-                <p>
+                <p class="meta-data">
                     {{ object.status }}
                 </p>
-                <p>
+                <p class="meta-data">
                     {% if object.anons_can_vote %}
                         Открытое голосование
                     {% else %}
                         Обязательная авторизация
                     {% endif %}
                 </p>
-                {% if can_edit %}
-                    <a href="{% url 'vote_edit' object.pk %}" class="medium-btn yellow">Редактировать</a>
-                {% endif %}
             </div>
+        </div>
+        <div class="list-elem">
+            {% if can_edit %}
+                <a href="{% url 'vote_edit' object.pk %}" class="medium-btn yellow">Редактировать</a>
+                <a href="{% url 'vote_edit' object.pk %}" class="medium-btn red">Удалить</a>
+            {% endif %}
         </div>
         <div class="list-elem">
             <div class="main__medium">
