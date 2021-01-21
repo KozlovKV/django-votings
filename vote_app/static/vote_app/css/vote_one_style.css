@@ -7,3 +7,11 @@
     padding: 0;
     border-radius: 10px;
 }
+
+.small-vote {
+    width: 15%;
+}
+
+.ultra-small-vote {
+    width: 5%;
+}
