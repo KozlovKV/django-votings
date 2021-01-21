@@ -42,6 +42,7 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
 
         # TODO: Добавить сохранение вариантов голосования
         self.save_vote_variants()
+
         return post_response
 
     def save_vote_variants(self):
@@ -115,7 +116,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
 
     def get_object(self, queryset=None):
         object = super(VotingView, self).get_object(queryset)
-        self.variants = list(VoteVariants.objects.filter(voting=object.pk))
+        self.variants = list(VoteVariants.objects.filter(voting=object))
         self.variants.sort(key=lambda x: x.serial_number)
         return object
 
@@ -154,7 +155,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
                 return self.is_ended()
         else:
             if self.object.result_see_who == Votings.VOTED:
-                return self.is_voted(self.request.user) and self.is_ended()
+                return self.is_voted(self.request.user)
             else:
                 return True
 
@@ -200,19 +201,20 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
 
     def vote_one_variant_process(self):
         variant_id = int(self.request.POST.get('variants'))
-        variant = self.variants[variant_id - 1]
+        variant = self.variants[variant_id]
         new_vote = Votes(user=self.request.user, voting=self.object, variant=variant)
         new_vote.save()
         variant.votes_count += 1
         variant.save()
+        self.object.votes_count += 1
         self.object.voters_count += 1
         self.object.save()
 
     def vote_many_variants_process(self):
-        for i in range(1, self.object.variants_count + 1):
+        for i in range(self.object.variants_count):
             input_val = int(self.request.POST.get(f'{i}', -1))
             if input_val != -1:
-                variant = self.variants[input_val - 1]
+                variant = self.variants[input_val]
                 new_vote = Votes(user=self.request.user, voting=self.object, variant=variant)
                 new_vote.save()
                 variant.votes_count += 1
