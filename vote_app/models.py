@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 
 class Votings(models.Model):
     title = models.CharField(max_length=256)
-    image = models.ImageField(upload_to='voting_images/', blank=True, null=True, default=None)  # FileField()
+    image = models.ImageField(upload_to='voting_images/', blank=True, null=True)  # FileField()
     description = models.TextField()
     author = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True)
     creation_date = models.DateTimeField(auto_now_add=True)
