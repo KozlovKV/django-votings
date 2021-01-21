@@ -37,8 +37,13 @@
                 {% csrf_token %}
                 {% for vote_variant in vote_variants %}
                     <div class="list-elem grey-3">
-                        <input type="{{ type_ref }}" name="variants" value="variant_{{ vote_variant.serial_number }}" id="variant_{{ vote_variant.serial_number }}">
-                        <strong class="wide">{{ vote_variant.description }}</strong>
+                        {% if type_ref == 'radio' %}
+                            <input type="{{ type_ref }}" name="variants" value="{{ vote_variant.serial_number }}" id="variant_{{ vote_variant.serial_number }}">
+                        {% endif %}
+                        {% if type_ref == 'checkbox' %}
+                            <input type="{{ type_ref }}" name="{{ vote_variant.serial_number }}" value="{{ vote_variant.serial_number }}" id="variant_{{ vote_variant.serial_number }}">
+                        {% endif %}
+                        <label for="variant_{{ vote_variant.serial_number }}" class="wide">{{ vote_variant.description }}</label>
                         <span>{{ vote_variant.votes_count }} - {{ vote_variant.percent | floatformat }}%</span>
                     </div>
                 {% endfor %}

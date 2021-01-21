@@ -1,5 +1,5 @@
 from django import forms
-from datetime import timezone
+from django.utils import timezone
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 import django.views.generic.edit as generic_edit
@@ -97,6 +97,13 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
     pk_url_kwarg = 'voting_id'
     variants = []
 
+    def __init__(self):
+        super(VotingView, self).__init__(self)
+        self.VOTE_PROCESSORS = {
+            'radio': self.vote_one_variant_process,
+            'checkbox': self.vote_many_variants_process,
+        }
+
     def get_object(self, queryset=None):
         object = super(VotingView, self).get_object(queryset)
         self.variants = list(VoteVariants.objects.filter(ID_voting=object.pk))
@@ -159,13 +166,28 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         if self.can_vote(request.user) and not self.is_ended():
-            variant_id = int(request.POST.get('variants').split('_')[1])
-            variant = self.variants[variant_id-1]
-            new_vote = Votes(User_id=request.user, Voting_id=self.object, Variant_id=variant)
-            new_vote.save()
-            variant.Votes_count += 1
-            variant.save()
-            self.object.Votes_count += 1
-            self.object.save()
+            self.VOTE_PROCESSORS[Votings.TYPE_REFS[self.object.Type]]()
         context = self.get_context_data(**kwargs)
         return render(self.request, self.template_name, context)
+
+    def vote_one_variant_process(self):
+        variant_id = int(self.request.POST.get('variants'))
+        variant = self.variants[variant_id - 1]
+        new_vote = Votes(User_id=self.request.user, Voting_id=self.object, Variant_id=variant)
+        new_vote.save()
+        variant.Votes_count += 1
+        variant.save()
+        self.object.Votes_count += 1
+        self.object.save()
+
+    def vote_many_variants_process(self):
+        for i in range(1, self.object.Variants_count+1):
+            input_val = int(self.request.POST.get(f'{i}', -1))
+            if input_val != -1:
+                variant = self.variants[input_val - 1]
+                new_vote = Votes(User_id=self.request.user, Voting_id=self.object, Variant_id=variant)
+                new_vote.save()
+                variant.Votes_count += 1
+                variant.save()
+        self.object.Votes_count += 1
+        self.object.save()
