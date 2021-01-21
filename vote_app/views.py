@@ -93,6 +93,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
     template_name = 'vote_one.html'
     model = Votings
     object = None
+    extra_context = {}
     pk_url_kwarg = 'voting_id'
     variants = []
 
@@ -118,9 +119,10 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
             'is_ended': self.is_ended(),
             'vote_variants': get_variants_context(self.object),
         })
+        context.update(self.extra_context)
         return context
 
-    def is_ended(self, voting_note=None):
+    def is_ended(self):
         if self.object.end_date == "":
             return False
         else:
@@ -149,9 +151,21 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
             return False
 
     def can_vote(self, user):
-        if self.is_voted(user):
+        if self.is_ended():
+            self.extra_context.update({
+                'reason_cant_vote': 'Голосование закончилось'
+            })
             return False
-        if not self.object.anons_can_vote and not user.is_authenticated:
+        elif not user.is_authenticated:
+            if not self.object.anons_can_vote:
+                self.extra_context.update({
+                    'reason_cant_vote': 'Вы уже голосовали'
+                })
+            return self.object.anons_can_vote
+        elif self.is_voted(user):
+            self.extra_context.update({
+                'reason_cant_vote': 'Вы уже голосовали'
+            })
             return False
         return True
 

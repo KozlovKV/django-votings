@@ -16,11 +16,14 @@
             <div>
                 <p>Автор: <a href="{% url 'profile_view' object.author.id %}">{{ object.author }}</a></p>
                 <p>Окончание: {{ object.end_date }}</p>
+                {% if is_ended %}
+                    <p>Окончено</p>
+                {% endif %}
                 <p>
                     {{ object.status }}
                 </p>
                 <p>
-                    {% if object.anons %}
+                    {% if object.anons_can_vote %}
                         Открытое голосование
                     {% else %}
                         Обязательная авторизация
@@ -56,8 +59,8 @@
                     {% if can_vote %}
                         <button type="submit" class="big-btn green">Голосовать</button>
                     {% else %}
-                        <h4>Вы не можете голосовать</h4>
-                        <h4>Резоны</h4>
+                        <h4 class="wide center">Вы не можете голосовать</h4>
+                        <h4 class="wide center">{{ reason_cant_vote }}</h4>
                     {% endif %}
                 </div>
             </form>
