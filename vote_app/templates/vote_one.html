@@ -11,29 +11,34 @@
     <div class="block">
         <div class="list-elem">
             <div>
-                <h2>{{ title }}</h2>
+                <h2>{{ object.title }}</h2>
             </div>
             <div>
-                <p>Автор: <a href="{{ author_url }}">{{ author }}</a></p>
-                <p>Окончание: {{ end_date }}</p>
+                <p>Автор: <a href="{% url 'profile_view' object.author.id %}">{{ object.author }}</a></p>
+                <p>Окончание: {{ object.end_date }}</p>
                 <p>
-                    {% if anons %}
+                    {{ object.status }}
+                </p>
+                <p>
+                    {% if object.anons %}
                         Открытое голосование
                     {% else %}
                         Обязательная авторизация
                     {% endif %}
                 </p>
-                <a href="{% url 'vote_edit' voting_id %}" class="medium-btn yellow">Редактировать</a>
+                {% if object.author == request.user or rights == 2 %}
+                    <a href="{% url 'vote_edit' object.pk %}" class="medium-btn yellow">Редактировать</a>
+                {% endif %}
             </div>
         </div>
         <div class="list-elem">
             <div class="medium">
-                <p>{{ description }}</p>
+                <p>{{ object.description }}</p>
             </div>
-            <img src="{{ image.url }}" class="medium">
+            <img src="{{ object.image.url }}" class="medium">
         </div>
         <div class="medium-block grey-2">
-            <form method="post" action="{% url 'vote_view' voting_id %}">
+            <form method="post" action="{% url 'vote_view' object.pk %}">
                 {% csrf_token %}
                 {% for vote_variant in vote_variants %}
                     <div class="list-elem grey-3">
@@ -52,16 +57,31 @@
                         <button type="submit" class="big-btn green">Голосовать</button>
                     {% else %}
                         <h4>Вы не можете голосовать</h4>
+                        <h4>Резоны</h4>
                     {% endif %}
                 </div>
             </form>
         </div>
         <div class="medium-block grey-2">
             <h3>Результаты</h3>
-            <h4>Всего голосов: {{ votes_count }}</h4>
-            <div class="horizontal-centering">
-                {% include 'charts/donut_chart.html' %}
-            </div>
+            {% if can_watch_res %}
+                <div class="list-elem grey-3 horizontal-centering">
+                    <h4>Всего голосовавших: {{ object.votes_count }}</h4>
+                    <h4>Всего голосов: {{ object.voters_count }}</h4>
+                </div>
+                <div class="horizontal-centering">
+                    {% include 'charts/donut_chart.html' %}
+                </div>
+            {% else %}
+                <div class="medium-block horizontal-centering grey-3">
+                    <h4 class="wide center">Вам не показываются результаты</h4>
+                    <h4 class="wide center">Результаты видны:</h4>
+                    <div class="wide list-elem grey-4">
+                        <h4>Кому: {{ object.get_result_see_who_name }}</h4>
+                        <h4>Когда: {{ object.get_result_see_when_name }}</h4>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

@@ -52,10 +52,21 @@ class Votings(models.Model):
     type = models.IntegerField(default=0, choices=VOTING_TYPE)
 
     voters_count = models.IntegerField(default=0)
+    votes_count = models.IntegerField(default=0)
     variants_count = models.IntegerField(default=2)
 
     def get_absolute_url(self):
         return reverse_lazy('vote_view', args=(self.pk, ))
+
+    def get_result_see_who_name(self):
+        for note in self.SEE_WHO_CHOICES:
+            if note[0] == self.result_see_who:
+                return note[1]
+
+    def get_result_see_when_name(self):
+        for note in self.SEE_WHEN_CHOICES:
+            if note[0] == self.result_see_when:
+                return note[1]
 
 
 class VoteVariants(models.Model):

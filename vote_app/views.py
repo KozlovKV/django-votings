@@ -74,10 +74,9 @@ def get_variants_description_list(request):
     return res
 
 
-def get_variants_context(voting_id):
+def get_variants_context(voting):
     res = []
-    vote_variants = VoteVariants.objects.filter(voting=voting_id)
-    voting = Votings.objects.get(pk=voting_id)
+    vote_variants = VoteVariants.objects.filter(voting=voting)
     for variant in vote_variants:
         variant_dict = {
             'serial_number': variant.serial_number,
@@ -112,25 +111,12 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
 
     def get_context_data(self, **kwargs):
         context = super(VotingView, self).get_context_data(**kwargs)
-        voting_id = self.object.pk
-        voting_note = self.object
         context.update({
-            'voting_id': voting_id,
-            'title': voting_note.title,
-            'description': voting_note.description,
-            'author': voting_note.author,
-            'author_url': reverse_lazy('profile_view', args=(voting_note.author.id,)),
-            'status': voting_note.complaint_state,
-            'image': (voting_note.image if not voting_note.image == '' else ''),
-            'type': voting_note.type,
-            'type_ref': Votings.TYPE_REFS[voting_note.type],
-            'anons': voting_note.anons_can_vote,
+            'type_ref': Votings.TYPE_REFS[self.object.type],
             'can_vote': self.can_vote(self.request.user),
             'can_watch_res': self.can_see_result(),
-            'votes_count': voting_note.voters_count,
-            'end_date': voting_note.end_date,
             'is_ended': self.is_ended(),
-            'vote_variants': get_variants_context(voting_id),
+            'vote_variants': get_variants_context(self.object),
         })
         return context
 
@@ -145,9 +131,15 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
 
     def can_see_result(self):
         if self.object.result_see_when == Votings.BY_TIMER:
-            return self.is_ended()
-        if self.object.result_see_who == Votings.VOTED:
-            return self.is_voted(self.request.user)
+            if self.object.result_see_who == Votings.VOTED:
+                return self.is_voted(self.request.user) and self.is_ended()
+            else:
+                return self.is_ended()
+        else:
+            if self.object.result_see_who == Votings.VOTED:
+                return self.is_voted(self.request.user) and self.is_ended()
+            else:
+                return True
 
     def is_voted(self, user):
         votes = Votes.objects.filter(voting=self.object.pk, user=user)
@@ -189,5 +181,6 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
                 new_vote.save()
                 variant.votes_count += 1
                 variant.save()
+                self.object.votes_count += 1
         self.object.voters_count += 1
         self.object.save()

@@ -43,7 +43,7 @@ def get_full_menu_context(request):
     else:
         info = AdditionUserInfo.objects.get(user=request.user)
         context['rights'] = info.user_rights
-        context['status'] = info.get_right_name()
+        context['right_name'] = info.get_right_name()
         if info.user_rights == 2:
             context['profile_menu'].append({'url': '/admin', 'label': 'Админ'})
     context['reset_form'] = profile_forms.ModifiedPasswordResetForm(request.POST)
