@@ -45,11 +45,10 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
         return post_response
 
     def save_vote_variants(self):
-        voting_id = self.object.id
         variants_list = get_variants_description_list(self.request)
         variants_count = len(variants_list)
         for serial_number in range(variants_count):
-            record = VoteVariants(voting=voting_id,
+            record = VoteVariants(voting=self.object,
                                   serial_number=serial_number,
                                   description=variants_list[serial_number],
                                   votes_count=0,)
