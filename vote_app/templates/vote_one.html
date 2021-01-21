@@ -35,10 +35,10 @@
             </div>
         </div>
         <div class="list-elem">
-            <div class="medium">
+            <div class="main__medium">
                 <p>{{ object.description }}</p>
             </div>
-            <img src="{{ object.image.url }}" class="medium">
+            <img src="{{ object.image.url }}" class="main__medium">
         </div>
         <div class="medium-block grey-2">
             <form method="post" action="{% url 'vote_view' object.pk %}">
@@ -73,7 +73,17 @@
                     <h4>Всего голосов: {{ object.voters_count }}</h4>
                 </div>
                 <div class="horizontal-centering">
-                    {% include 'charts/donut_chart.html' %}
+                    {% include 'charts/load_data_script.html' %}
+
+                    <div class="horizontal-centering medium small-block grey-3">
+                        {% include 'charts/donut_chart.html' %}
+                        {% include 'charts/donut_chart_download.html' %}
+                    </div>
+
+                    <div class="horizontal-centering medium small-block grey-3">
+                        {% include 'charts/column_chart.html' %}
+                        {% include 'charts/column_chart_download.html' %}
+                    </div>
                 </div>
             {% else %}
                 <div class="medium-block horizontal-centering grey-3">

@@ -1,0 +1,25 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    function drawColumnChart() {
+        var data = loadData()
+
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1]);
+
+        var options = {
+            title: '',
+            height: 200,
+            bar: {groupWidth: "80%"},
+            legend: { position: "none" },
+            backgroundColor: 'none',
+        };
+
+        var chart_block = document.getElementById("column_chart");
+        var chart = new google.visualization.ColumnChart(chart_block);
+        chart.draw(view, options);
+    }
+
+    google.charts.load("current", {packages:['corechart']});
+    google.charts.setOnLoadCallback(drawColumnChart);
+</script>
+<div id="column_chart" class="ultra-wide"></div>
