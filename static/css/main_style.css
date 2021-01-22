@@ -92,6 +92,16 @@ p {
 }
 
 .input {
+    display: inline-block;
+    border: 2px solid black;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    padding: 5px;
+    margin: 5px;
+    font-family: Jura;
+}
+
+.input-block {
     display: flex;
     flex-wrap: wrap;
     border: 2px solid black;

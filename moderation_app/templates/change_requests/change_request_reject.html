@@ -8,10 +8,10 @@
     <h1>Запрос почти отклонён!</h1>
     <h2>Перед одобрением выберите дополнительны действия</h2>
     <div class="block">
-        <form method="post" action="{% url 'moder_change_request_submit' request_id %}" class="horizontal-centering">
+        <form method="post" action="{% url 'moder_change_request_reject' request_id %}" class="horizontal-centering">
             {% csrf_token %}
             {{ form.comment }}
-            <input type="submit" value="Одобрить запрос" class="big-btn green">
+            <input type="submit" value="Одобрить запрос" class="big-btn red">
         </form>
     </div>
 {% endblock %}

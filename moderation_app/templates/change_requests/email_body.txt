@@ -1,0 +1,7 @@
+Здравствуйте, {{ voting.author }}!
+Ваша запрос номер {{ change_request.id }} ({{ voting.title }}) был {{ status }}
+
+{# comment #}
+
+С уважением, {{ moder }} - модератор команды проекта SV-1 ({{ main_url }})
+{{ date }}

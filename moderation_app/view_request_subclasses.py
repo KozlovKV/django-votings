@@ -1,7 +1,10 @@
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+import django.views.generic.edit as generic_edit
 import django.views.generic.detail as generic_detail
+from django.utils import timezone
 
-from menu_app.view_subclasses import TemplateViewWithMenu
+from menu_app.view_menu_context import get_full_site_url
+from menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
 from moderation_app.forms import EditRequestForm
 from moderation_app.models import VoteChangeRequest
 
@@ -31,7 +34,7 @@ class ChangeRequestsListView(TemplateViewWithMenu):
 
 
 class ChangeRequestView(generic_detail.DetailView, TemplateViewWithMenu):
-    template_name = 'change_requests/change_request_form.html'
+    template_name = 'change_requests/change_request_one.html'
     object = None
     model = VoteChangeRequest
     pk_url_kwarg = 'request_id'
@@ -47,9 +50,49 @@ class ChangeRequestView(generic_detail.DetailView, TemplateViewWithMenu):
         return context
 
 
-class ChangeRequestSubmitView(TemplateViewWithMenu):
+class ChangeRequestCloseTemplateView(TemplateViewWithMenu, generic_edit.FormView):
+    template_name = ''
+    form_class = EditRequestForm
+    success_url = reverse_lazy('moder_change_request_list')
+    new_status_name = ''
+    change_request_object = None
+
+    def get_email_context(self):
+        context = {
+            'change_request': self.change_request_object,
+            'voting': self.change_request_object.voting,
+            'moder': self.request.user,
+            'status': self.new_status_name,
+            'main_url': get_full_site_url(self.request),
+            'date': timezone.now(),
+        }
+        return context
+
+    def send_close_email(self):
+        email = TemplateEmailSender(to=[self.change_request_object.voting.author.email])
+        email.subject_template = 'change_requests/email_subject.txt'
+        email.body_template = 'change_requests/email_body.txt'
+        email.context = self.get_email_context()
+        email.request = self.request
+        email.send()
+
+    def get(self, request, *args, **kwargs):
+        return super(ChangeRequestCloseTemplateView, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        request_id = self.kwargs['request_id']
+        self.change_request_object = VoteChangeRequest.objects.get(pk=request_id)
+        post_resp = super(ChangeRequestCloseTemplateView, self).post(self, request, *args, **kwargs)
+        self.send_close_email()
+        self.change_request_object.delete()
+        return post_resp
+
+
+class ChangeRequestSubmitView(ChangeRequestCloseTemplateView):
     template_name = 'change_requests/change_request_submit.html'
+    new_status_name = 'принят'
 
 
-class ChangeRequestRejectView(TemplateViewWithMenu):
+class ChangeRequestRejectView(ChangeRequestCloseTemplateView):
     template_name = 'change_requests/change_request_reject.html'
+    new_status_name = 'отклонён'
