@@ -15,28 +15,28 @@
         в голосваниях, требующих авторизации на сайте.
     </p>
     <div class="horizontal-centering">
-        <a href="/vote/test/" class="big-btn yellow">Голосования</a>
+        <a href="{% url 'vote_list' %}" class="big-btn yellow">Голосования</a>
         {% if user.is_authenticated %}
-            <a href="/vote/test/" class="big-btn green">Создать голосование</a>
+            <a href="{% url 'vote_create' %}" class="big-btn green">Создать голосование</a>
         {% else %}
             <button class="big-btn blue" id="red_btn_on_index">Регистрация</button>
         {% endif %}
     </div>
     <h2>Отзывы</h2>
     <div class="horizontal-centering">
-        <div class="small-block feedback">
+        <div class="small-block small feedback">
             <h3>10 из 10</h3>
             <img src="https://i.ytimg.com/vi/JjMV29bmKZs/maxresdefault.jpg">
             <blockquote>"Нет! 12/10! Просто на кончиках пальцев. Бест оф зе бест голосовалка!!!"</blockquote>
             <p class="meta-data">Владыка верхнего интернета</p>
         </div>
-        <div class="small-block feedback">
+        <div class="small-block small feedback">
             <h3>Мяу!</h3>
             <img src="https://www.ponedelnikmag.com/users/16692/masteram_pera/01.gif">
             <blockquote>"М-р-р-р-р-р-р-р-р-р-р-р-р-р-р-р-р-р-р ^ↀᴥↀ^"</blockquote>
             <p class="meta-data">Кот</p>
         </div>
-        <div class="small-block feedback">
+        <div class="small-block small feedback">
             <h3>Матан вас разоблачил</h3>
             <img src="https://pbs.twimg.com/media/EcB2RSKWsAcZmfw.jpg">
             <blockquote>"Ну тут как бы всё ясно... ¯\_(ツ)_/¯"</blockquote>

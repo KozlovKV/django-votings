@@ -3,10 +3,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/btn_style.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'menu_app/css/menu_style.css' %}">
 <nav class="menu">
-<!--    <a href="/" class="logo">-->
-<!--        <img src="{% static 'menu_app/logo.png' %}" alt="logo">-->
-<!--    </a>-->
-    <a href="/" class="logo">
+    <a href="{% url 'menu' %}" class="logo">
         <div class="logo__name">SV-1</div>
         <div class="logo__online">Online-4</div>
     </a>
@@ -25,7 +22,7 @@
         </div>
     {% else %}
         <div class="login-profile-block">
-            <form action="/account/login/" method="post">
+            <form action="{% url 'login' %}" method="post">
                 {% csrf_token %}
                 {{ login_form.username }}
                 {{ login_form.password }}
@@ -38,7 +35,7 @@
 {% if not request.user.is_authenticated %}
     <div class="block hidden-top" id="reg_block">
         <h2>Регистрация</h2>
-        <form action="/account/register/" method="post">
+        <form action="{% url 'django_registration_register' %}" method="post">
             {% csrf_token %}
             {{ reg_form.username }}
             {{ reg_form.email }}

@@ -9,23 +9,20 @@
     <h1>Профиль пользователя {{ profile_user }}</h1>
     <div class="horizontal-centering">
         {% if profile_user == user %}
-            <div class="medium-block">
+            <div class="medium-block medium">
                 <h2>Редактировать данные</h2>
                 Вводите значения только в поля, которые хотите изменить
-                <form method="post" action="/profile/view/">
+                <form method="post" action="{% url 'profile_view' 0 %}">
                     <div class="horizontal-centering">
                         <input type="text" placeholder="Фамилия" class="input wide">
                         <input type="text" placeholder="Имя" class="input wide">
-                        <input type="text" placeholder="Отчество" class="input wide">
-                        <input type="text" placeholder="Логин" class="input wide">
-                        <input type="text" placeholder="Эл. почта" class="input wide">
                         <div class="input wide">Описание произошедших ошибок</div>
                         <input type="submit" value="Изменить" class="medium-btn green input wide">
                     </div>
                 </form>
             </div>
         {% endif %}
-        <div class="medium-block">
+        <div class="medium-block medium">
             <h2>Актуальные данные</h2>
             <div>
                 <p>Фамилия</p>
@@ -41,7 +38,7 @@
                 <p>Отдано голосов: 9999</p>
             </div>
             <div>
-                <p>Статус - {{ status }}</p>
+                <p>Статус - {{ right_name }}</p>
             </div>
         </div>
     </div>
@@ -49,29 +46,23 @@
         {% include 'registration/pswd_reset_form_integratable.html' %}
     {% endif %}
     <div class="horizontal-centering">
-        <div class="medium-block">
+        <div class="medium-block medium">
             <h2>Созданные голосования</h2>
             <div class="list-elem">
                 <h4>Заголовок голосования</h4>
-                <div>
-                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
-                </div>
+                <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="medium-btn blue fas fa-arrow-right"></a>
             </div>
             <div class="list-elem">
                 <h4>Заголовок голосования</h4>
-                <div>
-                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
-                </div>
+                <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="medium-btn blue fas fa-arrow-right"></a>
             </div>
             <div class="list-elem">
                 <h4>Заголовок голосования</h4>
-                <div>
-                    <a href="/vote/<voting_id>/" class="big-btn blue">></a>
-                </div>
+                <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="medium-btn blue fas fa-arrow-right"></a>
             </div>
         </div>
         {% if profile_user == user %}
-            <div class="medium-block">
+            <div class="medium-block medium">
                 <h2>Участвовал в голсованиях</h2>
                 <div class="list-elem">
                     <div>
@@ -79,7 +70,7 @@
                         <p>Выбранный вариант</p>
                     </div>
                     <div>
-                        <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                        <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue fas fa-arrow-right"></a>
                     </div>
                 </div>
                 <div class="list-elem">
@@ -88,7 +79,7 @@
                         <p>Выбранный вариант</p>
                     </div>
                     <div>
-                        <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                        <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue fas fa-arrow-right"></a>
                     </div>
                 </div>
                 <div class="list-elem">
@@ -97,7 +88,7 @@
                         <p>Выбранный вариант</p>
                     </div>
                     <div>
-                        <a href="/vote/<voting_id>/" class="big-btn blue">></a>
+                        <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue fas fa-arrow-right"></a>
                     </div>
                 </div>
             </div>

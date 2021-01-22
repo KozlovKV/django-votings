@@ -1,6 +1,6 @@
-Проект "Простая голосовалка"
+<h1>Проект "Простая голосовалка"</h1>
 
-Группа 4. Подгруппа 1.
+<h2>Группа 4. Подгруппа 1.</h2>
 
 Актуальная версия ТЗ - https://docs.google.com/document/d/1U-Jx90X7S6_kdyRRcuEZHR_4yyjvoYS9OFdGcAXLGyc/edit?usp=sharing
 

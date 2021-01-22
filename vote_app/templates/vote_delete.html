@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Отдельное голосование</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'vote_app/css/vote_one_style.css' %}">
+{% endblock %}
+
+{% block main %}
+    <div class="block">
+        <h1>Удаление голосования</h1>
+        {% if rights < 2 %}
+            <h2>Только администратор может удалять голосования</h2>
+        {% else %}
+            <form method="post" action="{% url 'vote_delete' voting_id %}" class="horizontal-centering">
+                {% csrf_token %}
+                <div class="list-elem">Я подтверждаю, что готов полностью и безвовзратно удалить голосование "{{ object.title }}" и все связанные с ним элементы</div>
+                <button type="submit" class="big-btn red">Подвтерждаю</button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'moder_base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Жалобы</title>
+    <style>
+        .list-elem * {
+            margin: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block for_moder %}
+    <h1>Список жалоб</h1>
+    <div class="horizontal-centering">
+        <div class="block wide">
+            {% for report in reports %}
+                <div class="list-elem">
+                    <div class="wide">
+                        <h4>{{ report.object.get_humanity_theme_name }}</h4>
+                        <p>
+                            {{ report.object.content }}
+                            {% if report.object.is_url_need %}
+                                <br>
+                                <a href="{{ report.object.get_object_url_from_report }}">Объект жалобы</a>
+                            {% endif %}
+                        </p>
+                        <p class="meta-data">
+                            <a href="{% url 'profile_view' report.object.author.id %}">
+                                {{ report.object.author }}
+                            </a>
+                        </p>
+                        <p class="meta-data">{{ report.object.date }}</p>
+                    </div>
+                    <div>
+                        <a href="{% url 'moder_report_submit' report.object.id %}" class="medium-btn green center wide">Принять</a>
+                        <a href="{% url 'moder_report_reject' report.object.id %}" class="medium-btn red center wide">Отклонить</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block moder_bottom %}
+    <a href="{% url 'moder_manage' %}" class="big-btn blue">Панель модератора</a>
+{% endblock %}

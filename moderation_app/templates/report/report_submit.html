@@ -1,0 +1,17 @@
+{% extends 'moder_base.html' %}
+
+{% block head %}
+    <title>Одобрение жалобы</title>
+{% endblock %}
+
+{% block for_moder %}
+    <h1>Жалоба почти одобрена!</h1>
+    <h2>Добавьте комментарий к письму, которое будет отправлено заявителю</h2>
+    <div class="block">
+        <form method="POST" action="{{ context_url }}" class="horizontal-centering">
+            {% csrf_token %}
+            {{ form.comment }}
+            <input type="submit" value="Одобрить жалобу и отправить письмо" class="big-btn green">
+        </form>
+    </div>
+{% endblock %}

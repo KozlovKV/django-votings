@@ -1,0 +1,33 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    function drawDonutChart() {
+        var data = loadData()
+
+        var options = {
+            title: '',
+            pieHole: 0.4,
+            backgroundColor: 'none',
+            chartArea: {
+                width: '100%',
+                height: '90%',
+            },
+            legend: {
+                position: 'right',
+                textStyle: {
+                    fontSize: 14,
+                    fontName: 'Roboto',
+                },
+            },
+        };
+
+        var chart_block = document.getElementById('donut_chart');
+        var chart = new google.visualization.PieChart(chart_block);
+
+        chart.draw(data, options);
+    }
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawDonutChart);
+</script>
+
+<div id="donut_chart" class="ultra-wide"></div>

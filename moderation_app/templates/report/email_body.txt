@@ -1,0 +1,10 @@
+Здравствуйте, {{ author }}!
+Ваша жалоба под номером {{ report_id }} ({{ theme }}) была {{ status }}
+
+{% if comment != '' %}
+Комментарий проверяющего:
+{{ comment }}
+{% endif %}
+
+С уважением, {{ moder }} - {{ right_name }} команды проекта SV-1 ({{ main_url }})
+{{ date }}
