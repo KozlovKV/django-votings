@@ -42,6 +42,13 @@ p {
     flex-wrap: wrap;
 }
 
+.vertical_centering {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 .block {
     position: relative;
     border: 3px solid black;
@@ -85,7 +92,8 @@ p {
 }
 
 .input {
-    display: inline-block;
+    display: flex;
+    flex-wrap: wrap;
     border: 2px solid black;
     border-radius: 5px;
     font-size: 1.1rem;

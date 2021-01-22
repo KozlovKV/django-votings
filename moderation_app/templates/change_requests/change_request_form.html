@@ -13,17 +13,22 @@
 
 {% block for_moder %}
     <div class="block">
-        <h1>Запрос номер {{ request_id }} - {{ object.voting.title }}</h1>
-        <div class="list-elem">
-
-            <p class="meta-data">{{ object.date }}</p>
-            <p class="meta-data">{{ object.voting.author }}</p>
-            <h2>Комментарий автора</h2>
+        <h1>Запрос номер {{ request_id }}</h1>
+        <div class="medium-block horizontal-centering grey-2">
+            <div class="list-elem wide grey-3">
+                <h2>{{ object.voting.title }}</h2>
+                <p class="meta-data">{{ object.date }}</p>
+                <p class="meta-data">
+                    {{ object.voting.author }}
+                    <a class="small-btn blue fas fa-arrow-right" href="{% url 'profile_view' object.voting.author.id %}"></a>
+                </p>
+            </div>
+            <h3 class="wide">Комментарий автора</h3>
             <p>{{ object.comment }}</p>
         </div>
-        <div class="block">
+        <div class="medium-block horizontal-centering grey-2">
             <h2>Список изменений</h2>
-            <div class="list-elem">
+            <div class="list-elem grey-3">
                 <div>
                     <h4>Название изменённого элемента</h4>
                     <ul>
@@ -32,7 +37,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="list-elem">
+            <div class="list-elem grey-3">
                 <div>
                     <h4>Название изменённого элемента</h4>
                     <ul>
@@ -41,7 +46,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="list-elem">
+            <div class="list-elem grey-3">
                 <div>
                     <h4>Название изменённого элемента</h4>
                     <ul>
@@ -51,20 +56,12 @@
                 </div>
             </div>
         </div>
-        <div class="block">
-            <h2>Действия</h2>
-            <form method="post" action="{% url 'moder_change_request_form' 0 %}">
-                {% csrf_token %}
-                <textarea name="comment" class="input wide" placeholder="Комментарий к решению (необязательно"></textarea>
-                <label class="input">
-                    Обнулить голоса (только при одобрении)
-                    <input name="reset" type="checkbox" value="reset" class="input">
-                </label>
-                <div class="horizontal-centering">
-                    <input type="submit" value="Одобрить" class="medium-btn green">
-                    <input type="submit" value="Отклонить" class="medium-btn red">
-                </div>
-            </form>
+        <div class="medium-block horizontal-centering grey-2">
+            <h2 class="wide">Действия</h2>
+            <div class="horizontal-centering wide">
+                <a type="submit" href="{% url 'moder_change_request_submit' request_id %}" class="medium-btn green">Одобрить</a>
+                <a type="submit" href="{% url 'moder_change_request_reject' request_id %}" class="medium-btn red">Отклонить</a>
+            </div>
         </div>
     </div>
 {% endblock %}

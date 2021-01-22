@@ -20,7 +20,9 @@ from django.urls import path, include
 import menu_app.views as menu
 import vote_app.views as vote
 import profile_app.views as profile
-import moderation_app.views as report
+import moderation_app.views as moder
+import moderation_app.view_report_subclasses as report
+import moderation_app.view_request_subclasses as change_request
 from django_project import settings
 
 urlpatterns = [
@@ -38,15 +40,19 @@ urlpatterns = [
     path('account/', include('profile_app.urls')),
 
     path('moderation/send/', report.SendReportView.as_view(), name='moder_report_send'),
-    path('moderation/manage/', report.ModerationPanelView.as_view(), name='moder_manage'),
+    path('moderation/manage/', moder.ModerationPanelView.as_view(), name='moder_manage'),
     path('moderation/manage/reports/list/', report.ReportsListView.as_view(), name='moder_reports_list'),
     path('moderation/manage/reports/submit/<int:report_id>/', report.ReportSubmitView.as_view(),
          name='moder_report_submit'),
     path('moderation/manage/reports/reject/<int:report_id>/', report.ReportRejectView.as_view(),
          name='moder_report_reject'),
-    path('moderation/manage/change_request/list/', report.ChangeRequestsListView.as_view(),
+    path('moderation/manage/change_request/list/', change_request.ChangeRequestsListView.as_view(),
          name='moder_change_request_list'),
-    path('moderation/manage/change_request/<int:request_id>/', report.ChangeRequestFormView.as_view(),
+    path('moderation/manage/change_request/<int:request_id>/', change_request.ChangeRequestView.as_view(),
          name='moder_change_request_form'),
+    path('moderation/manage/change_request/submit/<int:request_id>/', change_request.ChangeRequestSubmitView.as_view(),
+         name='moder_change_request_submit'),
+    path('moderation/manage/change_request/reject/<int:request_id>/', change_request.ChangeRequestRejectView.as_view(),
+         name='moder_change_request_reject'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
