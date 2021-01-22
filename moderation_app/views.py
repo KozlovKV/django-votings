@@ -7,8 +7,20 @@ from menu_app.view_menu_context import get_full_site_url
 from menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
 from moderation_app.forms import CommentForm, EditRequestForm
 from moderation_app.models import Reports, VoteChangeRequest
+from moderation_app.forms import CommentForm, ModeledReportCreateForm
+from moderation_app.models import Reports
 from moderation_app.view_subclasses import ReportCloseTemplateView
 from vote_app.models import Votings
+
+
+def get_reports_list_context(model_list):
+    res = []
+    for model_note in model_list:
+        dict_note = {
+            'object': model_note,
+        }
+        res.append(dict_note)
+    return res
 
 
 class TestModerView(TemplateViewWithMenu):
@@ -72,54 +84,48 @@ class ChangeRequestFormView(generic_detail.DetailView, TemplateViewWithMenu):
         return context
 
 
-def get_reports_list_context():
-    res = []
-    model_list = Reports.objects.filter(status=0)
-    for model_note in model_list:
-        dict_note = {
-            'id': model_note.pk,
-            'theme': model_note.get_humanity_theme_name(),
-            'object_url': model_note.get_object_url_from_report(),
-            'content': model_note.content,
-            'author': model_note.author,
-            'date': model_note.create_date,
-            'submit_url': reverse('moder_report_submit', args=(model_note.pk,)),
-            'reject_url': reverse('moder_report_reject', args=(model_note.pk,)),
-        }
-        res.append(dict_note)
-    return res
-
-
 class ReportsListView(TemplateViewWithMenu):
     template_name = 'report/reports_list.html'
 
     def get_context_data(self, **kwargs):
         context = super(ReportsListView, self).get_context_data(**kwargs)
         context.update({
-            'reports': get_reports_list_context()
+            'reports': get_reports_list_context(Reports.objects.filter(status=Reports.IN_PROCESS))
         })
         return context
 
 
 class ReportSubmitView(ReportCloseTemplateView):
     template_name = 'report/report_submit.html'
-    new_status = 1
+    new_status = Reports.SUBMITTED
     new_status_name = 'Одобрена'
 
 
 class ReportRejectView(ReportCloseTemplateView):
     template_name = 'report/report_reject.html'
-    new_status = 2
+    new_status = Reports.REJECTED
     new_status_name = 'Отклонена'
 
 
-class SendReportView(TemplateViewWithMenu):  # TODO: https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/
+class SendReportView(TemplateViewWithMenu, generic_edit.CreateView):  # TODO: https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/
     template_name = 'send.html'
+    object = None
+    model = Reports
+    form_class = ModeledReportCreateForm
+
+    def get_context_data(self, **kwargs):
+        context = super(SendReportView, self).get_context_data()
+        context.update({
+            'reports': get_reports_list_context(Reports.objects.filter(author=self.request.user))
+        })
+        return context
 
     def get(self, request, *args, **kwargs):
-        """
-            Добавление уникального для GET-запроса контекста в self.extra_context
-            Логика работы с БД
-            Да в общем всё что душе угодно (При ненадобности можно вообще удалить)
-        """
-        return super(SendReportView, self).get(self, request, *args, **kwargs)
+        # TODO: Приём значений тему и id-объекта из GET-запроса
+        get_response = super(SendReportView, self).get(request, *args, **kwargs)
+        # TODO: Приём значений тему и id-объекта из GET-запроса
+        return get_response
+
+    def post(self, request, *args, **kwargs):
+        post_response = super(SendReportView, self).post(self, request, *args, **kwargs)
+        return post_response

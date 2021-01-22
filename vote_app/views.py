@@ -42,7 +42,6 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
 
         # TODO: Добавить сохранение вариантов голосования
         self.save_vote_variants()
-
         return post_response
 
     def save_vote_variants(self):

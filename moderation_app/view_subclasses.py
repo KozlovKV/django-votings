@@ -1,4 +1,4 @@
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 import django.views.generic.edit as generic_edit
 from django.utils import timezone
 
@@ -34,7 +34,7 @@ class ReportCloseTemplateView(TemplateViewWithMenu, generic_edit.FormView):
         report_id = self.kwargs['report_id']
         report = Reports.objects.get(pk=report_id)
 
-        email = TemplateEmailSender(to=[(report.author.email)])
+        email = TemplateEmailSender(to=[report.author.email])
         email.subject_template = 'report/email_subject.txt'
         email.body_template = 'report/email_body.txt'
         email.context = self.get_email_context()

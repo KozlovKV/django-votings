@@ -1,5 +1,3 @@
-from audioop import reverse
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
@@ -22,11 +20,11 @@ class Reports(models.Model):
         (REJECTED, 'Отклонена')
     ]
 
-    author = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    theme = models.IntegerField(choices=THEMES)
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True)
+    theme = models.IntegerField(choices=THEMES, default=0)
     element = models.IntegerField(null=True)  # id модели, соответствующей теме жалобы
     content = models.TextField()
-    status = models.IntegerField(choices=STATUSES)
+    status = models.IntegerField(choices=STATUSES, default=0)
     create_date = models.DateTimeField(auto_now_add=True)
     close_date = models.DateTimeField(null=True)
 
@@ -45,6 +43,16 @@ class Reports(models.Model):
             if THEME[0] == self.theme:
                 return THEME[1]
         return 'Ошибочная тема'
+
+    def get_humanity_status_name(self):
+        for STATUS in self.STATUSES:
+            if STATUS[0] == self.status:
+                return STATUS[1]
+        return 'Ошибочный статус'
+
+    @staticmethod
+    def get_absolute_url():
+        return ''
 
 
 class VoteChangeRequest(models.Model):
