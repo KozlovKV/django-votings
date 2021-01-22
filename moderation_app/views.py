@@ -59,9 +59,9 @@ class ReportsListView(TemplateViewWithMenu):
                 'id': model_note.id,
                 'theme': model_note.get_humanity_theme_name(),
                 'object_url': model_note.get_object_url_from_report(),
-                'content': model_note.content,
-                'author': model_note.author,
-                'date': model_note.create_date,
+                'content': model_note.Content,
+                'author': model_note.Author,
+                'date': model_note.Create_date,
                 'submit_url': reverse('moder_report_submit', args=(model_note.id,)),
                 'reject_url': reverse('moder_report_reject', args=(model_note.id,)),
             }

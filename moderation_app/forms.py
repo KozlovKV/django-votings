@@ -30,11 +30,12 @@ class ModeledReportCreateForm(forms.ModelForm):
         ]
         labels = {
             'Theme': 'Тема жалобы',
-            'Content': 'Содержание жалобы (подробное описание значительно повышает шанс на адекватный ответ)',
+            'Content': 'Содержание жалобы',
         }
         widgets = {
             'Theme': forms.RadioSelect,
             'Content': forms.Textarea(attrs={
+                'placeholder': 'Содержание жалобы (подробное описание значительно повышает шанс на адекватный ответ)',
                 'style': 'width: 95%',
             }),
             'Author': forms.TextInput(attrs={

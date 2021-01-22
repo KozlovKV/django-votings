@@ -11,9 +11,16 @@
         <h1>Страница жалоб</h1>
         <div class="horizontal-centering">
             <div class="medium-block medium">
+                {% if form.errors %}
+                    <div class="block">
+                        <h2>Ошибки</h2>
+                        {{ form.errors }}
+                    </div>
+                {% endif %}
                 <h2>Отправить жалобу</h2>
                 <form method="post" action="{% url 'moder_report_send' %}">
                     {% csrf_token %}
+                    {{ form.Author }}
                     <div class="horizontal-centering">
                         <label>{{ form.Theme.label }}</label>
                         {{ form.Theme }}
@@ -38,5 +45,8 @@
         {% if rights != 0 %}
             <a href="{% url 'moder_manage' %}" class="big-btn blue">Панель модератора</a>
         {% endif %}
+        <script>
+            document.querySelector('#author').value = {{ user.id }}
+        </script>
     {% endif %}
 {% endblock %}
