@@ -115,7 +115,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
 
     def get_object(self, queryset=None):
         object = super(VotingView, self).get_object(queryset)
-        self.variants = list(VoteVariants.objects.filter(voting=object.pk))
+        self.variants = list(VoteVariants.objects.filter(voting=object))
         self.variants.sort(key=lambda x: x.serial_number)
         return object
 
@@ -140,11 +140,10 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         if self.object.end_date is None:
             return False
         else:
-            # if timezone.now() >= self.object.end_date:
-            #     return True
-            # elif timezone.now() < self.object.end_date:
-            #     return False
-            return timezone.now() >= self.object.end_date
+            if timezone.now() >= self.object.end_date:
+                return True
+            elif timezone.now() < self.object.end_date:
+                return False
 
     def can_see_result(self):
         if self.object.result_see_when == Votings.BY_TIMER:
@@ -154,17 +153,16 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
                 return self.is_ended()
         else:
             if self.object.result_see_who == Votings.VOTED:
-                return self.is_voted(self.request.user) and self.is_ended()
+                return self.is_voted(self.request.user)
             else:
                 return True
 
     def is_voted(self, user):
         votes = Votes.objects.filter(voting=self.object.pk, user=user)
-        # if len(votes) > 0:
-        #     return True
-        # else:
-        #     return False
-        return len(votes) > 0
+        if len(votes) > 0:
+            return True
+        else:
+            return False
 
     def can_vote(self, user):
         if self.is_ended():
@@ -200,19 +198,20 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
 
     def vote_one_variant_process(self):
         variant_id = int(self.request.POST.get('variants'))
-        variant = self.variants[variant_id - 1]
+        variant = self.variants[variant_id]
         new_vote = Votes(user=self.request.user, voting=self.object, variant=variant)
         new_vote.save()
         variant.votes_count += 1
         variant.save()
+        self.object.votes_count += 1
         self.object.voters_count += 1
         self.object.save()
 
     def vote_many_variants_process(self):
-        for i in range(1, self.object.variants_count + 1):
+        for i in range(self.object.variants_count):
             input_val = int(self.request.POST.get(f'{i}', -1))
             if input_val != -1:
-                variant = self.variants[input_val - 1]
+                variant = self.variants[input_val]
                 new_vote = Votes(user=self.request.user, voting=self.object, variant=variant)
                 new_vote.save()
                 variant.votes_count += 1
