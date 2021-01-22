@@ -39,7 +39,9 @@
             </div>
         </div>
         {% if rights != 0 %}
-            <a href="{% url 'moder_manage' %}" class="big-btn blue">Панель модератора</a>
+            <div class="horizontal-centering">
+                <a href="{% url 'moder_manage' %}" class="big-btn blue">Панель модератора</a>
+            </div>
         {% endif %}
         <script>
             document.querySelector('#author').value = {{ user.id }}

@@ -1,42 +1,33 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-    google.charts.load("current", {packages:["corechart"]});
-    google.charts.setOnLoadCallback(drawChart);
-    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Варианты', 'Кол-во голосов'],
-            {% for variant in vote_variants %}
-            ['{{ variant.description }}', {{ variant.votes_count }}],
-            {% endfor %}
-    ]);
+    function drawDonutChart() {
+        var data = loadData()
 
-    var options = {
-        title: '',
-        pieHole: 0.4,
-        backgroundColor: 'none',
-        chartArea: {
-            width: '100%',
-            height: '90%',
-        },
-        legend: {
-            position: 'right',
-            textStyle: {
-                fontSize: 16,
-                fontName: 'Roboto',
+        var options = {
+            title: '',
+            pieHole: 0.4,
+            backgroundColor: 'none',
+            chartArea: {
+                width: '100%',
+                height: '90%',
             },
-        },
-    };
+            legend: {
+                position: 'right',
+                textStyle: {
+                    fontSize: 14,
+                    fontName: 'Roboto',
+                },
+            },
+        };
 
-    var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        var chart_block = document.getElementById('donut_chart');
+        var chart = new google.visualization.PieChart(chart_block);
+
         chart.draw(data, options);
-        document.querySelector('#download_chart').href = chart.getImageURI()
     }
 
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawDonutChart);
 </script>
 
-<div class="horizontal-centering medium">
-    <div id="donutchart" class="small-block grey-3 chart_block ultra-wide"></div>
-    <div class="horizontal-centering">
-        <a href="" class="medium-btn yellow" id="download_chart">Загрузить картинку графика</a>
-    </div>
-</div>
+<div id="donut_chart" class="ultra-wide"></div>

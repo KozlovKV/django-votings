@@ -10,19 +10,25 @@
 body {
     margin: 0;
     padding: 0;
-    padding-top: 4%;
+    padding-top: 5%;
     height: 100%;
     font-family: Roboto;
 }
 
 .main-content {
+    position: relative;
     margin: 0 20%;
     font-size: 1.5rem;
 }
 
 h1, h2, h3 {
+    margin: 15px;
     font-family: Comfortaa, cursive;
     text-align: center;
+}
+
+h4, h5, h6 {
+    margin: 5px;
 }
 
 p {
@@ -30,12 +36,14 @@ p {
 }
 
 .horizontal-centering {
+    position: relative;
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
 }
 
 .block {
+    position: relative;
     border: 3px solid black;
     background-color: #DDD;
     border-radius: 20px;
@@ -45,6 +53,7 @@ p {
 }
 
 .medium-block {
+    position: relative;
     border: 2px solid black;
     border-radius: 20px;
     margin: 10px;
@@ -54,6 +63,7 @@ p {
 }
 
 .small-block {
+    position: relative;
     border: 2px solid black;
     border-radius: 15px;
     margin: 10px;
@@ -63,8 +73,9 @@ p {
 }
 
 .list-elem {
+    position: relative;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     background-color: #BBB; /* .grey-2 */
     border: 2px solid black;
@@ -117,18 +128,30 @@ p {
 
 .grey-4 { background-color: #777; }
 
-.hidden-top {
-    transform: translateY(-1000px);
+.hidden-top { transform: translateY(-1000px); }
+
+.hidden-left { transform: translateX(-1000px); }
+
+.hidden-bottom { transform: translateY(1000px); }
+
+.hidden-right { transform: translateX(1000px); }
+
+.left {
+    position: absolute;
+    left: 5px;
 }
 
-.hidden-left {
-    transform: translateX(-1000px);
+.right {
+    position: absolute;
+    right: 5px;
 }
 
-.hidden-bottom {
-    transform: translateY(1000px);
+.top {
+    position: absolute;
+    top: 5px;
 }
 
-.hidden-right {
-    transform: translateX(1000px);
+.bottom {
+    position: absolute;
+    bottom: 5px;
 }

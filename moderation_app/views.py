@@ -1,12 +1,16 @@
 from django.urls import reverse, reverse_lazy
 import django.views.generic.edit as generic_edit
+import django.views.generic.detail as generic_detail
 from django.utils import timezone
 
 from menu_app.view_menu_context import get_full_site_url
 from menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
+from moderation_app.forms import CommentForm, EditRequestForm
+from moderation_app.models import Reports, VoteChangeRequest
 from moderation_app.forms import CommentForm, ModeledReportCreateForm
 from moderation_app.models import Reports
 from moderation_app.view_subclasses import ReportCloseTemplateView
+from vote_app.models import Votings
 
 
 def get_reports_list(model_list):
@@ -39,30 +43,53 @@ class ModerationPanelView(TemplateViewWithMenu):
         context.update({
             'reports': {
                 'all': len(Reports.objects.all()),
-                'submitted': len(Reports.objects.filter(Status=1)),
-                'rejected': len(Reports.objects.filter(Status=2)),
-                'processed': len(Reports.objects.exclude(Status=0)),
+                'submitted': len(Reports.objects.filter(status=Reports.SUBMITTED)),
+                'rejected': len(Reports.objects.filter(status=Reports.REJECTED)),
+                'processed': len(Reports.objects.exclude(status=Reports.IN_PROCESS)),
             },
             'change_request': {
-                'all': len(Reports.objects.all()),
-                'submitted': len(Reports.objects.filter(Status=1)),
-                'rejected': len(Reports.objects.filter(Status=2)),
-                'processed': len(Reports.objects.exclude(Status=0)),
+                'all': len(VoteChangeRequest.objects.all()),
             },
         })
         return context
 
 
+def get_change_requests_list_context():
+    res = []
+    model_list = VoteChangeRequest.objects.all()
+    for model_note in model_list:
+        dict_note = {
+            'title': model_note.voting.title,
+            'date': model_note.date,
+            'form_url': reverse('moder_change_request_form', args=(model_note.pk,)),
+        }
+        res.append(dict_note)
+    return res
+
+
 class ChangeRequestsListView(TemplateViewWithMenu):
     template_name = 'change_requests_list.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(ChangeRequestsListView, self).get_context_data(**kwargs)
+        context.update({
+            'change_requests': get_change_requests_list_context(),
+        })
+        return context
 
-class ChangeRequestFormView(TemplateViewWithMenu):
+
+class ChangeRequestFormView(generic_detail.DetailView, TemplateViewWithMenu):
     template_name = 'change_request_form.html'
+    object = None
+    model = VoteChangeRequest
+    pk_url_kwarg = 'request_id'
 
-    def get(self, request, *args, **kwargs):
-        self.extra_context = kwargs
-        return super(ChangeRequestFormView, self).get(self, request, *args, **kwargs)
+    def get_context_data(self, **kwargs):
+        context = super(ChangeRequestFormView, self).get_context_data(**kwargs)
+        context.update({
+            'form': EditRequestForm
+        })
+        return context
 
 
 class ReportsListView(TemplateViewWithMenu):
@@ -100,14 +127,6 @@ class SendReportView(TemplateViewWithMenu, generic_edit.CreateView):  # TODO: ht
             'reports': get_reports_list(Reports.objects.filter(Author=4))
         })
         return context
-
-    def get(self, request, *args, **kwargs):
-        """
-            Добавление уникального для GET-запроса контекста в self.extra_context
-            Логика работы с БД
-            Да в общем всё что душе угодно (При ненадобности можно вообще удалить)
-        """
-        return super(SendReportView, self).get(self, request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         post_response = super(SendReportView, self).post(self, request, *args, **kwargs)

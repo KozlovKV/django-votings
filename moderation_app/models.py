@@ -11,10 +11,13 @@ class Reports(models.Model):
         (1, 'Сообщение об ошибке'),
     ]
 
+    IN_PROCESS = 0
+    SUBMITTED = 1
+    REJECTED = 2
     STATUSES = [
-        (0, 'Обрабатывается'),
-        (1, 'Решена'),
-        (2, 'Отклонена')
+        (IN_PROCESS, 'Обрабатывается'),
+        (SUBMITTED, 'Решена'),
+        (REJECTED, 'Отклонена')
     ]
 
     Author = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True)
@@ -47,7 +50,7 @@ class Reports(models.Model):
 
 
 class VoteChangeRequest(models.Model):
-    voting_id = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
-    Change = models.TextField()
+    voting = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
+    change = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     comment = models.TextField()

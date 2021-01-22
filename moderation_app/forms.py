@@ -26,19 +26,19 @@ class ModeledReportCreateForm(forms.ModelForm):
     class Meta:
         model = Reports
         fields = [
-            'Author', 'Theme', 'Content',
+            'author', 'theme', 'content',
         ]
         labels = {
-            'Theme': 'Тема жалобы',
-            'Content': 'Содержание жалобы',
+            'theme': 'Тема жалобы',
+            'content': 'Содержание жалобы',
         }
         widgets = {
-            'Theme': forms.RadioSelect,
-            'Content': forms.Textarea(attrs={
+            'theme': forms.RadioSelect,
+            'content': forms.Textarea(attrs={
                 'placeholder': 'Содержание жалобы (подробное описание значительно повышает шанс на адекватный ответ)',
                 'style': 'width: 95%',
             }),
-            'Author': forms.TextInput(attrs={
+            'author': forms.TextInput(attrs={
                 'type': 'hidden',
                 'id': 'author',
             }),

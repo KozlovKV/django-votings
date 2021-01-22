@@ -1,13 +1,16 @@
 from django import forms
+from django.utils import timezone
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 import django.views.generic.edit as generic_edit
+import django.views.generic.detail as generic_detail
 
 from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
+from profile_app.models import AdditionUserInfo
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
 
-from vote_app.models import Votings
+from vote_app.models import Votings, Votes
 from vote_app.models import VoteVariants
 
 
@@ -20,7 +23,7 @@ class VoteListPageView(TemplateViewWithMenu):
     template_name = 'vote_list.html'
 
 
-class CreateVotingView(TemplateViewWithMenu, generic_edit.CreateView):
+class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
     template_name = 'vote_config.html'
     object = None
     model = Votings
@@ -38,16 +41,21 @@ class CreateVotingView(TemplateViewWithMenu, generic_edit.CreateView):
         post_response = super(CreateVotingView, self).post(self, request, *args, **kwargs)
 
         # TODO: Добавить сохранение вариантов голосования
-        variants_list = get_variants_list(self.request)
-        print(variants_list)
-
-        # Записать ID новго голосования для переадресации
-        # voting_id = self.object.id
-        # post_response.url = reverse_lazy('vote_view', args=(voting_id,))
+        self.save_vote_variants()
         return post_response
 
+    def save_vote_variants(self):
+        variants_list = get_variants_description_list(self.request)
+        variants_count = len(variants_list)
+        for serial_number in range(variants_count):
+            record = VoteVariants(voting=self.object,
+                                  serial_number=serial_number,
+                                  description=variants_list[serial_number],
+                                  votes_count=0,)
+            record.save()
 
-class EditVotingView(TemplateViewWithMenu, generic_edit.FormView):
+
+class EditVotingView(generic_edit.FormView, TemplateViewWithMenu):
     template_name = 'vote_config.html'
     model = Votings
     form_class = ModeledVoteEditForm
@@ -65,73 +73,149 @@ class EditVotingView(TemplateViewWithMenu, generic_edit.FormView):
 
         # TODO: Добавить сохранение вариантов голосования и создание записи в модели запросов на редактирование
 
-        # Записать ID новго голосования для переадресации
-        # voting_id = self.object.id
-        # post_response.url = reverse_lazy('vote_view', args=(voting_id,))
         return post_response
 
 
-def get_variants_list(request):
+def get_variants_description_list(request):
     res = []
-    for serial_num in range(0, int(request.POST.get('Variants_count'))):
+    for serial_num in range(0, int(request.POST.get('variants_count'))):
         res.append(request.POST.get(f'variant_{serial_num}'))
     return res
 
 
-def get_variants_context(voting_id):
+def get_variants_context(voting):
     res = []
-    vote_variants = VoteVariants.objects.filter(ID_voting=voting_id)
-    voting = Votings.objects.get(pk=voting_id)
+    vote_variants = VoteVariants.objects.filter(voting=voting)
     for variant in vote_variants:
         variant_dict = {
-            'serial_number': variant.Serial_number,
-            'description': variant.Description,
-            'votes_count': variant.Votes_count,
-            'percent': (variant.Votes_count * 100) / voting.Votes_count,
+            'serial_number': variant.serial_number,
+            'description': variant.description,
+            'votes_count': variant.votes_count,
+            'percent': (variant.votes_count * 100) / (voting.voters_count if voting.voters_count != 0 else 1),
         }
         res.append(variant_dict)
     res.sort(key=lambda x: x['serial_number'])
     return res
 
 
-def get_variants_form(variants, type):
-    CHOICES = [(variant['serial_number'], variant['description']) for variant in variants]
-    form = None
-    if type == Votings.ONE:
-        form = forms.ChoiceField(choices=CHOICES)
-        # widget = forms.RadioSelect(attrs={
-        #     'class': 'input',
-        # })
-    elif type == Votings.MANY:
-        form = forms.ChoiceField(choices=CHOICES)
-        # widget = forms.CheckboxSelectMultiple(attrs={
-        #     'class': 'input',
-        # })
-    return form
-
-
-class VotingView(TemplateViewWithMenu):
+class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
     template_name = 'vote_one.html'
+    model = Votings
+    object = None
+    extra_context = {}
+    pk_url_kwarg = 'voting_id'
+    variants = []
+
+    def __init__(self):
+        super(VotingView, self).__init__()
+        self.VOTE_PROCESSORS = {
+            'radio': self.vote_one_variant_process,
+            'checkbox': self.vote_many_variants_process,
+        }
+
+    def get_object(self, queryset=None):
+        object = super(VotingView, self).get_object(queryset)
+        self.variants = list(VoteVariants.objects.filter(voting=object))
+        self.variants.sort(key=lambda x: x.serial_number)
+        return object
 
     def get_context_data(self, **kwargs):
         context = super(VotingView, self).get_context_data(**kwargs)
-        voting_id = kwargs["voting_id"]
-        voting_note = Votings.objects.get(pk=voting_id)
         context.update({
-            'voting_id': kwargs["voting_id"],
-            'edit_url': reverse_lazy('vote_edit', args=(kwargs["voting_id"],)),
-            'title': voting_note.Title,
-            'description': voting_note.Description,
-            'author': voting_note.Author,
-            'author_url': reverse_lazy('profile_view', args=(voting_note.Author.id,)),
-            'status': voting_note.Complaint_state,
-            'image': (voting_note.Image if not voting_note.Image == '' else ''),
-            'type': voting_note.Type,
-            'type_ref': Votings.TYPE_REFS[voting_note.Type],
-            'result_see_who': voting_note.Result_see_who,
-            'result_see_when': voting_note.Result_see_when,
-            'votes_count': voting_note.Votes_count,
-            'end_date': voting_note.End_date,
-            'vote_variants': get_variants_context(voting_id),
+            'type_ref': Votings.TYPE_REFS[self.object.type],
+            'can_vote': self.can_vote(self.request.user),
+            'can_edit': self.can_edit(self.request.user),
+            'can_watch_res': self.can_see_result(),
+            'is_ended': self.is_ended(),
+            'vote_variants': get_variants_context(self.object),
         })
+        try:
+            context['img_url'] = self.object.image.url
+        except ValueError:
+            context['img_url'] = ''
+        context.update(self.extra_context)
         return context
+
+    def is_ended(self):
+        if self.object.end_date is None:
+            return False
+        else:
+            if timezone.now() >= self.object.end_date:
+                return True
+            elif timezone.now() < self.object.end_date:
+                return False
+
+    def can_see_result(self):
+        if self.object.result_see_when == Votings.BY_TIMER:
+            if self.object.result_see_who == Votings.VOTED:
+                return self.is_voted(self.request.user) and self.is_ended()
+            else:
+                return self.is_ended()
+        else:
+            if self.object.result_see_who == Votings.VOTED:
+                return self.is_voted(self.request.user)
+            else:
+                return True
+
+    def is_voted(self, user):
+        votes = Votes.objects.filter(voting=self.object.pk, user=user)
+        if len(votes) > 0:
+            return True
+        else:
+            return False
+
+    def can_vote(self, user):
+        if self.is_ended():
+            self.extra_context.update({
+                'reason_cant_vote': 'Голосование закончилось'
+            })
+            return False
+        elif not user.is_authenticated:
+            if not self.object.anons_can_vote:
+                self.extra_context.update({
+                    'reason_cant_vote': 'Для этого голосования необходимо авторизоваться'
+                })
+            return self.object.anons_can_vote
+        elif self.is_voted(user):
+            self.extra_context.update({
+                'reason_cant_vote': 'Вы уже голосовали'
+            })
+            return False
+        return True
+
+    def can_edit(self, user):
+        if not user.is_authenticated:
+            return False
+        add_info = AdditionUserInfo.objects.get(user=user)
+        return self.object.author == user or add_info.user_rights == AdditionUserInfo.ADMIN
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.can_vote(request.user) and not self.is_ended():
+            self.VOTE_PROCESSORS[Votings.TYPE_REFS[self.object.type]]()
+        context = self.get_context_data(**kwargs)
+        return render(self.request, self.template_name, context)
+
+    def vote_one_variant_process(self):
+        variant_id = int(self.request.POST.get('variants'))
+        variant = self.variants[variant_id]
+        new_vote = Votes(user=self.request.user, voting=self.object, variant=variant)
+        new_vote.save()
+        variant.votes_count += 1
+        variant.save()
+        self.object.votes_count += 1
+        self.object.voters_count += 1
+        self.object.save()
+
+    def vote_many_variants_process(self):
+        for i in range(self.object.variants_count):
+            input_val = int(self.request.POST.get(f'{i}', -1))
+            if input_val != -1:
+                variant = self.variants[input_val]
+                new_vote = Votes(user=self.request.user, voting=self.object, variant=variant)
+                new_vote.save()
+                variant.votes_count += 1
+                variant.save()
+                self.object.votes_count += 1
+        self.object.voters_count += 1
+        self.object.save()
