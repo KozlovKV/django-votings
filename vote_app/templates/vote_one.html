@@ -40,7 +40,9 @@
         <div class="list-elem">
             {% if can_edit %}
                 <a href="{% url 'vote_edit' object.pk %}" class="medium-btn yellow">Редактировать</a>
-                <a href="{% url 'vote_edit' object.pk %}" class="medium-btn red">Удалить</a>
+                {% if rights == 2 %}
+                    <a href="{% url 'vote_delete' object.pk %}" class="medium-btn red">Удалить</a>
+                {% endif %}
             {% endif %}
         </div>
         <div class="list-elem">

@@ -219,3 +219,17 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
                 self.object.votes_count += 1
         self.object.voters_count += 1
         self.object.save()
+
+
+class DeleteVotingView(generic_edit.DeleteView, TemplateViewWithMenu):
+    template_name = 'vote_delete.html'
+    model = Votings
+    object = None
+    pk_url_kwarg = 'voting_id'
+    success_url = reverse_lazy('vote_list')
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.extra_context = {'object': self.object}
+        return super(DeleteVotingView, self).get(request, *args, **kwargs)
+

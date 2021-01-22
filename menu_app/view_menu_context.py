@@ -19,7 +19,7 @@ def get_profile_menu_context(request):
     profile_menu_context = []
     if request.user.is_authenticated:
         profile_menu_context = [
-            {'url': reverse('profile_view', args=(0,)), 'label': request.user},
+            {'url': reverse('profile_view', args=(request.user.id,)), 'label': request.user},
             {'url': reverse('logout'), 'label': 'Выход'}
         ]
     return profile_menu_context
