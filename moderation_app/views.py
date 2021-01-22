@@ -9,6 +9,24 @@ from moderation_app.models import Reports
 from moderation_app.view_subclasses import ReportCloseTemplateView
 
 
+def get_reports_list(model_list):
+    res = []
+    for model_note in model_list:
+        dict_note = {
+            'id': model_note.id,
+            'theme': model_note.get_humanity_theme_name(),
+            'object_url': model_note.get_object_url_from_report(),
+            'content': model_note.Content,
+            'author': model_note.Author,
+            'date': model_note.Create_date,
+            'submit_url': reverse('moder_report_submit', args=(model_note.id,)),
+            'reject_url': reverse('moder_report_reject', args=(model_note.id,)),
+            'status': Reports.STATUSES[model_note.Status][1],
+        }
+        res.append(dict_note)
+    return res
+
+
 class TestModerView(TemplateViewWithMenu):
     template_name = 'report_test.html'
 
@@ -50,28 +68,10 @@ class ChangeRequestFormView(TemplateViewWithMenu):
 class ReportsListView(TemplateViewWithMenu):
     template_name = 'report/reports_list.html'
 
-    @staticmethod
-    def get_reports_list():
-        res = []
-        model_list = Reports.objects.filter(Status=0)
-        for model_note in model_list:
-            dict_note = {
-                'id': model_note.id,
-                'theme': model_note.get_humanity_theme_name(),
-                'object_url': model_note.get_object_url_from_report(),
-                'content': model_note.Content,
-                'author': model_note.Author,
-                'date': model_note.Create_date,
-                'submit_url': reverse('moder_report_submit', args=(model_note.id,)),
-                'reject_url': reverse('moder_report_reject', args=(model_note.id,)),
-            }
-            res.append(dict_note)
-        return res
-
     def get_context_data(self, **kwargs):
         context = super(ReportsListView, self).get_context_data(**kwargs)
         context.update({
-            'reports': self.get_reports_list()
+            'reports': get_reports_list(Reports.objects.filter(Status=0))
         })
         return context
 
@@ -94,6 +94,13 @@ class SendReportView(TemplateViewWithMenu, generic_edit.CreateView):  # TODO: ht
     model = Reports
     form_class = ModeledReportCreateForm
 
+    def get_context_data(self, **kwargs):
+        context = super(SendReportView, self).get_context_data()
+        context.update({
+            'reports': get_reports_list(Reports.objects.filter(Author=4))
+        })
+        return context
+
     def get(self, request, *args, **kwargs):
         """
             Добавление уникального для GET-запроса контекста в self.extra_context
@@ -104,8 +111,4 @@ class SendReportView(TemplateViewWithMenu, generic_edit.CreateView):  # TODO: ht
 
     def post(self, request, *args, **kwargs):
         post_response = super(SendReportView, self).post(self, request, *args, **kwargs)
-
-        # Записать ID новой жалобы для переадресации
-        # report_id = self.object.id
-        # post_response.url = reverse_lazy('vote_view', args=(report_id,))
         return post_response

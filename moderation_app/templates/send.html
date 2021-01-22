@@ -31,15 +31,11 @@
             </div>
             <div class="medium-block medium">
                 <h2>Отправленные жалобы</h2>
-                <div class="list-elem">
-                    <div>Жалоба №1 - решена</div>
-                </div>
-                <div class="list-elem">
-                    <div>Жалоба №13 - отлконена</div>
-                </div>
-                <div class="list-elem">
-                    <div>Жалоба №99 - обрабатывается</div>
-                </div>
+                {% for report in reports %}
+                    <div class="list-elem">
+                        <div>Жалоба №{{ report.id }} - {{ report.status }}</div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
         {% if rights != 0 %}

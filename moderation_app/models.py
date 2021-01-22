@@ -41,7 +41,8 @@ class Reports(models.Model):
                 return THEME[1]
         return 'Ошибочная тема'
 
-    def get_absolute_url(self):
+    @staticmethod
+    def get_absolute_url():
         return ''
 
 
