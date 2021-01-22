@@ -13,7 +13,8 @@ class CommentForm(forms.Form):
 
 
 class EditRequestForm(forms.Form):
-    comment = forms.CharField(label='Комментарий к решению (необязательно)',
+    comment = forms.CharField(required=False,
+                              label='Комментарий к решению (необязательно)',
                               widget=forms.Textarea(attrs={
                                     'placeholder': 'Комментарий к решению (необязательно)',
                                     'class': 'input wide',

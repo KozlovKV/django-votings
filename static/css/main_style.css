@@ -42,7 +42,7 @@ p {
     flex-wrap: wrap;
 }
 
-.vertical_centering {
+.vertical-centering {
     position: relative;
     display: flex;
     align-items: center;
@@ -103,6 +103,7 @@ p {
 
 .input-block {
     display: flex;
+    justify-content: space-around;
     flex-wrap: wrap;
     border: 2px solid black;
     border-radius: 5px;

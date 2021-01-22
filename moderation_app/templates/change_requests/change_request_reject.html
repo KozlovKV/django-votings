@@ -11,7 +11,7 @@
         <form method="post" action="{% url 'moder_change_request_reject' request_id %}" class="horizontal-centering">
             {% csrf_token %}
             {{ form.comment }}
-            <input type="submit" value="Одобрить запрос" class="big-btn red">
+            <input type="submit" value="Отклонить запрос" class="big-btn red">
         </form>
     </div>
 {% endblock %}

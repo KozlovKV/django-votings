@@ -52,7 +52,7 @@ class Reports(models.Model):
 
     @staticmethod
     def get_absolute_url():
-        return ''
+        return reverse_lazy('moder_report_send')
 
 
 class VoteChangeRequest(models.Model):
