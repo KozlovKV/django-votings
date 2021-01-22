@@ -120,6 +120,12 @@ class SendReportView(TemplateViewWithMenu, generic_edit.CreateView):  # TODO: ht
         })
         return context
 
+    def get(self, request, *args, **kwargs):
+        # TODO: Приём значений тему и id-объекта из GET-запроса
+        get_response = super(SendReportView, self).get(request, *args, **kwargs)
+        # TODO: Приём значений тему и id-объекта из GET-запроса
+        return get_response
+
     def post(self, request, *args, **kwargs):
         post_response = super(SendReportView, self).post(self, request, *args, **kwargs)
         return post_response
