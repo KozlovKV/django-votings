@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('vote_app', '0012_auto_20210121_2053'),
+        ('vote_app', '0012_auto_20210121_2015'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
