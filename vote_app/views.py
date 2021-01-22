@@ -39,8 +39,6 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
 
     def post(self, request, *args, **kwargs):
         post_response = super(CreateVotingView, self).post(self, request, *args, **kwargs)
-
-        # TODO: Добавить сохранение вариантов голосования
         self.save_vote_variants()
         return post_response
 
@@ -55,12 +53,14 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
             record.save()
 
 
-class EditVotingView(generic_edit.FormView, TemplateViewWithMenu):
+class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
     template_name = 'vote_config.html'
     model = Votings
+    object = None
     form_class = ModeledVoteEditForm
 
     def get_context_data(self, **kwargs):
+        self.object = Votings.objects.get(pk=kwargs["voting_id"])
         context = super(EditVotingView, self).get_context_data(**kwargs)
         context.update({
             'voting_id': kwargs["voting_id"],
