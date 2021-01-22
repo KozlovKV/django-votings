@@ -63,15 +63,16 @@ class ModeledVoteEditForm(forms.ModelForm):
             'description': 'Описание',
             'type': 'Тип голосования',
             'anons_can_vote': 'Разрешить голосовать анонимам',
-            'result_see_who': 'Кому видны результаты',
-            'result_see_when': 'Когда видные результаты',
-            'end_date': 'Дата окончания (пусто - бессрочно)',
+            'result_see_who': 'Кому видны результаты*',
+            'result_see_when': 'Когда видные результаты*',
+            'end_date': 'Дата окончания (пусто - бессрочно)*',
         }
         widgets = {
             'description': forms.Textarea(attrs={
                 'style': 'width: 95%',
             }),
-            'type': forms.RadioSelect,
+            'type': forms.RadioSelect(attrs={'disabled': True}),
+            # 'anons_can_vote': forms.BooleanField(disabled=True),
             'result_see_who': forms.RadioSelect,
             'result_see_when': forms.RadioSelect,
             'end_date': forms.DateTimeInput(attrs={

@@ -7,6 +7,7 @@ import django.views.generic.detail as generic_detail
 
 from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
+from moderation_app.models import VoteChangeRequest
 from profile_app.models import AdditionUserInfo
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
 
@@ -55,25 +56,52 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
 
 class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
     template_name = 'vote_config.html'
-    model = Votings
+    model = Votings  # and VoteChangeRequest
     object = None
+    old_object = None
     form_class = ModeledVoteEditForm
+    pk_url_kwarg = 'voting_id'
+    need_moderator = False
+    variants = []
+
+    def get_object(self, queryset=None):
+        object = super(EditVotingView, self).get_object(queryset)
+        self.variants = list(VoteVariants.objects.filter(voting=object))
+        self.variants.sort(key=lambda x: x.serial_number)
+        return object
 
     def get_context_data(self, **kwargs):
-        self.object = Votings.objects.get(pk=kwargs["voting_id"])
+        self.object = self.get_object()
+        self.old_object = self.object
         context = super(EditVotingView, self).get_context_data(**kwargs)
         context.update({
             'voting_id': kwargs["voting_id"],
             'context_url': reverse('vote_edit', args=(kwargs["voting_id"],)),
+            # 'vote_variants': get_variants_context(self.object),
         })
         return context
 
     def post(self, request, *args, **kwargs):
         post_response = super(EditVotingView, self).post(self, request, *args, **kwargs)
-
-        # TODO: Добавить сохранение вариантов голосования и создание записи в модели запросов на редактирование
-
+        self.save_change_request()
+        if self.need_moderator:
+            self.object = self.old_object
         return post_response
+
+    def save_change_request(self):
+        change = ''
+        if self.request.POST.get('end_date') == self.old_object.end_date:
+            change += '$$4:' + self.request.POST.get('end_date') + '$$'
+        if self.request.POST.get('result_see_who') == self.old_object.result_see_sho:
+            change += '$$5:' + self.request.POST.get('result_see_who') + '$$'
+        if self.request.POST.get('result_see_who') == self.old_object.result_see_sho:
+            change += '$$6:' + self.request.POST.get('result_see_who') + '$$'
+
+        if self.need_moderator:
+            record = VoteChangeRequest(voting=self.object,
+                                       change=change,
+                                       comment=self.request.POST.get('comment'))
+            record.save()
 
 
 def get_variants_description_list(request):
@@ -91,7 +119,7 @@ def get_variants_context(voting):
             'serial_number': variant.serial_number,
             'description': variant.description,
             'votes_count': variant.votes_count,
-            'percent': (variant.votes_count * 100) / (voting.voters_count if voting.voters_count != 0 else 1),
+            'percent': (variant.votes_count * 100) / (voting.voters_count if voting.voters_count else 1),
         }
         res.append(variant_dict)
     res.sort(key=lambda x: x['serial_number'])
@@ -234,4 +262,3 @@ class DeleteVotingView(generic_edit.DeleteView, TemplateViewWithMenu):
         self.object = self.get_object()
         self.extra_context = {'object': self.object}
         return super(DeleteVotingView, self).get(request, *args, **kwargs)
-
