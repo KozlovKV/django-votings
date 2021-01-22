@@ -7,6 +7,7 @@ from menu_app.view_menu_context import get_full_site_url
 from menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
 from moderation_app.forms import EditRequestForm
 from moderation_app.models import VoteChangeRequest
+from profile_app.models import AdditionUserInfo
 
 
 def get_change_requests_list_context():
@@ -61,7 +62,10 @@ class ChangeRequestCloseTemplateView(TemplateViewWithMenu, generic_edit.FormView
         context = {
             'change_request': self.change_request_object,
             'voting': self.change_request_object.voting,
+            'comment': self.request.POST.get('comment', ''),
+            'reset': self.request.POST.get('reset_votes', False),
             'moder': self.request.user,
+            'right_name': AdditionUserInfo.objects.get(user=self.request.user).get_right_name(),
             'status': self.new_status_name,
             'main_url': get_full_site_url(self.request),
             'date': timezone.now(),

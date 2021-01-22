@@ -6,6 +6,7 @@ from menu_app.view_menu_context import get_full_site_url
 from menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
 from moderation_app.forms import CommentForm, ModeledReportCreateForm
 from moderation_app.models import Reports
+from profile_app.models import AdditionUserInfo
 
 
 def get_reports_list_context(model_list):
@@ -23,7 +24,7 @@ class ReportCloseTemplateView(TemplateViewWithMenu, generic_edit.FormView):
     form_class = CommentForm
     success_url = reverse_lazy('moder_manage')
     new_status = 2
-    new_status_name = 'Отклонена'
+    new_status_name = 'отклонена'
 
     def get_email_context(self):
         report_id = self.kwargs['report_id']
@@ -33,6 +34,7 @@ class ReportCloseTemplateView(TemplateViewWithMenu, generic_edit.FormView):
             'status': self.new_status_name,
             'comment': self.request.POST.get('comment', ''),
             'moder': self.request.user,
+            'right_name': AdditionUserInfo.objects.get(user=self.request.user).get_right_name(),
             'author': report.author,
             'theme': report.get_humanity_theme_name(),
             'main_url': get_full_site_url(self.request),
@@ -79,13 +81,13 @@ class ReportsListView(TemplateViewWithMenu):
 class ReportSubmitView(ReportCloseTemplateView):
     template_name = 'report/report_submit.html'
     new_status = Reports.SUBMITTED
-    new_status_name = 'Одобрена'
+    new_status_name = 'одобрена'
 
 
 class ReportRejectView(ReportCloseTemplateView):
     template_name = 'report/report_reject.html'
     new_status = Reports.REJECTED
-    new_status_name = 'Отклонена'
+    new_status_name = 'отклонена'
 
 
 class SendReportView(TemplateViewWithMenu, generic_edit.CreateView):  # TODO: https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/

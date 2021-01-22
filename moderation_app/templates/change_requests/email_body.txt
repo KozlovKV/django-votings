@@ -1,7 +1,13 @@
 Здравствуйте, {{ voting.author }}!
 Ваша запрос номер {{ change_request.id }} ({{ voting.title }}) был {{ status }}
+{% if reset %}
+Голоса были сброшены
+{% endif %}
 
-{# comment #}
+{% if comment != '' %}
+Комментарий проверяющего:
+{{ comment }}
+{% endif %}
 
-С уважением, {{ moder }} - модератор команды проекта SV-1 ({{ main_url }})
+С уважением, {{ moder }} - {{ right_name }} команды проекта SV-1 ({{ main_url }})
 {{ date }}

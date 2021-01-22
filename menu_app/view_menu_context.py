@@ -25,9 +25,9 @@ def get_profile_menu_context(request):
     return profile_menu_context
 
 
-def get_full_site_url(req):
-    scheme = 'http://' if not req.is_secure() else 'https://'
-    return scheme + str(get_current_site(req))
+def get_full_site_url(request):
+    scheme = 'http://' if not request.is_secure() else 'https://'
+    return scheme + str(get_current_site(request))
 
 
 def get_full_menu_context(request):

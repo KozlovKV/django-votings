@@ -22,11 +22,11 @@ class Reports(models.Model):
 
     author = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True)
     theme = models.IntegerField(choices=THEMES, default=0)
-    element = models.IntegerField(null=True)  # id модели, соответствующей теме жалобы
+    element = models.IntegerField(null=True, blank=True)  # id модели, соответствующей теме жалобы
     content = models.TextField()
     status = models.IntegerField(choices=STATUSES, default=0)
     create_date = models.DateTimeField(auto_now_add=True)
-    close_date = models.DateTimeField(null=True)
+    close_date = models.DateTimeField(null=True, blank=True)
 
     def is_url_need(self):
         return self.theme == 0
