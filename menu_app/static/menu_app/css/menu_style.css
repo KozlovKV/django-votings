@@ -50,7 +50,7 @@
 
 .login-profile-block {
     display: flex;
-    justify-content: space;
+    justify-content: space-around;
     position: absolute;
     right: 5px;
 }

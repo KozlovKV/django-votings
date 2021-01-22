@@ -7,6 +7,7 @@
         .input {
             margin: 10px;
             padding: 10px;
+            display: inline-block;
         }
     </style>
 {% endblock %}
@@ -25,49 +26,50 @@
         {% endif %}
         <form method="POST" action="{{ context_url }}">
             {% csrf_token %}
+            {{ form.author }}
             <div class="horizontal-centering">
                 <div class="input">
-                    <label>{{ form.Title.label }}</label>
-                    {{ form.Title }}
+                    <label>{{ form.title.label }}</label>
+                    {{ form.title }}
                 </div>
                 <div class="input">
-                    <label>{{ form.Image.label }}</label>
-                    {{ form.Image }}
+                    <label>{{ form.image.label }}</label>
+                    {{ form.image }}
                 </div>
             </div>
             <div class="horizontal-centering">
                 <div class="input wide">
-                    <label>{{ form.Description.label }}</label><br>
-                    {{ form.Description }}
+                    <label>{{ form.description.label }}</label><br>
+                    {{ form.description }}
                 </div>
             </div>
             <div class="horizontal-centering">
                 <div class="input">
-                    <label>{{ form.Type.label }}</label>
-                    {{ form.Type }}
+                    <label>{{ form.type.label }}</label>
+                    {{ form.type }}
                 </div>
                 <div class="input">
-                    <label>{{ form.Result_see_who.label }}</label>
-                    {{ form.Result_see_who }}
+                    <label>{{ form.result_see_who.label }}</label>
+                    {{ form.result_see_who }}
                 </div>
                 <div class="input">
-                    <label>{{ form.Result_see_when.label }}</label>
-                    {{ form.Result_see_when }}
+                    <label>{{ form.result_see_when.label }}</label>
+                    {{ form.result_see_when }}
                 </div>
             </div>
             <div class="horizontal-centering">
                 <div class="input">
-                    <label>{{ form.Anons_can_vote.label }}</label>
-                    {{ form.Anons_can_vote }}
+                    <label>{{ form.anons_can_vote.label }}</label>
+                    {{ form.anons_can_vote }}
                 </div>
                 <div class="input">
-                    <label>{{ form.End_date.label }}</label>
-                    {{ form.End_date }}
+                    <label>{{ form.end_date.label }}</label>
+                    {{ form.end_date }}
                 </div>
             </div>
             <div class="block">
                 <h2>Варианты голосования</h2>
-                {{ form.Variants_count }}
+                {{ form.variants_count }}
                 <div id="vote_variants">
                     <div class="list-elem">
                         <input name="variant_" type="text" required maxlength="256" placeholder="Вариант " class="input wide">
@@ -96,4 +98,9 @@
         </form>
     </div>
     <script src="{% static 'vote_app/js/variants_script.js' %}"></script>
+    {% if voting_id == -1 %}
+        <script>
+            document.querySelector('#author').value = {{ user.id }}
+        </script>
+    {% endif %}
 {% endblock %}

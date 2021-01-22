@@ -19,15 +19,15 @@ def get_profile_menu_context(request):
     profile_menu_context = []
     if request.user.is_authenticated:
         profile_menu_context = [
-            {'url': reverse('profile_view', args=(0,)), 'label': request.user},
+            {'url': reverse('profile_view', args=(request.user.id,)), 'label': request.user},
             {'url': reverse('logout'), 'label': 'Выход'}
         ]
     return profile_menu_context
 
 
-def get_full_site_url(req):
-    scheme = 'http://' if not req.is_secure() else 'https://'
-    return scheme + str(get_current_site(req))
+def get_full_site_url(request):
+    scheme = 'http://' if not request.is_secure() else 'https://'
+    return scheme + str(get_current_site(request))
 
 
 def get_full_menu_context(request):
@@ -41,9 +41,9 @@ def get_full_menu_context(request):
         context['login_form'] = profile_forms.ModifiedAuthenticationForm(request.POST)
         context['reg_form'] = profile_forms.ModifiedRegistrationForm(request.POST)
     else:
-        info = AdditionUserInfo.objects.get(User_id=request.user)
+        info = AdditionUserInfo.objects.get(user=request.user)
         context['rights'] = info.user_rights
-        context['status'] = info.get_right_name()
+        context['right_name'] = info.get_right_name()
         if info.user_rights == 2:
             context['profile_menu'].append({'url': '/admin', 'label': 'Админ'})
     context['reset_form'] = profile_forms.ModifiedPasswordResetForm(request.POST)

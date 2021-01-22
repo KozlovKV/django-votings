@@ -1,0 +1,73 @@
+{% extends 'moder_base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Запросы на изменения</title>
+    <style>
+        .list-elem * {
+            margin: 5px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block for_moder %}
+    <div class="block">
+        <h1>Запрос номер {{ request_id }}</h1>
+        <div class="medium-block horizontal-centering grey-2">
+            <div class="list-elem wide grey-3">
+                <h2>{{ object.voting.title }}</h2>
+                <p class="meta-data">{{ object.date }}</p>
+                <p class="meta-data">
+                    {{ object.voting.author }}
+                    <a class="small-btn blue fas fa-arrow-right" href="{% url 'profile_view' object.voting.author.id %}"></a>
+                </p>
+            </div>
+            <h3 class="wide">Комментарий автора</h3>
+            <p class="wide">{{ object.comment }}</p>
+        </div>
+        <div class="medium-block horizontal-centering grey-2">
+            <h2>Список изменений</h2>
+            <div class="list-elem grey-3">
+                <div>
+                    <h4>Название изменённого элемента</h4>
+                    <ul>
+                        <li>Было: А вот раньше было лучше! Не то что сейчас в этих ваших интернетах!</li>
+                        <li>Стало: Хотя... И сейчас куча классных вещей. Вот этот сайт например</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="list-elem grey-3">
+                <div>
+                    <h4>Название изменённого элемента</h4>
+                    <ul>
+                        <li>Было: А вот раньше было лучше! Не то что сейчас в этих ваших интернетах!</li>
+                        <li>Стало: Хотя... И сейчас куча классных вещей. Вот этот сайт например</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="list-elem grey-3">
+                <div>
+                    <h4>Название изменённого элемента</h4>
+                    <ul>
+                        <li>Было: А вот раньше было лучше! Не то что сейчас в этих ваших интернетах!</li>
+                        <li>Стало: Хотя... И сейчас куча классных вещей. Вот этот сайт например</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="medium-block horizontal-centering grey-2">
+            <h2 class="wide">Действия</h2>
+            <div class="horizontal-centering wide">
+                <a type="submit" href="{% url 'moder_change_request_submit' request_id %}" class="big-btn green">Одобрить</a>
+                <a type="submit" href="{% url 'moder_change_request_reject' request_id %}" class="big-btn red">Отклонить</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block moder_bottom %}
+    <a href="{% url 'moder_manage' %}" class="big-btn blue">Панель модератора</a>
+    <a href="{% url 'moder_change_request_list' %}" class="big-btn green">Список запросов на изменения</a>
+{% endblock %}
+

@@ -1,5 +1,8 @@
-Здравствуйте, {{ author }}!
-Ваша жалоба под номером {{ report_id }} ({{ theme }}) была {{ status }}
+Здравствуйте, {{ voting.author }}!
+Ваша запрос номер {{ change_request.id }} ({{ voting.title }}) был {{ status }}
+{% if reset %}
+Голоса были сброшены
+{% endif %}
 
 {% if comment != '' %}
 Комментарий проверяющего:

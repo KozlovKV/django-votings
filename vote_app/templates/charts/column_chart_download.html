@@ -1,0 +1,34 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    function drawColumnChartForDownload() {
+        var data = loadData()
+
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1]);
+
+        var download_options = {
+            title: '{{ object.title }}',
+            height: 200,
+            bar: {groupWidth: "80%"},
+            legend: { position: "none" },
+            fontName: 'Roboto',
+            fontSize: 10,
+            titleTextStyle: {
+                fontSize: 16,
+                fontName: 'Roboto',
+                bold: true,
+            },
+        };
+
+        var download_block = document.querySelector('#column_chart_download');
+        var download_chart = new google.visualization.ColumnChart(download_block);
+        google.visualization.events.addListener(download_chart, 'ready', function () {
+          download_block.innerHTML = '<a href="' + download_chart.getImageURI() + '" download class="small-btn yellow" id="download_a">Загрузить картинку графика</a>';
+        });
+        download_chart.draw(view, download_options);
+    }
+
+    google.charts.load("current", {packages:['corechart']});
+    google.charts.setOnLoadCallback(drawColumnChartForDownload);
+</script>
+<div id="column_chart_download" class="horizontal-centering wide"></div>

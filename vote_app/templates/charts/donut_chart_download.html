@@ -1,0 +1,33 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    function drawDonutChartForDownload() {
+        var data = loadData()
+        var download_options = {
+            title: '{{ object.title }}',
+            pieHole: 0.4,
+            legend: {
+                position: 'left',
+                textStyle: {
+                    fontSize: 12,
+                    fontName: 'Roboto',
+                },
+            },
+            titleTextStyle: {
+                fontSize: 16,
+                fontName: 'Roboto',
+                bold: true,
+            },
+        };
+        var download_block = document.querySelector('#donut_chart_download');
+        var download_chart = new google.visualization.PieChart(download_block);
+        google.visualization.events.addListener(download_chart, 'ready', function () {
+          download_block.innerHTML = '<a href="' + download_chart.getImageURI() + '" download class="small-btn yellow" id="download_a">Загрузить картинку графика</a>';
+        });
+        download_chart.draw(data, download_options);
+    }
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawDonutChartForDownload);
+</script>
+
+<div id="donut_chart_download" class="horizontal-centering wide"></div>

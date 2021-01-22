@@ -54,7 +54,14 @@
 {% endblock %}
 
 {% block main %}
-    <a href="{% url 'vote_create' %}" class="medium-btn green">Создать голосование</a>
+    <div class="horizontal-centering">
+        {% if user.is_authenticated %}
+            <a href="{% url 'vote_create' %}" class="big-btn green">Создать голосование</a>
+        {% else %}
+            <h4 class="ultra-wide center">Создание голосований доступно только после регистрации</h4>
+            <button class="big-btn blue" id="red_btn_on_vote_list">Регистрация</button>
+        {% endif %}
+    </div>
     <section>
         <h3>Заголовок голосования</h3>
         <img src="#" alt="">
@@ -109,4 +116,8 @@
         </div>
         <div class="klyauza"></div>
     </section>
+    <script>
+        red_btn_on_vote_list = document.getElementById('red_btn_on_vote_list');
+        red_btn_on_vote_list.addEventListener('click', toggle_reg_form);
+    </script>
 {% endblock %}

@@ -1,0 +1,10 @@
+<script>
+    function loadData() {
+        return google.visualization.arrayToDataTable([
+            ['Варианты', 'Кол-во голосов'],
+            {% for variant in vote_variants %}
+            ['{{ variant.description }}', {{ variant.votes_count }}],
+            {% endfor %}
+        ]);
+    }
+</script>

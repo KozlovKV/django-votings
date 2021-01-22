@@ -25,11 +25,6 @@
             <div>
                 <p>Количество: {{ change_request.all }}</p>
             </div>
-            <div>
-                <p>Обработано: {{ change_request.processed }}</p>
-                <p>Одобрено: {{ change_request.submitted }}</p>
-                <p>Отклонено: {{ change_request.rejected }}</p>
-            </div>
             <a href="{% url 'moder_change_request_list' %}" class="big-btn blue">К списку</a>
         </div>
     </div>

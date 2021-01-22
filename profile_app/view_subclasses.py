@@ -20,7 +20,7 @@ class RegistrationViewDetailed(reg_act_views.RegistrationView, TemplateViewWithM
 
     def register(self, form):
         new_user = super(RegistrationViewDetailed, self).register(form)
-        additional_info = profile_models.AdditionUserInfo(User_id=new_user)
+        additional_info = profile_models.AdditionUserInfo(user=new_user)
         additional_info.save()
         return new_user
 

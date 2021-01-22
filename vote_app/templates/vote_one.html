@@ -3,58 +3,138 @@
 
 {% block head %}
     <title>Отдельное голосование</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/btn_style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'vote_app/css/vote_list_style.css' %}">
-    <style>
-        .medium {
-            width: 50%;
-            margin: 15px;
-        }
-
-        .main__img {
-            padding: 0;
-            border-radius: 10px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'vote_app/css/vote_one_style.css' %}">
 {% endblock %}
 
 {% block main %}
     <div class="block">
-        <div class="list-elem">
+        <div class="list-elem ">
             <div>
-                <h2>{{ title }}</h2>
+                <h2>{{ object.title }}</h2>
             </div>
             <div>
-                <p>Автор: <a href="{{ author_url }}">{{ author }}</a></p>
-                <p>Окончание: {{ end_date }}</p>
-                <a href="{{ edit_url }}" class="medium-btn yellow">Редактировать</a>
+                <p class="meta-data">Автор: {{ object.author }}<a href="{% url 'profile_view' object.author.id %}"
+                                                class="small-btn blue fas fa-arrow-right"></a></p>
+                <p class="meta-data">
+                    {% if object.end_date is None %}
+                        Бессрочно
+                    {% else %}
+                        Окончание: {{ object.end_date }}
+                    {% endif %}
+                </p>
+                {% if is_ended %}
+                    <p>Окончено</p>
+                {% endif %}
+                <p class="meta-data">
+                    {{ object.status }}
+                </p>
+                <p class="meta-data">
+                    {% if object.anons_can_vote %}
+                        Открытое голосование
+                    {% else %}
+                        Обязательная авторизация
+                    {% endif %}
+                </p>
             </div>
         </div>
         <div class="list-elem">
-            <div class="medium">
-                <p>{{ description }}</p>
+            {% if can_edit %}
+                <a href="{% url 'vote_edit' object.pk %}" class="medium-btn yellow">Редактировать</a>
+                {% if rights == 2 %}
+                    <a href="{% url 'vote_delete' object.pk %}" class="medium-btn red">Удалить</a>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="list-elem">
+            <div class="main__medium">
+                <p>{{ object.description }}</p>
             </div>
-            <img src="{{ image.url }}" class="medium">
+            <img src="{{ img_url }}" class="main__medium">
         </div>
         <div class="medium-block grey-2">
-            {% for vote_variant in vote_variants %}
-                <div class="list-elem grey-3">
-                    <strong class="wide">{{ vote_variant.description }}</strong>
-                    <span>{{ vote_variant.votes_count }} - {{ vote_variant.percent | floatformat }}%</span>
+            {% if can_vote %}
+            <form method="post" action="{% url 'vote_view' object.pk %}">
+                {% csrf_token %}
+                {% for vote_variant in vote_variants %}
+                    <div class="list-elem grey-3">
+                        {% if type_ref == 'radio' %}
+
+                            <label class="btn-radio">
+                                <input type="{{ type_ref }}"
+                                   name="variants"
+                                   value="{{ vote_variant.serial_number }}"
+                                   id="variant_{{ vote_variant.serial_number }}">
+
+                                <svg width="20px" height="20px" viewBox="0 0 20 20">
+                                    <circle cx="10" cy="10" r="9"></circle>
+                                    <path d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z" class="inner"></path>
+                                    <path d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z" class="outer"></path>
+                                </svg>
+                            </label>
+                        {% endif %}
+                        {% if type_ref == 'checkbox' %}
+                            <div class="checkbox path">
+                                <input type="{{ type_ref }}"
+                                       name="{{ vote_variant.serial_number }}"
+                                       value="{{ vote_variant.serial_number }}"
+                                       id="variant_{{ vote_variant.serial_number }}">
+
+                                <svg viewBox="0 0 21 21">
+                                    <path d="M5,10.75 L8.5,14.25 L19.4,2.3 C18.8333333,1.43333333 18.0333333,1 17,1 L4,1 C2.35,1 1,2.35 1,4 L1,17 C1,18.65 2.35,20 4,20 L17,20 C18.65,20 20,18.65 20,17 L20,7.99769186"></path>
+                                </svg>
+                            </div>
+                        {% endif %}
+                        <label for="variant_{{ vote_variant.serial_number }}" class="wide">{{ vote_variant.description }}</label>
+                        <span class="small-vote">{{ vote_variant.votes_count }} - {{ vote_variant.percent | floatformat }}%</span>
+                    </div>
+                {% endfor %}
+                <div class="horizontal-centering">
+                    <button type="submit" class="big-btn green">Голосовать</button>
                 </div>
-            {% endfor %}
-            <div class="horizontal-centering">
-                <button class="big-btn green">Голосовать</button>
-            </div>
+            </form>
+            {% else %}
+                {% for vote_variant in vote_variants %}
+                    <div class="list-elem grey-3">
+                        <label class="wide">{{ vote_variant.description }}</label>
+                        <span class="small-vote">{{ vote_variant.votes_count }} - {{ vote_variant.percent | floatformat }}%</span>
+                    </div>
+                {% endfor %}
+                <div class="horizontal-centering">
+                    <h4 class="wide center">Вы не можете голосовать</h4>
+                    <h4 class="wide center">{{ reason_cant_vote }}</h4>
+                </div>
+            {% endif %}
         </div>
         <div class="medium-block grey-2">
             <h3>Результаты</h3>
-            <h4>Всего голосов: {{ votes_count }}</h4>
-            <div class="horizontal-centering">
-                <div class="small-block grey-3 wide">
-                    {% include 'charts/donut_chart.html' %}
+            {% if can_watch_res %}
+                <div class="list-elem grey-3 horizontal-centering">
+                    <h4>Всего голосовавших: {{ object.voters_count }}</h4>
+                    <h4>Всего голосов: {{ object.votes_count }}</h4>
                 </div>
-            </div>
+                <div class="horizontal-centering">
+                    {% include 'charts/load_data_script.html' %}
+
+                    <div class="horizontal-centering medium small-block grey-3">
+                        {% include 'charts/donut_chart.html' %}
+                        {% include 'charts/donut_chart_download.html' %}
+                    </div>
+
+                    <div class="horizontal-centering medium small-block grey-3">
+                        {% include 'charts/column_chart.html' %}
+                        {% include 'charts/column_chart_download.html' %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="medium-block horizontal-centering grey-3">
+                    <h4 class="wide center">Вам не показываются результаты</h4>
+                    <h4 class="wide center">Результаты видны:</h4>
+                    <div class="wide list-elem grey-4">
+                        <h4>Кому: {{ object.get_result_see_who_name }}</h4>
+                        <h4>Когда: {{ object.get_result_see_when_name }}</h4>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

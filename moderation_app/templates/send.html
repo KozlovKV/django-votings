@@ -11,38 +11,46 @@
         <h1>Страница жалоб</h1>
         <div class="horizontal-centering">
             <div class="medium-block medium">
+                {% if form.errors %}
+                    <div class="block">
+                        <h2>Ошибки</h2>
+                        {{ form.errors }}
+                    </div>
+                {% endif %}
                 <h2>Отправить жалобу</h2>
                 <form method="post" action="{% url 'moder_report_send' %}">
+                    {% csrf_token %}
+                    {{ form.author }}
                     <div class="horizontal-centering">
-                        <label>Тема жалобы</label>
-                        <select class="input wide">
-                          <option>Сложный выбор</option>
-                          <option>Некорректные формуллировки</option>
-                          <option>Автора купил Запад</option>
-                        </select>
-                        <textarea
-                                placeholder="Содержание жалобы (подробное описание значительно повышает шанс на адекватный ответ)"
-                                class="input wide">
-                        </textarea>
-                        <input type="submit" value="Изменить" class="medium-btn green input wide">
+                        <label>{{ form.theme.label }}</label>
+                        {{ form.theme }}
+                        {{ form.content }}
+                        <input type="submit" value="Отправить жалобу" class="medium-btn green input wide">
                     </div>
                 </form>
             </div>
             <div class="medium-block medium">
                 <h2>Отправленные жалобы</h2>
-                <div class="list-elem">
-                    <div>Жалоба №1 - решена</div>
-                </div>
-                <div class="list-elem">
-                    <div>Жалоба №13 - отлконена</div>
-                </div>
-                <div class="list-elem">
-                    <div>Жалоба №99 - обрабатывается</div>
-                </div>
+                {% for report in reports %}
+                    <div class="small-block grey-2">
+                        <div class="list-elem grey-3">
+                            <div class="center ultra-wide">Жалоба №{{ report.object.id }} - {{ report.object.get_humanity_status_name }}</div>
+                        </div>
+                        <div class="small-block grey-3">
+                            <div class="list-elem">{{ report.object.get_humanity_theme_name }}</div>
+                            <div class="list-elem">{{ report.object.content }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
         {% if rights != 0 %}
-            <a href="{% url 'moder_manage' %}" class="big-btn blue">Панель модератора</a>
+            <div class="horizontal-centering">
+                <a href="{% url 'moder_manage' %}" class="big-btn blue">Панель модератора</a>
+            </div>
         {% endif %}
+        <script>
+            document.querySelector('#author').value = {{ user.id }}
+        </script>
     {% endif %}
 {% endblock %}
