@@ -20,29 +20,35 @@ class Reports(models.Model):
         (REJECTED, 'Отклонена')
     ]
 
-    Author = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True)
-    Theme = models.IntegerField(choices=THEMES, default=0)
-    Element = models.IntegerField(null=True)  # id модели, соответствующей теме жалобы
-    Content = models.TextField()
-    Status = models.IntegerField(choices=STATUSES, default=0)
-    Create_date = models.DateTimeField(auto_now_add=True)
-    Close_date = models.DateTimeField(null=True)
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True)
+    theme = models.IntegerField(choices=THEMES, default=0)
+    element = models.IntegerField(null=True)  # id модели, соответствующей теме жалобы
+    content = models.TextField()
+    status = models.IntegerField(choices=STATUSES, default=0)
+    create_date = models.DateTimeField(auto_now_add=True)
+    close_date = models.DateTimeField(null=True)
 
     def is_url_need(self):
-        return self.Theme == 0
+        return self.theme == 0
 
     def get_object_url_from_report(self):
         if self.is_url_need():
-            if self.Theme == 0:
-                return reverse_lazy('vote_view', args=(self.Element,))
+            if self.theme == 0:
+                return reverse_lazy('vote_view', args=(self.element,))
         else:
             return ''
 
     def get_humanity_theme_name(self):
         for THEME in self.THEMES:
-            if THEME[0] == self.Theme:
+            if THEME[0] == self.theme:
                 return THEME[1]
         return 'Ошибочная тема'
+
+    def get_humanity_status_name(self):
+        for STATUS in self.STATUSES:
+            if STATUS[0] == self.status:
+                return STATUS[1]
+        return 'Ошибочный статус'
 
     @staticmethod
     def get_absolute_url():

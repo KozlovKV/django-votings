@@ -17,24 +17,24 @@
             {% for report in reports %}
                 <div class="list-elem">
                     <div class="wide">
-                        <h4>{{ report.theme }}</h4>
+                        <h4>{{ report.object.get_humanity_theme_name }}</h4>
                         <p>
-                            {{ report.content }}
-                            {% if report.object_url != '' %}
+                            {{ report.object.content }}
+                            {% if report.object.is_url_need %}
                                 <br>
-                                <a href="{{ report.object_url }}">Объект жалобы</a>
+                                <a href="{{ report.object.get_object_url_from_report }}">Объект жалобы</a>
                             {% endif %}
                         </p>
                         <p class="meta-data">
-                            <a href="{% url 'profile_view' report.author.id %}">
-                                {{ report.author }}
+                            <a href="{% url 'profile_view' report.object.author.id %}">
+                                {{ report.object.author }}
                             </a>
                         </p>
-                        <p class="meta-data">{{ report.date }}</p>
+                        <p class="meta-data">{{ report.object.date }}</p>
                     </div>
                     <div>
-                        <a href="{{ report.submit_url }}" class="medium-btn green center wide">Принять</a>
-                        <a href="{{ report.reject_url }}" class="medium-btn red center wide">Отклонить</a>
+                        <a href="{% url 'moder_report_submit' report.object.id %}" class="medium-btn green center wide">Принять</a>
+                        <a href="{% url 'moder_report_reject' report.object.id %}" class="medium-btn red center wide">Отклонить</a>
                     </div>
                 </div>
             {% endfor %}

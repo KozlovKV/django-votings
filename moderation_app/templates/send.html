@@ -20,20 +20,26 @@
                 <h2>Отправить жалобу</h2>
                 <form method="post" action="{% url 'moder_report_send' %}">
                     {% csrf_token %}
-                    {{ form.Author }}
+                    {{ form.author }}
                     <div class="horizontal-centering">
-                        <label>{{ form.Theme.label }}</label>
-                        {{ form.Theme }}
-                        {{ form.Content }}
-                        <input type="submit" value="Изменить" class="medium-btn green input wide">
+                        <label>{{ form.theme.label }}</label>
+                        {{ form.theme }}
+                        {{ form.content }}
+                        <input type="submit" value="Отправить жалобу" class="medium-btn green input wide">
                     </div>
                 </form>
             </div>
             <div class="medium-block medium">
                 <h2>Отправленные жалобы</h2>
                 {% for report in reports %}
-                    <div class="list-elem">
-                        <div>Жалоба №{{ report.id }} - {{ report.status }}</div>
+                    <div class="small-block grey-2">
+                        <div class="list-elem grey-3">
+                            <div class="center ultra-wide">Жалоба №{{ report.object.id }} - {{ report.object.get_humanity_status_name }}</div>
+                        </div>
+                        <div class="small-block grey-3">
+                            <div class="list-elem">{{ report.object.get_humanity_theme_name }}</div>
+                            <div class="list-elem">{{ report.object.content }}</div>
+                        </div>
                     </div>
                 {% endfor %}
             </div>

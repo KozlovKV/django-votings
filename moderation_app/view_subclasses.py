@@ -23,10 +23,10 @@ class ReportCloseTemplateView(TemplateViewWithMenu, generic_edit.FormView):
             'status': self.new_status_name,
             'comment': self.request.POST.get('comment', ''),
             'moder': self.request.user,
-            'author': report.Author,
+            'author': report.author,
             'theme': report.get_humanity_theme_name(),
             'main_url': get_full_site_url(self.request),
-            'date': report.Close_date,
+            'date': report.close_date,
         }
         return context
 
@@ -34,7 +34,7 @@ class ReportCloseTemplateView(TemplateViewWithMenu, generic_edit.FormView):
         report_id = self.kwargs['report_id']
         report = Reports.objects.get(pk=report_id)
 
-        email = TemplateEmailSender(to=[report.Author.email])
+        email = TemplateEmailSender(to=[report.author.email])
         email.subject_template = 'report/email_subject.txt'
         email.body_template = 'report/email_body.txt'
         email.context = self.get_email_context()
@@ -44,8 +44,8 @@ class ReportCloseTemplateView(TemplateViewWithMenu, generic_edit.FormView):
     def save_closed_report(self):
         report_id = self.kwargs['report_id']
         report = Reports.objects.get(pk=report_id)
-        report.Close_date = timezone.now()
-        report.Status = self.new_status
+        report.close_date = timezone.now()
+        report.status = self.new_status
         report.save()
 
     def post(self, request, *args, **kwargs):
