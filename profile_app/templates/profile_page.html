@@ -6,17 +6,17 @@
 {% endblock %}
 
 {% block main %}
-    <h1>Профиль пользователя {{ profile_user }}</h1>
+    <h1>Профиль пользователя {{ object.username }}</h1>
     <div class="horizontal-centering">
-        {% if profile_user == user %}
+        {% if object == current_user %}
             <div class="medium-block medium">
                 <h2>Редактировать данные</h2>
                 Вводите значения только в поля, которые хотите изменить
-                <form method="post" action="{% url 'profile_view' 0 %}">
+                <form method="post" action="{% url 'profile_view' profile_id %}">
                     <div class="horizontal-centering">
-                        <input type="text" placeholder="Фамилия" class="input wide">
-                        <input type="text" placeholder="Имя" class="input wide">
-                        <div class="input wide">Описание произошедших ошибок</div>
+                        {% csrf_token %}
+                        {{ form.first_name }}
+                        {{ form.last_name }}
                         <input type="submit" value="Изменить" class="medium-btn green input wide">
                     </div>
                 </form>
@@ -25,24 +25,22 @@
         <div class="medium-block medium">
             <h2>Актуальные данные</h2>
             <div>
-                <p>Фамилия</p>
-                <p>Имя</p>
-                <p>Отчество</p>
+                <p>{{ object.get_full_name }}</p>
             </div>
             <div>
-                <p>Логин: l000gin</p>
-                <p>E-mail: example@site.z</p>
+                <p>Логин: {{ object.username }}</p>
+                <p>E-mail: {{ object.email }}</p>
             </div>
             <div>
-                <p>Создано голосований: 1337</p>
-                <p>Отдано голосов: 9999</p>
+                <p>Создано голосований: {{ addition.votings_created }}</p>
+                <p>Отдано голосов: {{ addition.votes_given }}</p>
             </div>
             <div>
-                <p>Статус - {{ right_name }}</p>
+                <p>Статус - {{ addition.get_right_name }}</p>
             </div>
         </div>
     </div>
-    {% if profile_user == user %}
+    {% if object == current_user %}
         {% include 'registration/pswd_reset_form_integratable.html' %}
     {% endif %}
     <div class="horizontal-centering">
@@ -61,7 +59,7 @@
                 <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="medium-btn blue fas fa-arrow-right"></a>
             </div>
         </div>
-        {% if profile_user == user %}
+        {% if object == current_user %}
             <div class="medium-block medium">
                 <h2>Участвовал в голсованиях</h2>
                 <div class="list-elem">
