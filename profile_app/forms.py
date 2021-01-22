@@ -2,6 +2,29 @@ from django import forms
 import django_registration.forms as reg_forms
 import django.contrib.auth.forms as auth_forms
 from django.contrib.auth import password_validation
+from django.contrib.auth.models import User
+
+
+class ProfilePageForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = [
+            'first_name', 'last_name',
+        ]
+        labels = {
+            'first_name': 'Имя',
+            'last_name': 'Фамилия',
+        }
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'wide input',
+                'placeholder': 'Новое имя',
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'wide input',
+                'placeholder': 'Новая фамилия',
+            }),
+        }
 
 
 class ModifiedAuthenticationForm(auth_forms.AuthenticationForm):

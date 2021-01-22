@@ -13,7 +13,7 @@ class TestProfileView(TemplateViewWithMenu):
 class ProfilePageView(TemplateViewWithMenu, generic_edit.UpdateView):  # TODO: унаследовать UpdateView - https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/#django.views.generic.edit.UpdateView
     template_name = 'profile_page.html'
     model = AdditionUserInfo
-    form_class = ProfilePageView
+    form_class = ProfilePageForm
     pk_url_kwarg = 'profile_id'
 
     def __init__(self, **kwargs):
