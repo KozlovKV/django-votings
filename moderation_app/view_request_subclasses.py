@@ -80,9 +80,6 @@ class ChangeRequestCloseTemplateView(TemplateViewWithMenu, generic_edit.FormView
         email.request = self.request
         email.send()
 
-    def get(self, request, *args, **kwargs):
-        return super(ChangeRequestCloseTemplateView, self).get(request, *args, **kwargs)
-
     def post(self, request, *args, **kwargs):
         request_id = self.kwargs['request_id']
         self.change_request_object = VoteChangeRequest.objects.get(pk=request_id)
