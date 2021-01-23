@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Жалобы</title>
+{% endblock %}
+
+{% block main %}
+    {% if not user.is_authenticated %}
+        <h1>Только авторизованные пользователи могут оставлять жалобы</h1>
+        <div class="horizontal-centering">
+            <a href="{% url 'menu' %}" class="yellow-btn big-btn">На главную</a>
+        </div>
+    {% else %}
+        <h1>Жалоба успешно отправлена</h1>
+        <div class="horizontal-centering">
+            <a href="{% url 'moder_report_send' %}" class="yellow-btn big-btn">К панели жалоб</a>
+            <a href="{% url 'menu' %}" class="yellow-btn big-btn">На главную</a>
+        </div>
+    {% endif %}
+{% endblock %}

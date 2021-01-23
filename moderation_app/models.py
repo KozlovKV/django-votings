@@ -6,9 +6,11 @@ from vote_app.models import Votings
 
 
 class Reports(models.Model):
+    VOTING_REPORT = 0
+    ERROR_MESSAGE = 1
     THEMES = [
-        (0, 'Жалоба на голосование'),
-        (1, 'Сообщение об ошибке'),
+        (VOTING_REPORT, 'Жалоба на голосование'),
+        (ERROR_MESSAGE, 'Сообщение об ошибке'),
     ]
 
     IN_PROCESS = 0
@@ -32,9 +34,10 @@ class Reports(models.Model):
         return self.theme == 0
 
     def get_object_url_from_report(self):
-        if self.is_url_need():
-            if self.theme == 0:
-                return reverse_lazy('vote_view', args=(self.element,))
+        if not self.is_url_need():
+            return ''
+        if self.theme == 0 and self.element is not None:
+            return reverse_lazy('vote_view', args=(self.element,))
         else:
             return ''
 

@@ -139,6 +139,21 @@ p {
     font-size: 1rem;
 }
 
+.yellow-text {
+    color: #ffff52;
+    text-shadow: 0 0 3px black;
+}
+
+.green-text {
+    color: #26e336;
+    text-shadow: 0 0 3px black;
+}
+
+.red-text {
+    color: #e32636;
+    text-shadow: 0 0 3px black;
+}
+
 .grey-1 { background-color: #DDD; }
 
 .grey-2 { background-color: #BBB; }
