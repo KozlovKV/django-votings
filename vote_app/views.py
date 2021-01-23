@@ -73,10 +73,11 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
     def get_context_data(self, **kwargs):
         self.object = self.get_object()
         self.old_object = self.object
+        # self.object = Votings.objects.get(pk=kwargs["voting_id"])
         context = super(EditVotingView, self).get_context_data(**kwargs)
         context.update({
-            'voting_id': kwargs["voting_id"],
-            'context_url': reverse('vote_edit', args=(kwargs["voting_id"],)),
+            'voting_id': self.object.pk,
+            'context_url': reverse('vote_edit', args=(self.object.pk,)),
             # 'vote_variants': get_variants_context(self.object),
         })
         return context
@@ -89,17 +90,23 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
         return post_response
 
     def save_change_request(self):
-        change = ''
-        if self.request.POST.get('end_date') == self.old_object.end_date:
-            change += '$$4:' + self.request.POST.get('end_date') + '$$'
-        if self.request.POST.get('result_see_who') == self.old_object.result_see_sho:
-            change += '$$5:' + self.request.POST.get('result_see_who') + '$$'
-        if self.request.POST.get('result_see_who') == self.old_object.result_see_sho:
-            change += '$$6:' + self.request.POST.get('result_see_who') + '$$'
+        if self.request.POST.get('title') != self.object.title or \
+                self.request.POST.get('image') != self.object.image or \
+                self.request.POST.get('description') != self.object.description:
+            self.need_moderator = True
+
+        # Здесь должно быть сравнение старых вариантов голосования и новых
+        # если изменения есть - self.need_moderator = True
 
         if self.need_moderator:
             record = VoteChangeRequest(voting=self.object,
-                                       change=change,
+                                       title=self.request.POST.get('title'),
+                                       image=self.request.POST.get('image'),
+                                       description=self.request.POST.get('description'),
+                                       end_date=self.request.POST.get('end_date'),
+                                       result_see_who=self.request.POST.get('result_see_who'),
+                                       result_see_when=self.request.POST.get('result_see_when'),
+                                       variants_count=self.request.POST.get('variants_count'),
                                        comment=self.request.POST.get('comment'))
             record.save()
 
