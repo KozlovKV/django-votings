@@ -32,11 +32,10 @@ class ModeledReportCreateForm(forms.ModelForm):
         labels = {
             'theme': 'Тема жалобы',
             'content': 'Содержание жалобы',
-            'element': 'Объект жалобы, для хаполнения нужно нажимать на кнопку жалобы около объектов',
+            'element': 'Объект жалобы, для заполнения нужно нажимать на кнопку жалобы около объектов',
         }
         widgets = {
             'theme': forms.Select(attrs={
-                'placeholder': 'Содержание жалобы (подробное описание значительно повышает шанс на адекватный ответ)',
                 'class': 'input wide',
             }),
             'content': forms.Textarea(attrs={

@@ -29,7 +29,10 @@
                     <div class="horizontal-centering">
                         <label>{{ form.theme.label }}</label>
                         {{ form.theme }}
-                        {{ form.element }}
+                        <div class="list-elem">
+                            <label>{{ form.element.label }}</label>
+                            {{ form.element }}
+                        </div>
                         {{ form.content }}
                         <input type="submit" value="Отправить жалобу" class="medium-btn green input wide">
                     </div>
