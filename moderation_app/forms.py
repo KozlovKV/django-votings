@@ -27,7 +27,7 @@ class ModeledReportCreateForm(forms.ModelForm):
     class Meta:
         model = Reports
         fields = [
-            'author', 'theme', 'content',
+            'author', 'element', 'theme', 'content',
         ]
         labels = {
             'theme': 'Тема жалобы',
@@ -45,5 +45,9 @@ class ModeledReportCreateForm(forms.ModelForm):
             'author': forms.TextInput(attrs={
                 'type': 'hidden',
                 'id': 'author',
+            }),
+            'element': forms.TextInput(attrs={
+                'type': 'hidden',
+                'id': 'element',
             }),
         }

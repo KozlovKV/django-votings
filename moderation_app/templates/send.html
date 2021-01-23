@@ -21,6 +21,7 @@
                 <form method="post" action="{% url 'moder_report_send' %}">
                     {% csrf_token %}
                     {{ form.author }}
+                    {{ form.element }}
                     <div class="horizontal-centering">
                         <label>{{ form.theme.label }}</label>
                         {{ form.theme }}
@@ -51,6 +52,7 @@
         {% endif %}
         <script>
             document.querySelector('#author').value = {{ user.id }}
+            document.querySelector('#element').value = {{ element }}
         </script>
     {% endif %}
 {% endblock %}

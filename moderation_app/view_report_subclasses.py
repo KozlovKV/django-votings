@@ -104,9 +104,13 @@ class SendReportView(TemplateViewWithMenu, generic_edit.CreateView):  # TODO: ht
         return context
 
     def get(self, request, *args, **kwargs):
-        # TODO: Приём значений тему и id-объекта из GET-запроса
+        self.extra_context = {
+            'theme': request.GET.get('theme', None),
+            'element': request.GET.get('element', None),
+        }
+        if self.extra_context['theme'] != str(Reports.VOTING_REPORT):
+            self.extra_context['element'] = None
         get_response = super(SendReportView, self).get(request, *args, **kwargs)
-        # TODO: Приём значений тему и id-объекта из GET-запроса
         return get_response
 
     def post(self, request, *args, **kwargs):
