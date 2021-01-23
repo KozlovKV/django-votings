@@ -142,10 +142,6 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         if self.object.end_date is None:
             return False
         else:
-            # if timezone.now() >= self.object.end_date:
-            #     return True
-            # elif timezone.now() < self.object.end_date:
-            #     return False
             return timezone.now() >= self.object.end_date
 
     def can_see_result(self):
@@ -162,10 +158,6 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
 
     def is_voted(self, user):
         votes = Votes.objects.filter(voting=self.object.pk, user=user)
-        # if len(votes) > 0:
-        #     return True
-        # else:
-        #     return False
         return len(votes) > 0
 
     def can_vote(self, user):
