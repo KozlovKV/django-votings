@@ -8,6 +8,7 @@ import django.views.generic.detail as generic_detail
 from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
 from moderation_app.models import VoteChangeRequest
+from moderation_app.models import Reports
 from profile_app.models import AdditionUserInfo
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
 
@@ -40,6 +41,8 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
 
     def post(self, request, *args, **kwargs):
         post_response = super(CreateVotingView, self).post(self, request, *args, **kwargs)
+        self.object.image = self.request.FILES.get('image', None)
+        self.object.save()
         self.save_vote_variants()
         return post_response
 
@@ -159,6 +162,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         context = super(VotingView, self).get_context_data(**kwargs)
         context.update({
             'type_ref': Votings.TYPE_REFS[self.object.type],
+            'voting_report': Reports.VOTING_REPORT,
             'can_vote': self.can_vote(self.request.user),
             'can_edit': self.can_edit(self.request.user),
             'can_watch_res': self.can_see_result(),
@@ -176,10 +180,6 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         if self.object.end_date is None:
             return False
         else:
-            # if timezone.now() >= self.object.end_date:
-            #     return True
-            # elif timezone.now() < self.object.end_date:
-            #     return False
             return timezone.now() >= self.object.end_date
 
     def can_see_result(self):
@@ -196,10 +196,6 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
 
     def is_voted(self, user):
         votes = Votes.objects.filter(voting=self.object.pk, user=user)
-        # if len(votes) > 0:
-        #     return True
-        # else:
-        #     return False
         return len(votes) > 0
 
     def can_vote(self, user):

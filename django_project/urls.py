@@ -41,6 +41,7 @@ urlpatterns = [
     path('account/', include('profile_app.urls')),
 
     path('moderation/send/', report.SendReportView.as_view(), name='moder_report_send'),
+    path('moderation/send/success/', report.SendReportSuccessView.as_view(), name='moder_report_send_success'),
     path('moderation/manage/', moder.ModerationPanelView.as_view(), name='moder_manage'),
     path('moderation/manage/reports/list/', report.ReportsListView.as_view(), name='moder_reports_list'),
     path('moderation/manage/reports/submit/<int:report_id>/', report.ReportSubmitView.as_view(),

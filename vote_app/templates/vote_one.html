@@ -38,6 +38,7 @@
             </div>
         </div>
         <div class="list-elem">
+            <a class="medium-btn red" href="{% url 'moder_report_send' %}?theme={{ voting_report }}&element={{ object.id }}">Пожаловаться</a>
             {% if can_edit %}
                 <a href="{% url 'vote_edit' object.pk %}" class="medium-btn yellow">Редактировать</a>
                 {% if rights == 2 %}

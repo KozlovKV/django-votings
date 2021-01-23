@@ -20,7 +20,7 @@
                         <h4>{{ report.object.get_humanity_theme_name }}</h4>
                         <p>
                             {{ report.object.content }}
-                            {% if report.object.is_url_need %}
+                            {% if report.object.get_object_url_from_report != '' %}
                                 <br>
                                 <a href="{{ report.object.get_object_url_from_report }}">Объект жалобы</a>
                             {% endif %}
