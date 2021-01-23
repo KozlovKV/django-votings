@@ -40,6 +40,8 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
 
     def post(self, request, *args, **kwargs):
         post_response = super(CreateVotingView, self).post(self, request, *args, **kwargs)
+        self.object.image = self.request.FILES.get('image', None)
+        self.object.save()
         self.save_vote_variants()
         return post_response
 
