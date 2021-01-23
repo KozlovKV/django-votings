@@ -72,7 +72,7 @@ class ModeledVoteEditForm(forms.ModelForm):
                 'style': 'width: 95%',
             }),
             'type': forms.RadioSelect(attrs={'disabled': True}),
-            # 'anons_can_vote': forms.BooleanField(disabled=True),
+            'anons_can_vote': forms.CheckboxInput(attrs={'disabled': True}),
             'result_see_who': forms.RadioSelect,
             'result_see_when': forms.RadioSelect,
             'end_date': forms.DateTimeInput(attrs={
