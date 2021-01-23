@@ -9,6 +9,11 @@
         <h1>Только авторизованные пользователи могут оставлять жалобы</h1>
     {% else %}
         <h1>Страница жалоб</h1>
+        {% if rights != 0 %}
+            <div class="horizontal-centering">
+                <a href="{% url 'moder_manage' %}" class="big-btn blue">Панель модератора</a>
+            </div>
+        {% endif %}
         <div class="horizontal-centering">
             <div class="medium-block medium">
                 {% if form.errors %}
@@ -30,12 +35,20 @@
                     </div>
                 </form>
             </div>
-            <div class="medium-block medium">
+            <div class="medium-block wide">
                 <h2>Отправленные жалобы</h2>
                 {% for report in reports %}
                     <div class="small-block grey-2">
                         <div class="list-elem grey-3">
-                            <div class="center ultra-wide">Жалоба №{{ report.object.id }} - {{ report.object.get_humanity_status_name }}</div>
+                            <div class="center ultra-wide">Жалоба №{{ report.object.id }} -
+                                {% if report.object.status == report.object.REJECTED %}
+                                    <span class="red-text">{{ report.object.get_humanity_status_name }}</span>
+                                {% elif report.object.status == report.object.SUBMITTED %}
+                                    <span class="green-text">{{ report.object.get_humanity_status_name }}</span>
+                                {% elif report.object.status == report.object.IN_PROCESS %}
+                                    <span class="yellow-text">{{ report.object.get_humanity_status_name }}</span>
+                                {% endif %}
+                            </div>
                         </div>
                         <div class="small-block grey-3">
                             <div class="list-elem">{{ report.object.get_humanity_theme_name }}</div>
@@ -45,11 +58,6 @@
                 {% endfor %}
             </div>
         </div>
-        {% if rights != 0 %}
-            <div class="horizontal-centering">
-                <a href="{% url 'moder_manage' %}" class="big-btn blue">Панель модератора</a>
-            </div>
-        {% endif %}
         <script>
             document.querySelector('#author').value = {{ user.id }}
             document.querySelector('#element').value = {{ element }}
