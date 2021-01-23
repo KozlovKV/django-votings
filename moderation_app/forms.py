@@ -32,6 +32,7 @@ class ModeledReportCreateForm(forms.ModelForm):
         labels = {
             'theme': 'Тема жалобы',
             'content': 'Содержание жалобы',
+            'element': 'Объект жалобы, для хаполнения нужно нажимать на кнопку жалобы около объектов',
         }
         widgets = {
             'theme': forms.Select(attrs={
@@ -46,8 +47,10 @@ class ModeledReportCreateForm(forms.ModelForm):
                 'type': 'hidden',
                 'id': 'author',
             }),
-            'element': forms.TextInput(attrs={
-                'type': 'hidden',
+            'element': forms.NumberInput(attrs={
+                'placeholder': 'Пусто',
+                'readonly': True,
+                'class': 'input wide',
                 'id': 'element',
             }),
         }

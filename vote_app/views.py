@@ -7,6 +7,7 @@ import django.views.generic.detail as generic_detail
 
 from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
+from moderation_app.models import Reports
 from profile_app.models import AdditionUserInfo
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
 
@@ -123,6 +124,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         context = super(VotingView, self).get_context_data(**kwargs)
         context.update({
             'type_ref': Votings.TYPE_REFS[self.object.type],
+            'voting_report': Reports.VOTING_REPORT,
             'can_vote': self.can_vote(self.request.user),
             'can_edit': self.can_edit(self.request.user),
             'can_watch_res': self.can_see_result(),

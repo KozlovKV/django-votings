@@ -26,10 +26,10 @@
                 <form method="post" action="{% url 'moder_report_send' %}">
                     {% csrf_token %}
                     {{ form.author }}
-                    {{ form.element }}
                     <div class="horizontal-centering">
                         <label>{{ form.theme.label }}</label>
                         {{ form.theme }}
+                        {{ form.element }}
                         {{ form.content }}
                         <input type="submit" value="Отправить жалобу" class="medium-btn green input wide">
                     </div>

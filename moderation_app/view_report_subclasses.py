@@ -98,8 +98,10 @@ class SendReportView(TemplateViewWithMenu, generic_edit.CreateView):  # TODO: ht
 
     def get_context_data(self, **kwargs):
         context = super(SendReportView, self).get_context_data()
+        reports_list = get_reports_list_context(Reports.objects.filter(author=self.request.user))
+        reports_list.reverse()
         context.update({
-            'reports': get_reports_list_context(Reports.objects.filter(author=self.request.user))
+            'reports': reports_list,
         })
         return context
 
@@ -116,3 +118,7 @@ class SendReportView(TemplateViewWithMenu, generic_edit.CreateView):  # TODO: ht
     def post(self, request, *args, **kwargs):
         post_response = super(SendReportView, self).post(self, request, *args, **kwargs)
         return post_response
+
+
+class SendReportSuccessView(TemplateViewWithMenu):
+    template_name = 'report_success'
