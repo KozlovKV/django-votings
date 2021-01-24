@@ -26,7 +26,7 @@
             <h3>Пункты обозначенные (*) не требуют подтверждения модератора.
             Изменения, внесенные в них, сразу вступят в силу.</h3>
         {% endif %}
-        <form method="POST" action="{{ context_url }}">
+        <form method="POST" action="{{ context_url }}" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.author }}
             <div class="horizontal-centering">
@@ -37,6 +37,7 @@
                 <div class="input">
                     <label>{{ form.image.label }}</label>
                     {{ form.image }}
+<!--                    <input type="image" name="image">-->
                 </div>
             </div>
             <div class="horizontal-centering">

@@ -11,7 +11,6 @@
         {% if object == current_user %}
             <div class="medium-block medium">
                 <h2>Редактировать данные</h2>
-                Вводите значения только в поля, которые хотите изменить
                 <form method="post" action="{% url 'profile_view' profile_id %}">
                     <div class="horizontal-centering">
                         {% csrf_token %}
@@ -29,7 +28,6 @@
             </div>
             <div>
                 <p>Логин: {{ object.username }}</p>
-                <p>E-mail: {{ object.email }}</p>
             </div>
             <div>
                 <p>Создано голосований: {{ addition.votings_created }}</p>

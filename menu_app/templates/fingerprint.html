@@ -1,0 +1,17 @@
+<input type="hidden" readonly name="fingerprint" id="id_fingerprint">
+<script>
+    function initFingerprintJS() {
+        FingerprintJS.load().then(fp => {
+            fp.get().then(result => {
+                const visitorId = result.visitorId;
+                console.log(visitorId)
+                document.getElementById('id_fingerprint').value = visitorId;
+            });
+        });
+    }
+</script>
+<script
+    async
+    src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
+    onload="initFingerprintJS()"
+></script>

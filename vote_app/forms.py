@@ -4,17 +4,18 @@ from vote_app.models import Votings
 
 
 class ModeledVoteCreateForm(forms.ModelForm):
+    image = forms.ImageField(label='Картинка', required=False)
+
     class Meta:
         model = Votings
         fields = [
-            'title', 'image', 'description',
+            'title', 'description',
             'type', 'anons_can_vote',
             'result_see_who', 'result_see_when',
             'end_date', 'variants_count', 'author',
         ]
         labels = {
             'title': 'Заголовок',
-            'image': 'Картинка',
             'description': 'Описание',
             'type': 'Тип голосования',
             'anons_can_vote': 'Разрешить голосовать анонимам',

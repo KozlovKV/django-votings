@@ -8,7 +8,7 @@
 
 {% block main %}
     <div class="block">
-        <div class="list-elem ">
+        <div class="list-elem">
             <div>
                 <h2>{{ object.title }}</h2>
             </div>
@@ -37,7 +37,8 @@
                 </p>
             </div>
         </div>
-        <div class="list-elem">
+        <div class="horizontal-centering small-block grey-2">
+            <a class="medium-btn red" href="{% url 'moder_report_send' %}?theme={{ voting_report }}&element={{ object.id }}">Пожаловаться</a>
             {% if can_edit %}
                 <a href="{% url 'vote_edit' object.pk %}" class="medium-btn yellow">Редактировать</a>
                 {% if rights == 2 %}
@@ -55,6 +56,9 @@
             {% if can_vote %}
             <form method="post" action="{% url 'vote_view' object.pk %}">
                 {% csrf_token %}
+                {% if not user.is_authenticated %}
+                    {% include 'fingerprint.html' %}
+                {% endif %}
                 {% for vote_variant in vote_variants %}
                     <div class="list-elem grey-3">
                         {% if type_ref == 'radio' %}
