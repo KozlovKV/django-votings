@@ -75,10 +75,10 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
     def get_context_data(self, **kwargs):
         self.object = self.get_object()
         self.old_object = self.object
-        # self.object = Votings.objects.get(pk=kwargs["voting_id"])
         context = super(EditVotingView, self).get_context_data(**kwargs)
         context.update({
             'voting_id': self.object.pk,
+            'can_edit': self.object.can_edit(self.request),
             'context_url': reverse('vote_edit', args=(self.object.pk,)),
             'vote_variants': get_variants_context(self.object),
         })
@@ -162,10 +162,10 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         context.update({
             'type_ref': Votings.TYPE_REFS[self.object.type],
             'voting_report': Reports.VOTING_REPORT,
-            'can_vote': self.can_vote(self.request.user),
-            'can_edit': self.can_edit(self.request.user),
-            'can_watch_res': self.can_see_result(),
-            'is_ended': self.is_ended(),
+            'can_vote': self.object.can_vote(self.request),
+            'can_edit': self.object.can_edit(self.request),
+            'can_watch_res': self.object.can_see_result(self.request),
+            'is_ended': self.object.is_ended(),
             'vote_variants': get_variants_context(self.object),
         })
         try:
@@ -175,59 +175,9 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         context.update(self.extra_context)
         return context
 
-    def is_ended(self):
-        if self.object.end_date is None:
-            return False
-        else:
-            return timezone.now() >= self.object.end_date
-
-    def can_see_result(self):
-        if self.object.result_see_when == Votings.BY_TIMER:
-            if self.object.result_see_who == Votings.VOTED:
-                return self.is_voted(self.request.user) and self.is_ended()
-            else:
-                return self.is_ended()
-        else:
-            if self.object.result_see_who == Votings.VOTED:
-                return self.is_voted(self.request.user)
-            else:
-                return True
-
-    def is_voted(self, user):
-        if user.is_authenticated:
-            votes = Votes.objects.filter(voting=self.object.pk, user=user)
-        else:
-            votes = Votes.objects.filter(voting=self.object.pk, fingerprint=self.request.POST.get('fingerprint', -1))
-        return len(votes) > 0
-
-    def can_vote(self, user):
-        if self.is_ended():
-            self.extra_context.update({
-                'reason_cant_vote': 'Голосование закончилось'
-            })
-            return False
-        elif self.is_voted(user):
-            self.extra_context.update({
-                'reason_cant_vote': 'Вы уже голосовали'
-            })
-            return False
-        elif not user.is_authenticated:
-            if not self.object.anons_can_vote:
-                self.extra_context.update({
-                    'reason_cant_vote': 'Для этого голосования необходимо авторизоваться'
-                })
-            return self.object.anons_can_vote
-        return True
-
-    def can_edit(self, user):
-        if not user.is_authenticated:
-            return False
-        add_info = AdditionUserInfo.objects.get(user=user)
-        return self.object.author == user or add_info.user_rights == AdditionUserInfo.ADMIN
-
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self.can_vote(request.user) and not self.is_ended():
+        if self.object.can_vote(request.user) and not self.object.is_ended():
             self.VOTE_PROCESSORS[Votings.TYPE_REFS[self.object.type]]()
         context = self.get_context_data(**kwargs)
         return render(self.request, self.template_name, context)
