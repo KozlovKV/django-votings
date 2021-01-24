@@ -37,15 +37,17 @@
                 </p>
             </div>
         </div>
-        <div class="horizontal-centering small-block grey-2">
-            <a class="medium-btn red" href="{% url 'moder_report_send' %}?theme={{ voting_report }}&element={{ object.id }}">Пожаловаться</a>
-            {% if can_edit %}
-                <a href="{% url 'vote_edit' object.pk %}" class="medium-btn yellow">Редактировать</a>
-                {% if rights == 2 %}
-                    <a href="{% url 'vote_delete' object.pk %}" class="medium-btn red">Удалить</a>
+        {% if user.is_authenticated %}
+            <div class="horizontal-centering small-block grey-2">
+                <a class="medium-btn red" href="{% url 'moder_report_send' %}?theme={{ voting_report }}&element={{ object.id }}">Пожаловаться</a>
+                {% if can_edit %}
+                    <a href="{% url 'vote_edit' object.pk %}" class="medium-btn yellow">Редактировать</a>
+                    {% if rights == 2 %}
+                        <a href="{% url 'vote_delete' object.pk %}" class="medium-btn red">Удалить</a>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
         <div class="list-elem">
             <div class="main__medium">
                 <p>{{ object.description }}</p>
