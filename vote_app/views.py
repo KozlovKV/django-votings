@@ -115,7 +115,7 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
             record = VoteVariantsChangeRequest(voting_request=self.object,
                                                serial_number=serial_number,
                                                description=self.variants_list[serial_number],
-                                               votes_count=self.variants[serial_number],)
+                                               votes_count=len(self.variants),)
             record.save()
 
     def save_request(self):
