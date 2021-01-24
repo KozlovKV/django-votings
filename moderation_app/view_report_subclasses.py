@@ -98,11 +98,12 @@ class SendReportView(TemplateViewWithMenu, generic_edit.CreateView):  # TODO: ht
 
     def get_context_data(self, **kwargs):
         context = super(SendReportView, self).get_context_data()
-        reports_list = get_reports_list_context(Reports.objects.filter(author=self.request.user))
-        reports_list.reverse()
-        context.update({
-            'reports': reports_list,
-        })
+        if self.request.user.is_authenticated:
+            reports_list = get_reports_list_context(Reports.objects.filter(author=self.request.user))
+            reports_list.reverse()
+            context.update({
+                'reports': reports_list,
+            })
         return context
 
     def get(self, request, *args, **kwargs):

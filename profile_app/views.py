@@ -27,7 +27,7 @@ class ProfilePageView(TemplateViewWithMenu, generic_edit.UpdateView):  # TODO: �
 
     def get_object(self, queryset=None):
         object = super(ProfilePageView, self).get_object(queryset)
-        self.addition_info = AdditionUserInfo.objects.get(user=self.object)
+        self.addition_info = AdditionUserInfo.objects.get(user=object)
         self.votes = 0  # TODO: получить список голосов, привязанных к данному пользователю
         self.votings = 0  # TODO: получить список голосований, привязанных к данному пользователю
         self.addition_info.votes_given = 0  # TODO: Обновить количество отданных голосов на основании длины списка голосов

@@ -8,7 +8,7 @@
 
 {% block main %}
     <div class="block">
-        <div class="list-elem ">
+        <div class="list-elem">
             <div>
                 <h2>{{ object.title }}</h2>
             </div>
@@ -37,15 +37,17 @@
                 </p>
             </div>
         </div>
-        <div class="list-elem">
-            <a class="medium-btn red" href="{% url 'moder_report_send' %}?theme={{ voting_report }}&element={{ object.id }}">Пожаловаться</a>
-            {% if can_edit %}
-                <a href="{% url 'vote_edit' object.pk %}" class="medium-btn yellow">Редактировать</a>
-                {% if rights == 2 %}
-                    <a href="{% url 'vote_delete' object.pk %}" class="medium-btn red">Удалить</a>
+        {% if user.is_authenticated %}
+            <div class="horizontal-centering small-block grey-2">
+                <a class="medium-btn red" href="{% url 'moder_report_send' %}?theme={{ voting_report }}&element={{ object.id }}">Пожаловаться</a>
+                {% if can_edit %}
+                    <a href="{% url 'vote_edit' object.pk %}" class="medium-btn yellow">Редактировать</a>
+                    {% if rights == 2 %}
+                        <a href="{% url 'vote_delete' object.pk %}" class="medium-btn red">Удалить</a>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
         <div class="list-elem">
             <div class="main__medium">
                 <p>{{ object.description }}</p>
@@ -56,6 +58,9 @@
             {% if can_vote %}
             <form method="post" action="{% url 'vote_view' object.pk %}">
                 {% csrf_token %}
+                {% if not user.is_authenticated %}
+                    {% include 'fingerprint.html' %}
+                {% endif %}
                 {% for vote_variant in vote_variants %}
                     <div class="list-elem grey-3">
                         {% if type_ref == 'radio' %}
@@ -64,7 +69,8 @@
                                 <input type="{{ type_ref }}"
                                    name="variants"
                                    value="{{ vote_variant.serial_number }}"
-                                   id="variant_{{ vote_variant.serial_number }}">
+                                   id="variant_{{ vote_variant.serial_number }}"
+                                   required>
 
                                 <svg width="20px" height="20px" viewBox="0 0 20 20">
                                     <circle cx="10" cy="10" r="9"></circle>
@@ -78,7 +84,10 @@
                                 <input type="{{ type_ref }}"
                                        name="{{ vote_variant.serial_number }}"
                                        value="{{ vote_variant.serial_number }}"
-                                       id="variant_{{ vote_variant.serial_number }}">
+                                       id="variant_{{ vote_variant.serial_number }}"
+                                       class="required-checkbox"
+                                       required
+                                       onclick="deRequireCb('required-checkbox')">
 
                                 <svg viewBox="0 0 21 21">
                                     <path d="M5,10.75 L8.5,14.25 L19.4,2.3 C18.8333333,1.43333333 18.0333333,1 17,1 L4,1 C2.35,1 1,2.35 1,4 L1,17 C1,18.65 2.35,20 4,20 L17,20 C18.65,20 20,18.65 20,17 L20,7.99769186"></path>
@@ -89,6 +98,9 @@
                         <span class="small-vote">{{ vote_variant.votes_count }} - {{ vote_variant.percent | floatformat }}%</span>
                     </div>
                 {% endfor %}
+                {% if not user.is_authenticated %}
+                    <h4>Если вы аноним и уже голосовали, не пытайтесь снова - не получится</h4>
+                {% endif %}
                 <div class="horizontal-centering">
                     <button type="submit" class="big-btn green">Голосовать</button>
                 </div>
@@ -138,4 +150,28 @@
             {% endif %}
         </div>
     </div>
+    {% if type_ref == 'checkbox' %}
+        <script>
+            function deRequireCb(elClass) {
+                el=document.getElementsByClassName(elClass);
+
+                var atLeastOneChecked=false;
+                for (i=0; i<el.length; i++) {
+                    if (el[i].checked === true) {
+                        atLeastOneChecked=true;
+                    }
+                }
+
+                if (atLeastOneChecked === true) {
+                    for (i=0; i<el.length; i++) {
+                        el[i].required = false;
+                    }
+                } else {
+                    for (i=0; i<el.length; i++) {
+                        el[i].required = true;
+                    }
+                }
+            }
+        </script>
+    {% endif %}
 {% endblock %}
