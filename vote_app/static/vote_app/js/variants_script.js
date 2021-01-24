@@ -10,12 +10,13 @@ variant_blocks[0].remove()
 update_variants_context()
 
 function delete_variant_block(event) {
+    if (variant_blocks.length == 2) { return }
     event.target.parentNode.remove()
     update_variants_context()
 }
 
 function create_variant_block(serial_number) {
-    block = saved_variant_block.cloneNode(true)
+    let block = saved_variant_block.cloneNode(true)
     let input = block.getElementsByTagName('input')[0]
     input.name = 'variant_' + String(serial_number)
     input.placeholder = 'Вариант ' + String(serial_number + 1)
@@ -33,7 +34,7 @@ function add_new_variant(event) {
 function update_variants_context() {
     variants_count.value = variant_blocks.length
     for (let i = 0; i < variant_blocks.length; ++i) {
-        block = variant_blocks[i]
+        let block = variant_blocks[i]
         block.getElementsByTagName('button')[0].addEventListener('click', delete_variant_block)
         let input = block.getElementsByTagName('input')[0]
         input.name = 'variant_' + String(i)

@@ -79,7 +79,6 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
             'voting_id': self.object.pk,
             'context_url': reverse('vote_edit', args=(self.object.pk,)),
             'vote_variants': get_variants_context(self.object),
-            'variants_list': get_variants_description_list(self.request),
         })
         return context
 

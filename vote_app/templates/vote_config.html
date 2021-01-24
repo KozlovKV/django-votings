@@ -104,5 +104,22 @@
         <script>
             document.querySelector('#author').value = {{ user.id }}
         </script>
+    {% else %}
+        <script>
+            let current_count = Number({{ vote_variants|length }})
+            while (variant_blocks.length < current_count) {
+                add_new_variant()
+                update_variants_context()
+            }
+            let i = 0
+            let block = 0
+            let input = 0
+            {% for variant in vote_variants %}
+                block = variant_blocks[i]
+                input = block.getElementsByTagName('input')[0]
+                input.value = '{{ variant.description }}'
+                ++i
+            {% endfor %}
+        </script>
     {% endif %}
 {% endblock %}

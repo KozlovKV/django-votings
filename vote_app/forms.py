@@ -55,7 +55,7 @@ class ModeledVoteEditForm(forms.ModelForm):
             'title', 'image', 'description',
             'type', 'anons_can_vote',
             'result_see_who', 'result_see_when',
-            'end_date',
+            'end_date', 'variants_count',
         ]
         labels = {
             'title': 'Заголовок',
@@ -77,5 +77,9 @@ class ModeledVoteEditForm(forms.ModelForm):
             'result_see_when': forms.RadioSelect,
             'end_date': forms.DateTimeInput(attrs={
                 'type': 'datetime',
+            }),
+            'variants_count': forms.NumberInput(attrs={
+                'type': 'hidden',
+                'id': 'variants_count',
             }),
         }
