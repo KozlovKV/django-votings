@@ -98,22 +98,21 @@ class Votings(models.Model):
 
     def can_vote(self, request):
         if self.is_ended():
-            self.extra_context.update({
-                'reason_cant_vote': 'Голосование закончилось'
-            })
             return False
         elif self.is_voted(request):
-            self.extra_context.update({
-                'reason_cant_vote': 'Вы уже голосовали'
-            })
             return False
         elif not request.user.is_authenticated:
-            if not self.anons_can_vote:
-                self.extra_context.update({
-                    'reason_cant_vote': 'Для этого голосования необходимо авторизоваться'
-                })
             return self.anons_can_vote
         return True
+
+    def get_reason_cant_vote(self, request):
+        if self.is_ended():
+            return 'Голосование закончилось'
+        elif self.is_voted(request):
+            return 'Вы уже голосовали'
+        elif not request.user.is_authenticated and not self.anons_can_vote:
+            return 'Для этого голосования необходимо авторизоваться'
+        return ''
 
     def can_edit(self, request):
         if not request.user.is_authenticated:

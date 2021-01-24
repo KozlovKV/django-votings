@@ -1,0 +1,109 @@
+<h1>Создай меня! Я знаю, ты сможешь!</h1>
+        <div class="block">
+            {% if form.errors %}
+                <div class="block">
+                    <h2>Ошибки</h2>
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+            {% if voting_id != -1 %}
+                <h2>Страница редактирования голосования номер {{ voting_id }}</h2>
+                <h3>Пункты обозначенные (*) не требуют подтверждения модератора.
+                Изменения, внесенные в них, сразу вступят в силу.</h3>
+            {% endif %}
+            <form method="POST" action="{{ context_url }}" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.author }}
+                <div class="horizontal-centering">
+                    <div class="input">
+                        <label>{{ form.title.label }}</label>
+                        {{ form.title }}
+                    </div>
+                    <div class="input">
+                        <label>{{ form.image.label }}</label>
+                        {{ form.image }}
+                    </div>
+                </div>
+                <div class="horizontal-centering">
+                    <div class="input wide">
+                        <label>{{ form.description.label }}</label><br>
+                        {{ form.description }}
+                    </div>
+                </div>
+                <div class="horizontal-centering">
+                    <div class="input">
+                        <label>{{ form.type.label }}</label>
+                        {{ form.type }}
+                    </div>
+                    <div class="input">
+                        <label>{{ form.result_see_who.label }}</label>
+                        {{ form.result_see_who }}
+                    </div>
+                    <div class="input">
+                        <label>{{ form.result_see_when.label }}</label>
+                        {{ form.result_see_when }}
+                    </div>
+                </div>
+                <div class="horizontal-centering">
+                    <div class="input">
+                        <label>{{ form.anons_can_vote.label }}</label>
+                        {{ form.anons_can_vote }}
+                    </div>
+                    <div class="input">
+                        <label>{{ form.end_date.label }}</label>
+                        {{ form.end_date }}
+                    </div>
+                </div>
+                <div class="block">
+                    <h2>Варианты голосования</h2>
+                    {{ form.variants_count }}
+                    <div id="vote_variants">
+                        <div class="list-elem">
+                            <input name="variant_" type="text" required maxlength="256" placeholder="Вариант " class="input wide">
+                            <button type="button" class="medium-btn red">Удалить</button>
+                        </div>
+                        <div class="list-elem">
+                            <input name="variant_0" type="text" required maxlength="256" placeholder="Вариант 1" class="input wide">
+                            <button type="button" class="medium-btn red">Удалить</button>
+                        </div>
+                        <div class="list-elem">
+                            <input name="variant_1" type="text" required maxlength="256" placeholder="Вариант 2" class="input wide">
+                            <button type="button" class="medium-btn red">Удалить</button>
+                        </div>
+                    </div>
+                    <div class="horizontal-centering">
+                        <button id="add_vote_variant" type="button" class="medium-btn blue">Добавить вариант</button>
+                    </div>
+                </div>
+                {% if voting_id != -1 %}
+                    <div class="block">
+                        <h4>{{ form.comment.label }}</h4>
+                        {{ form.comment }}
+                    </div>
+                {% endif %}
+                <input type="submit" value="Сохранить" class="big-btn green">
+            </form>
+        </div>
+        <script src="{% static 'vote_app/js/variants_script.js' %}"></script>
+        {% if voting_id == -1 %}
+            <script>
+                document.querySelector('#author').value = {{ user.id }}
+            </script>
+        {% else %}
+            <script>
+                let current_count = Number({{ vote_variants|length }})
+                while (variant_blocks.length < current_count) {
+                    add_new_variant()
+                    update_variants_context()
+                }
+                let i = 0
+                let block = 0
+                let input = 0
+                {% for variant in vote_variants %}
+                    block = variant_blocks[i]
+                    input = block.getElementsByTagName('input')[0]
+                    input.value = '{{ variant.description }}'
+                    ++i
+                {% endfor %}
+            </script>
+        {% endif %}

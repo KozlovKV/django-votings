@@ -163,6 +163,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
             'type_ref': Votings.TYPE_REFS[self.object.type],
             'voting_report': Reports.VOTING_REPORT,
             'can_vote': self.object.can_vote(self.request),
+            'reason_cant_vote': self.object.get_reason_cant_vote(self.request),
             'can_edit': self.object.can_edit(self.request),
             'can_watch_res': self.object.can_see_result(self.request),
             'is_ended': self.object.is_ended(),
