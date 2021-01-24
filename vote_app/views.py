@@ -178,7 +178,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self.object.can_vote(request.user) and not self.object.is_ended():
+        if self.object.can_vote(request) and not self.object.is_ended():
             self.VOTE_PROCESSORS[Votings.TYPE_REFS[self.object.type]]()
         context = self.get_context_data(**kwargs)
         return render(self.request, self.template_name, context)
