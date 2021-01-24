@@ -25,7 +25,7 @@ class ModeledVoteCreateForm(forms.ModelForm):
         }
         widgets = {
             'description': forms.Textarea(attrs={
-                'style': 'width: 95%',
+                'class': 'input wide',
             }),
             'type': forms.RadioSelect,
             'result_see_who': forms.RadioSelect,
@@ -47,7 +47,7 @@ class ModeledVoteCreateForm(forms.ModelForm):
 class ModeledVoteEditForm(forms.ModelForm):
     comment = forms.CharField(required=False, label='Комментарий для модератора',
                               widget=forms.Textarea(attrs={
-                                  'style': 'width: 95%',
+                                    'class': 'input wide',
                               }))
 
     class Meta:
@@ -70,7 +70,7 @@ class ModeledVoteEditForm(forms.ModelForm):
         }
         widgets = {
             'description': forms.Textarea(attrs={
-                'style': 'width: 95%',
+                'class': 'input wide',
             }),
             'type': forms.RadioSelect(attrs={'disabled': True}),
             'anons_can_vote': forms.CheckboxInput(attrs={'disabled': True}),
