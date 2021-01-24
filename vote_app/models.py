@@ -80,7 +80,8 @@ class VoteVariants(models.Model):
 
 
 class Votes(models.Model):
-    user = models.ForeignKey(to=User, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(to=User, on_delete=models.DO_NOTHING, null=True)
+    fingerprint = models.CharField(null=True, max_length=256)
     voting = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
     variant = models.ForeignKey(to=VoteVariants, on_delete=models.CASCADE)
     vote_date = models.DateTimeField(auto_now_add=True)

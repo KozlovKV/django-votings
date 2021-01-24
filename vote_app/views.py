@@ -7,8 +7,7 @@ import django.views.generic.detail as generic_detail
 
 from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
-from moderation_app.models import VoteChangeRequest
-from moderation_app.models import Reports
+from moderation_app.models import VoteChangeRequest, Reports
 from profile_app.models import AdditionUserInfo
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
 
@@ -82,7 +81,6 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
             'voting_id': self.object.pk,
             'context_url': reverse('vote_edit', args=(self.object.pk,)),
             'vote_variants': get_variants_context(self.object),
-            'variants_list': get_variants_description_list(self.request),
         })
         return context
 
@@ -130,7 +128,7 @@ def get_variants_context(voting):
             'serial_number': variant.serial_number,
             'description': variant.description,
             'votes_count': variant.votes_count,
-            'percent': (variant.votes_count * 100) / (voting.voters_count if voting.voters_count else 1),
+            'percent': (variant.votes_count * 100) / (voting.votes_count if voting.votes_count != 0 else 1),
         }
         res.append(variant_dict)
     res.sort(key=lambda x: x['serial_number'])
@@ -156,6 +154,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         object = super(VotingView, self).get_object(queryset)
         self.variants = list(VoteVariants.objects.filter(voting=object))
         self.variants.sort(key=lambda x: x.serial_number)
+        self.update_votes_count(object)
         return object
 
     def get_context_data(self, **kwargs):
@@ -195,7 +194,10 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
                 return True
 
     def is_voted(self, user):
-        votes = Votes.objects.filter(voting=self.object.pk, user=user)
+        if user.is_authenticated:
+            votes = Votes.objects.filter(voting=self.object.pk, user=user)
+        else:
+            votes = Votes.objects.filter(voting=self.object.pk, fingerprint=self.request.POST.get('fingerprint', -1))
         return len(votes) > 0
 
     def can_vote(self, user):
@@ -204,17 +206,17 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
                 'reason_cant_vote': 'Голосование закончилось'
             })
             return False
+        elif self.is_voted(user):
+            self.extra_context.update({
+                'reason_cant_vote': 'Вы уже голосовали'
+            })
+            return False
         elif not user.is_authenticated:
             if not self.object.anons_can_vote:
                 self.extra_context.update({
                     'reason_cant_vote': 'Для этого голосования необходимо авторизоваться'
                 })
             return self.object.anons_can_vote
-        elif self.is_voted(user):
-            self.extra_context.update({
-                'reason_cant_vote': 'Вы уже голосовали'
-            })
-            return False
         return True
 
     def can_edit(self, user):
@@ -233,11 +235,15 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
     def vote_one_variant_process(self):
         variant_id = int(self.request.POST.get('variants'))
         variant = self.variants[variant_id]
-        new_vote = Votes(user=self.request.user, voting=self.object, variant=variant)
+        new_vote = Votes(voting=self.object, variant=variant)
+        if self.request.user.is_authenticated:
+            new_vote.user = self.request.user
+        else:
+            new_vote.fingerprint = self.request.POST.get('fingerprint', None)
         new_vote.save()
-        variant.votes_count += 1
+        variant.votes_count = len(Votes.objects.filter(variant=variant))
         variant.save()
-        self.object.votes_count += 1
+        self.object.votes_count = len(Votes.objects.filter(voting=self.object))
         self.object.voters_count += 1
         self.object.save()
 
@@ -246,13 +252,24 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
             input_val = int(self.request.POST.get(f'{i}', -1))
             if input_val != -1:
                 variant = self.variants[input_val]
-                new_vote = Votes(user=self.request.user, voting=self.object, variant=variant)
+                new_vote = Votes(voting=self.object, variant=variant)
+                if self.request.user.is_authenticated:
+                    new_vote.user = self.request.user
+                else:
+                    new_vote.fingerprint = self.request.POST.get('fingerprint', None)
                 new_vote.save()
-                variant.votes_count += 1
+                variant.votes_count = len(Votes.objects.filter(variant=variant))
                 variant.save()
-                self.object.votes_count += 1
+        self.object.votes_count = len(Votes.objects.filter(voting=self.object))
         self.object.voters_count += 1
         self.object.save()
+
+    def update_votes_count(self, object):
+        for variant in self.variants:
+            variant.votes_count = len(Votes.objects.filter(variant=variant))
+            variant.save()
+        object.votes_count = len(Votes.objects.filter(voting=object))
+        object.save()
 
 
 class DeleteVotingView(generic_edit.DeleteView, TemplateViewWithMenu):
