@@ -56,7 +56,7 @@ class ModeledVoteEditForm(forms.ModelForm):
             'title', 'image', 'description',
             'type', 'anons_can_vote',
             'result_see_who', 'result_see_when',
-            'end_date',
+            'end_date', 'variants_count',
         ]
         labels = {
             'title': 'Заголовок',
@@ -64,18 +64,23 @@ class ModeledVoteEditForm(forms.ModelForm):
             'description': 'Описание',
             'type': 'Тип голосования',
             'anons_can_vote': 'Разрешить голосовать анонимам',
-            'result_see_who': 'Кому видны результаты',
-            'result_see_when': 'Когда видные результаты',
-            'end_date': 'Дата окончания (пусто - бессрочно)',
+            'result_see_who': 'Кому видны результаты*',
+            'result_see_when': 'Когда видные результаты*',
+            'end_date': 'Дата окончания (пусто - бессрочно)*',
         }
         widgets = {
             'description': forms.Textarea(attrs={
                 'style': 'width: 95%',
             }),
-            'type': forms.RadioSelect,
+            'type': forms.RadioSelect(attrs={'disabled': True}),
+            'anons_can_vote': forms.CheckboxInput(attrs={'disabled': True}),
             'result_see_who': forms.RadioSelect,
             'result_see_when': forms.RadioSelect,
             'end_date': forms.DateTimeInput(attrs={
                 'type': 'datetime',
+            }),
+            'variants_count': forms.NumberInput(attrs={
+                'type': 'hidden',
+                'id': 'variants_count',
             }),
         }
