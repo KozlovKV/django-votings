@@ -64,14 +64,14 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
     form_class = ModeledVoteEditForm
     pk_url_kwarg = 'voting_id'
     # need_moderator = False
-    variants = []
-    variants_list = []
-    variants_count = 0
+    old_variants = []
+    new_variants = []
+    new_variants_count = 0
 
     def get_object(self, queryset=None):
         object = super(EditVotingView, self).get_object(queryset)
-        self.variants = list(VoteVariants.objects.filter(voting=object))
-        self.variants.sort(key=lambda x: x.serial_number)
+        self.old_variants = list(VoteVariants.objects.filter(voting=object))
+        self.old_variants.sort(key=lambda x: x.serial_number)
         return object
 
     def get_context_data(self, **kwargs):
@@ -90,6 +90,7 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
         if self.is_title_img_or_desc_changed() or self.is_variants_changed():
             self.save_request()
             self.save_vote_variants()
+            # Здесь вставить возвращение старых вариантов, если необходимо
             self.object = self.old_object
         return post_response
 
@@ -100,22 +101,22 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
 
     def is_variants_changed(self):
         need_moderator = False
-        self.variants_list = get_variants_description_list(self.request)
-        self.variants_count = len(self.variants_list)
-        if self.variants_count == len(self.variants):
-            for serial_number in range(self.variants_count):
+        self.new_variants = get_variants_description_list(self.request)
+        self.new_variants_count = len(self.new_variants)
+        if self.new_variants_count == len(self.old_variants):
+            for serial_number in range(self.new_variants_count):
                 if not need_moderator:
-                    need_moderator = self.variants_list[serial_number] != self.variants[serial_number]
+                    need_moderator = self.new_variants[serial_number] != self.old_variants[serial_number]
         else:
             need_moderator = True
         return need_moderator
 
     def save_vote_variants(self):
-        for serial_number in range(self.variants_count):
+        for serial_number in range(self.new_variants_count):
             record = VoteVariantsChangeRequest(voting_request=self.object,
                                                serial_number=serial_number,
-                                               description=self.variants_list[serial_number],
-                                               votes_count=len(self.variants),)
+                                               description=self.new_variants[serial_number],
+                                               votes_count=len(self.new_variants), )
             record.save()
 
     def save_request(self):
