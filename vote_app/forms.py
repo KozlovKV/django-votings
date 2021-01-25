@@ -24,6 +24,9 @@ class ModeledVoteCreateForm(forms.ModelForm):
             'end_date': 'Дата окончания (пусто - бессрочно)',
         }
         widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'input',
+            }),
             'description': forms.Textarea(attrs={
                 'class': 'input wide',
             }),
@@ -69,11 +72,13 @@ class ModeledVoteEditForm(forms.ModelForm):
             'end_date': 'Дата окончания (пусто - бессрочно)*',
         }
         widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'input',
+            }),
             'description': forms.Textarea(attrs={
                 'class': 'input wide',
             }),
-            # 'type': forms.RadioSelect(attrs={'disabled': True}),
-            # 'anons_can_vote': forms.CheckboxInput(attrs={'disabled': True}),
+            'type': forms.RadioSelect(),
             'result_see_who': forms.RadioSelect,
             'result_see_when': forms.RadioSelect,
             'end_date': forms.DateTimeInput(attrs={
