@@ -7,7 +7,7 @@ import django.views.generic.detail as generic_detail
 
 from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
-from moderation_app.models import VoteChangeRequest, Reports
+from moderation_app.models import VoteChangeRequest, Reports, VoteVariantsChangeRequest
 from profile_app.models import AdditionUserInfo
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
 
@@ -58,18 +58,20 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
 
 class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
     template_name = 'vote_config.html'
-    model = Votings  # and VoteChangeRequest
+    model = Votings  # and VoteChangeRequest and VoteVariantsChangeRequest
     object = None
     old_object = None
     form_class = ModeledVoteEditForm
     pk_url_kwarg = 'voting_id'
-    need_moderator = False
-    variants = []
+    # need_moderator = False
+    old_variants = []
+    new_variants = []
+    new_variants_count = 0
 
     def get_object(self, queryset=None):
         object = super(EditVotingView, self).get_object(queryset)
-        self.variants = list(VoteVariants.objects.filter(voting=object))
-        self.variants.sort(key=lambda x: x.serial_number)
+        self.old_variants = list(VoteVariants.objects.filter(voting=object))
+        self.old_variants.sort(key=lambda x: x.serial_number)
         return object
 
     def get_context_data(self, **kwargs):
@@ -86,31 +88,49 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
 
     def post(self, request, *args, **kwargs):
         post_response = super(EditVotingView, self).post(self, request, *args, **kwargs)
-        self.save_change_request()
-        if self.need_moderator:
+        if self.is_title_img_or_desc_changed() or self.is_variants_changed():
+            self.save_request()
+            self.save_vote_variants()
+            # Здесь вставить возвращение старых вариантов, если необходимо
             self.object = self.old_object
         return post_response
 
-    def save_change_request(self):
-        if self.request.POST.get('title') != self.object.title or \
+    def is_title_img_or_desc_changed(self):
+        return self.request.POST.get('title') != self.object.title or \
                 self.request.POST.get('image') != self.object.image or \
-                self.request.POST.get('description') != self.object.description:
-            self.need_moderator = True
+                self.request.POST.get('description') != self.object.description
 
-        # Здесь должно быть сравнение старых вариантов голосования и новых
-        # если изменения есть - self.need_moderator = True
+    def is_variants_changed(self):
+        need_moderator = False
+        self.new_variants = get_variants_description_list(self.request)
+        self.new_variants_count = len(self.new_variants)
+        if self.new_variants_count == len(self.old_variants):
+            for serial_number in range(self.new_variants_count):
+                if not need_moderator:
+                    need_moderator = self.new_variants[serial_number] != self.old_variants[serial_number]
+        else:
+            need_moderator = True
+        return need_moderator
 
-        if self.need_moderator:
-            record = VoteChangeRequest(voting=self.object,
-                                       title=self.request.POST.get('title'),
-                                       image=self.request.POST.get('image'),
-                                       description=self.request.POST.get('description'),
-                                       end_date=self.request.POST.get('end_date'),
-                                       result_see_who=self.request.POST.get('result_see_who'),
-                                       result_see_when=self.request.POST.get('result_see_when'),
-                                       variants_count=self.request.POST.get('variants_count'),
-                                       comment=self.request.POST.get('comment'))
+    def save_vote_variants(self):
+        for serial_number in range(self.new_variants_count):
+            record = VoteVariantsChangeRequest(voting_request=self.object,
+                                               serial_number=serial_number,
+                                               description=self.new_variants[serial_number],
+                                               votes_count=len(self.new_variants), )
             record.save()
+
+    def save_request(self):
+        record = VoteChangeRequest(voting=self.object,
+                                   title=self.request.POST.get('title'),
+                                   image=self.request.POST.get('image'),
+                                   description=self.request.POST.get('description'),
+                                   end_date=self.request.POST.get('end_date'),
+                                   result_see_who=self.request.POST.get('result_see_who'),
+                                   result_see_when=self.request.POST.get('result_see_when'),
+                                   variants_count=self.request.POST.get('variants_count'),
+                                   comment=self.request.POST.get('comment'))
+        record.save()
 
 
 def get_variants_description_list(request):
