@@ -103,7 +103,6 @@ class VoteVariantsChangeRequest(models.Model):
     voting_request = models.ForeignKey(to=VoteChangeRequest, on_delete=models.CASCADE)
     serial_number = models.IntegerField()
     description = models.TextField()
-    votes_count = models.IntegerField()
 
     def get_absolute_url(self):
-        return reverse_lazy('vote_view', args=(self.voting,))
+        return reverse_lazy('vote_view', args=(self.voting_request,))
