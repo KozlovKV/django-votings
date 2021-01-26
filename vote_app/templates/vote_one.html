@@ -48,14 +48,16 @@
                 {% endif %}
             </div>
         {% endif %}
-        <div class="horizontal-centering">
-            <div class="horizontal-centering medium-block medium grey-2">
-                <img src="{{ object.get_img_url }}" class="card-img">
+        <div class="horizontal-centering medium-block grey-2">
+            <div class="medium">
                 <p>{{ object.description }}</p>
             </div>
-            <div class="horizontal-centering medium-block medium grey-2">
-                {% include 'vote_variants.html' %}
+            <div class="medium">
+                <img src="{{ object.get_img_url }}" class="card-img">
             </div>
+        </div>
+        <div class="medium-block grey-2">
+            {% include 'vote_variants.html' %}
         </div>
         <div class="medium-block grey-2">
             <h3>Результаты</h3>
