@@ -1,17 +1,7 @@
-.main__medium {
-    width: 50%;
-    margin: 15px;
-}
-
-.main__img {
-    padding: 0;
-    border-radius: 10px;
-}
-
 .small-vote {
-    width: 15%;
+    width: 25%;
 }
 
 .ultra-small-vote {
-    width: 5%;
+    width: 15%;
 }

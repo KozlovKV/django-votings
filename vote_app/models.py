@@ -71,6 +71,12 @@ class Votings(models.Model):
             if note[0] == self.result_see_when:
                 return note[1]
 
+    def get_img_url(self):
+        if self.image is None:
+            return ''
+        else:
+            return self.image.url
+
     def is_ended(self):
         if self.end_date is None:
             return False
