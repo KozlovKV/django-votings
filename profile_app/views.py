@@ -7,7 +7,7 @@ import django.views.generic.edit as generic_edit
 
 from profile_app.forms import ProfilePageForm
 from profile_app.models import AdditionUserInfo
-from vote_app.models import Votes
+from vote_app.models import Votes, Votings
 
 
 class TestProfileView(TemplateViewWithMenu):
@@ -28,8 +28,8 @@ class ProfilePageView(TemplateViewWithMenu, generic_edit.UpdateView):  # TODO: Ñ
     def get_object(self, queryset=None):
         object = super(ProfilePageView, self).get_object(queryset)
         self.addition_info = AdditionUserInfo.objects.get(user=object)
-        self.votes = AdditionUserInfo.objects.filter(user=object)
-        self.votings = AdditionUserInfo.objects.filter(author=object)
+        self.votes = Votes.objects.filter(user=object)
+        self.votings = Votings.objects.filter(author=object)
         self.addition_info.votes_given = len(self.votes)
         self.addition_info.votings_created = len(self.votings)
         self.addition_info.save()
