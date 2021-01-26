@@ -34,6 +34,14 @@ class ChangeRequestsListView(TemplateViewWithMenu):
         return context
 
 
+def add_change_note(list_, name, old, new):
+    list_.append({
+        'name': name,
+        'old': old,
+        'new': new,
+    })
+
+
 class ChangeRequestView(generic_detail.DetailView, TemplateViewWithMenu):
     template_name = 'change_requests/change_request_one.html'
     object = None
@@ -43,12 +51,37 @@ class ChangeRequestView(generic_detail.DetailView, TemplateViewWithMenu):
 
     def get_context_data(self, **kwargs):
         self.object = self.get_object()
+        self.changes_list = self.get_changes_list()
         context = super(ChangeRequestView, self).get_context_data(**kwargs)
         context.update({
             'form': EditRequestForm,
             'changes': self.changes_list,
         })
         return context
+
+    def get_changes_list(self):
+        res = []
+        old = self.object.voting
+        new_ = self.object
+        if old.title != new_.title:
+            add_change_note(res, 'Заголовок', old.title, new_.title)
+        if old.image != new_.image:
+            add_change_note(res, 'Изображение', old.image, new_.image)
+        if old.description != new_.description:
+            add_change_note(res, 'Описание', old.description, new_.description)
+        if old.end_date != new_.end_date:
+            add_change_note(res, 'Дата окончания', old.end_date, new_.end_date)
+        if old.result_see_who != new_.result_see_who:
+            add_change_note(res, 'Кому видны результаты',
+                                 old.get_result_see_who_name(),
+                                 new_.get_result_see_who_name())
+        if old.result_see_when != new_.result_see_when:
+            add_change_note(res, 'Когда видны результаты',
+                                 old.get_result_see_when_name(),
+                                 new_.get_result_see_when_name())
+        if old.variants_count != new_.variants_count:
+            add_change_note(res, 'Количество вариантов', old.variants_count, new_.variants_count)
+        return res
 
 
 class ChangeRequestCloseTemplateView(TemplateViewWithMenu, generic_edit.FormView):

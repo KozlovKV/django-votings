@@ -24,14 +24,17 @@ class ModeledVoteCreateForm(forms.ModelForm):
             'end_date': 'Дата окончания (пусто - бессрочно)',
         }
         widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'input',
+            }),
             'description': forms.Textarea(attrs={
-                'style': 'width: 95%',
+                'class': 'input wide',
             }),
             'type': forms.RadioSelect,
             'result_see_who': forms.RadioSelect,
             'result_see_when': forms.RadioSelect,
             'end_date': forms.DateTimeInput(attrs={
-                'type': 'datetime',
+                'type': 'datetime-local',
             }),
             'variants_count': forms.NumberInput(attrs={
                 'type': 'hidden',
@@ -47,7 +50,7 @@ class ModeledVoteCreateForm(forms.ModelForm):
 class ModeledVoteEditForm(forms.ModelForm):
     comment = forms.CharField(required=False, label='Комментарий для модератора',
                               widget=forms.Textarea(attrs={
-                                  'style': 'width: 95%',
+                                    'class': 'input wide',
                               }))
 
     class Meta:
@@ -69,15 +72,17 @@ class ModeledVoteEditForm(forms.ModelForm):
             'end_date': 'Дата окончания (пусто - бессрочно)*',
         }
         widgets = {
-            'description': forms.Textarea(attrs={
-                'style': 'width: 95%',
+            'title': forms.TextInput(attrs={
+                'class': 'input',
             }),
-            # 'type': forms.RadioSelect(attrs={'disabled': True}),
-            # 'anons_can_vote': forms.CheckboxInput(attrs={'disabled': True}),
+            'description': forms.Textarea(attrs={
+                'class': 'input wide',
+            }),
+            'type': forms.RadioSelect(),
             'result_see_who': forms.RadioSelect,
             'result_see_when': forms.RadioSelect,
             'end_date': forms.DateTimeInput(attrs={
-                'type': 'datetime',
+                'type': 'datetime-local',
             }),
             'variants_count': forms.NumberInput(attrs={
                 'type': 'hidden',
