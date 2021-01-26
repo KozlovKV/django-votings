@@ -62,7 +62,7 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
 class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
     template_name = 'vote_config.html'
     model = Votings  # and VoteChangeRequest and VoteVariantsChangeRequest
-    object = None  # Обрабатываемый объект типа Votings, если только (*), то изменяется, иначе -> old_object
+    object = None  # Обрабатываемый объект типа Votings, если не должен изменяеться -> old_object
     old_object = None  # Объект типа Votings, содержит в себе неизменную версию object
     new_request = None  # Объект типа VoteChangeRequest, запрос
     form_class = ModeledVoteEditForm
@@ -92,9 +92,10 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
         self.old_object = Votings.objects.get(pk=kwargs["voting_id"])
         post_response = super(EditVotingView, self).post(self, request, *args, **kwargs)
         if self.is_title_img_or_desc_changed() or self.is_variants_changed():
-            self.save_request()
-            self.save_vote_variants()
-            self.object = copy.copy(self.old_object)
+            if '_save' in request.POST:
+                self.save_request()
+                self.save_vote_variants()
+                self.object = copy.copy(self.old_object)
             self.object.save()
         elif self.is_number_of_variants_changed() or self.is_type_or_anons_changed():
             self.clear_all_votes()

@@ -97,7 +97,10 @@
                     {{ form.comment }}
                 </div>
             {% endif %}
-            <input type="submit" value="Сохранить" class="big-btn green">
+            <input type="submit" value="Сохранить" class="big-btn green" name="_save">
+            {% if voting_id != -1 %}
+                <input type="submit" value="Сохранить и Обнулить" class="big-btn red" name="_clear">
+            {% endif %}
         </form>
     </div>
     <script src="{% static 'vote_app/js/variants_script.js' %}"></script>
