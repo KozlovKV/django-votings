@@ -7,6 +7,7 @@ import django.views.generic.detail as generic_detail
 
 from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
+from moderation_app.models import VoteChangeRequest, Reports
 from profile_app.models import AdditionUserInfo
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
 
@@ -39,6 +40,8 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
 
     def post(self, request, *args, **kwargs):
         post_response = super(CreateVotingView, self).post(self, request, *args, **kwargs)
+        self.object.image = self.request.FILES.get('image', None)
+        self.object.save()
         self.save_vote_variants()
         return post_response
 
@@ -55,25 +58,59 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
 
 class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
     template_name = 'vote_config.html'
-    model = Votings
+    model = Votings  # and VoteChangeRequest
     object = None
+    old_object = None
     form_class = ModeledVoteEditForm
+    pk_url_kwarg = 'voting_id'
+    need_moderator = False
+    variants = []
+
+    def get_object(self, queryset=None):
+        object = super(EditVotingView, self).get_object(queryset)
+        self.variants = list(VoteVariants.objects.filter(voting=object))
+        self.variants.sort(key=lambda x: x.serial_number)
+        return object
 
     def get_context_data(self, **kwargs):
-        self.object = Votings.objects.get(pk=kwargs["voting_id"])
+        self.object = self.get_object()
+        self.old_object = self.object
         context = super(EditVotingView, self).get_context_data(**kwargs)
         context.update({
-            'voting_id': kwargs["voting_id"],
-            'context_url': reverse('vote_edit', args=(kwargs["voting_id"],)),
+            'voting_id': self.object.pk,
+            'can_edit': self.object.can_edit(self.request),
+            'context_url': reverse('vote_edit', args=(self.object.pk,)),
+            'vote_variants': get_variants_context(self.object),
         })
         return context
 
     def post(self, request, *args, **kwargs):
         post_response = super(EditVotingView, self).post(self, request, *args, **kwargs)
-
-        # TODO: Добавить сохранение вариантов голосования и создание записи в модели запросов на редактирование
-
+        self.save_change_request()
+        if self.need_moderator:
+            self.object = self.old_object
         return post_response
+
+    def save_change_request(self):
+        if self.request.POST.get('title') != self.object.title or \
+                self.request.POST.get('image') != self.object.image or \
+                self.request.POST.get('description') != self.object.description:
+            self.need_moderator = True
+
+        # Здесь должно быть сравнение старых вариантов голосования и новых
+        # если изменения есть - self.need_moderator = True
+
+        if self.need_moderator:
+            record = VoteChangeRequest(voting=self.object,
+                                       title=self.request.POST.get('title'),
+                                       image=self.request.POST.get('image'),
+                                       description=self.request.POST.get('description'),
+                                       end_date=self.request.POST.get('end_date'),
+                                       result_see_who=self.request.POST.get('result_see_who'),
+                                       result_see_when=self.request.POST.get('result_see_when'),
+                                       variants_count=self.request.POST.get('variants_count'),
+                                       comment=self.request.POST.get('comment'))
+            record.save()
 
 
 def get_variants_description_list(request):
@@ -91,7 +128,7 @@ def get_variants_context(voting):
             'serial_number': variant.serial_number,
             'description': variant.description,
             'votes_count': variant.votes_count,
-            'percent': (variant.votes_count * 100) / (voting.voters_count if voting.voters_count != 0 else 1),
+            'percent': (variant.votes_count * 100) / (voting.votes_count if voting.votes_count != 0 else 1),
         }
         res.append(variant_dict)
     res.sort(key=lambda x: x['serial_number'])
@@ -117,16 +154,19 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         object = super(VotingView, self).get_object(queryset)
         self.variants = list(VoteVariants.objects.filter(voting=object))
         self.variants.sort(key=lambda x: x.serial_number)
+        self.update_votes_count(object)
         return object
 
     def get_context_data(self, **kwargs):
         context = super(VotingView, self).get_context_data(**kwargs)
         context.update({
             'type_ref': Votings.TYPE_REFS[self.object.type],
-            'can_vote': self.can_vote(self.request.user),
-            'can_edit': self.can_edit(self.request.user),
-            'can_watch_res': self.can_see_result(),
-            'is_ended': self.is_ended(),
+            'voting_report': Reports.VOTING_REPORT,
+            'can_vote': self.object.can_vote(self.request),
+            'reason_cant_vote': self.object.get_reason_cant_vote(self.request),
+            'can_edit': self.object.can_edit(self.request),
+            'can_watch_res': self.object.can_see_result(self.request),
+            'is_ended': self.object.is_ended(),
             'vote_variants': get_variants_context(self.object),
         })
         try:
@@ -136,64 +176,9 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         context.update(self.extra_context)
         return context
 
-    def is_ended(self):
-        if self.object.end_date is None:
-            return False
-        else:
-            # if timezone.now() >= self.object.end_date:
-            #     return True
-            # elif timezone.now() < self.object.end_date:
-            #     return False
-            return timezone.now() >= self.object.end_date
-
-    def can_see_result(self):
-        if self.object.result_see_when == Votings.BY_TIMER:
-            if self.object.result_see_who == Votings.VOTED:
-                return self.is_voted(self.request.user) and self.is_ended()
-            else:
-                return self.is_ended()
-        else:
-            if self.object.result_see_who == Votings.VOTED:
-                return self.is_voted(self.request.user)
-            else:
-                return True
-
-    def is_voted(self, user):
-        votes = Votes.objects.filter(voting=self.object.pk, user=user)
-        # if len(votes) > 0:
-        #     return True
-        # else:
-        #     return False
-        return len(votes) > 0
-
-    def can_vote(self, user):
-        if self.is_ended():
-            self.extra_context.update({
-                'reason_cant_vote': 'Голосование закончилось'
-            })
-            return False
-        elif not user.is_authenticated:
-            if not self.object.anons_can_vote:
-                self.extra_context.update({
-                    'reason_cant_vote': 'Для этого голосования необходимо авторизоваться'
-                })
-            return self.object.anons_can_vote
-        elif self.is_voted(user):
-            self.extra_context.update({
-                'reason_cant_vote': 'Вы уже голосовали'
-            })
-            return False
-        return True
-
-    def can_edit(self, user):
-        if not user.is_authenticated:
-            return False
-        add_info = AdditionUserInfo.objects.get(user=user)
-        return self.object.author == user or add_info.user_rights == AdditionUserInfo.ADMIN
-
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self.can_vote(request.user) and not self.is_ended():
+        if self.object.can_vote(request) and not self.object.is_ended():
             self.VOTE_PROCESSORS[Votings.TYPE_REFS[self.object.type]]()
         context = self.get_context_data(**kwargs)
         return render(self.request, self.template_name, context)
@@ -201,11 +186,15 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
     def vote_one_variant_process(self):
         variant_id = int(self.request.POST.get('variants'))
         variant = self.variants[variant_id]
-        new_vote = Votes(user=self.request.user, voting=self.object, variant=variant)
+        new_vote = Votes(voting=self.object, variant=variant)
+        if self.request.user.is_authenticated:
+            new_vote.user = self.request.user
+        else:
+            new_vote.fingerprint = self.request.POST.get('fingerprint', None)
         new_vote.save()
-        variant.votes_count += 1
+        variant.votes_count = len(Votes.objects.filter(variant=variant))
         variant.save()
-        self.object.votes_count += 1
+        self.object.votes_count = len(Votes.objects.filter(voting=self.object))
         self.object.voters_count += 1
         self.object.save()
 
@@ -214,13 +203,24 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
             input_val = int(self.request.POST.get(f'{i}', -1))
             if input_val != -1:
                 variant = self.variants[input_val]
-                new_vote = Votes(user=self.request.user, voting=self.object, variant=variant)
+                new_vote = Votes(voting=self.object, variant=variant)
+                if self.request.user.is_authenticated:
+                    new_vote.user = self.request.user
+                else:
+                    new_vote.fingerprint = self.request.POST.get('fingerprint', None)
                 new_vote.save()
-                variant.votes_count += 1
+                variant.votes_count = len(Votes.objects.filter(variant=variant))
                 variant.save()
-                self.object.votes_count += 1
+        self.object.votes_count = len(Votes.objects.filter(voting=self.object))
         self.object.voters_count += 1
         self.object.save()
+
+    def update_votes_count(self, object):
+        for variant in self.variants:
+            variant.votes_count = len(Votes.objects.filter(variant=variant))
+            variant.save()
+        object.votes_count = len(Votes.objects.filter(voting=object))
+        object.save()
 
 
 class DeleteVotingView(generic_edit.DeleteView, TemplateViewWithMenu):
@@ -234,4 +234,3 @@ class DeleteVotingView(generic_edit.DeleteView, TemplateViewWithMenu):
         self.object = self.get_object()
         self.extra_context = {'object': self.object}
         return super(DeleteVotingView, self).get(request, *args, **kwargs)
-

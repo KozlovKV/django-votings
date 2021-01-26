@@ -1,106 +1,24 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block head %}
     <title>Редактирование голосований</title>
-    <style>
-        .input {
-            margin: 10px;
-            padding: 10px;
-            display: inline-block;
-        }
-    </style>
 {% endblock %}
 
 {% block main %}
-    <h1>Создай меня! Я знаю, ты сможешь!</h1>
-    <div class="block">
-        {% if form.errors %}
-            <div class="block">
-                <h2>Ошибки</h2>
-                {{ form.errors }}
+    {% if not user.is_authenticated %}
+        <h1>Только авторизованные пользователи могут создавать и редактировать голосования</h1>
+    {% else %}
+        {% if voting_id == -1 %}
+            {% include 'vote_config_form.html' %}
+        {% elif can_edit %}
+            {% include 'vote_config_form.html' %}
+        {% else %}
+            <h2>Вы не можете редактировать это голосование</h2>
+            <div class="horizontal-centering">
+                <a href="{% url 'menu' %}" class="medium-btn yellow">На главную</a>
+                <a href="{% url 'vote_list' %}" class="medium-btn blue">К списку голосований</a>
+                <a href="{% url 'vote_view' voting_id %}" class="medium-btn green">К голосованию</a>
             </div>
         {% endif %}
-        {% if voting_id != -1 %}
-            <h2>Страница редактирования голосования номер {{ voting_id }}</h2>
-        {% endif %}
-        <form method="POST" action="{{ context_url }}">
-            {% csrf_token %}
-            {{ form.author }}
-            <div class="horizontal-centering">
-                <div class="input">
-                    <label>{{ form.title.label }}</label>
-                    {{ form.title }}
-                </div>
-                <div class="input">
-                    <label>{{ form.image.label }}</label>
-                    {{ form.image }}
-                </div>
-            </div>
-            <div class="horizontal-centering">
-                <div class="input wide">
-                    <label>{{ form.description.label }}</label><br>
-                    {{ form.description }}
-                </div>
-            </div>
-            <div class="horizontal-centering">
-                <div class="input">
-                    <label>{{ form.type.label }}</label>
-                    {{ form.type }}
-                </div>
-                <div class="input">
-                    <label>{{ form.result_see_who.label }}</label>
-                    {{ form.result_see_who }}
-                </div>
-                <div class="input">
-                    <label>{{ form.result_see_when.label }}</label>
-                    {{ form.result_see_when }}
-                </div>
-            </div>
-            <div class="horizontal-centering">
-                <div class="input">
-                    <label>{{ form.anons_can_vote.label }}</label>
-                    {{ form.anons_can_vote }}
-                </div>
-                <div class="input">
-                    <label>{{ form.end_date.label }}</label>
-                    {{ form.end_date }}
-                </div>
-            </div>
-            <div class="block">
-                <h2>Варианты голосования</h2>
-                {{ form.variants_count }}
-                <div id="vote_variants">
-                    <div class="list-elem">
-                        <input name="variant_" type="text" required maxlength="256" placeholder="Вариант " class="input wide">
-                        <button type="button" class="medium-btn red">Удалить</button>
-                    </div>
-                    <div class="list-elem">
-                        <input name="variant_0" type="text" required maxlength="256" placeholder="Вариант 1" class="input wide">
-                        <button type="button" class="medium-btn red">Удалить</button>
-                    </div>
-                    <div class="list-elem">
-                        <input name="variant_1" type="text" required maxlength="256" placeholder="Вариант 2" class="input wide">
-                        <button type="button" class="medium-btn red">Удалить</button>
-                    </div>
-                </div>
-                <div class="horizontal-centering">
-                    <button id="add_vote_variant" type="button" class="medium-btn blue">Добавить вариант</button>
-                </div>
-            </div>
-            {% if voting_id != -1 %}
-                <div class="block">
-                    <h4>{{ form.comment.label }}</h4>
-                    {{ form.comment }}
-                </div>
-            {% endif %}
-            <input type="submit" value="Сохранить" class="big-btn green">
-        </form>
-    </div>
-    <script src="{% static 'vote_app/js/variants_script.js' %}"></script>
-    {% if voting_id == -1 %}
-        <script>
-            document.querySelector('#author').value = {{ user.id }}
-        </script>
     {% endif %}
 {% endblock %}

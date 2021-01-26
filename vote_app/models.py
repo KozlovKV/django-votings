@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
+from django.utils import timezone
+
+from profile_app.models import AdditionUserInfo
 
 
 class Votings(models.Model):
@@ -68,6 +71,55 @@ class Votings(models.Model):
             if note[0] == self.result_see_when:
                 return note[1]
 
+    def is_ended(self):
+        if self.end_date is None:
+            return False
+        else:
+            return timezone.now() >= self.end_date
+
+    def can_see_result(self, request):
+        if self.result_see_when == Votings.BY_TIMER:
+            if self.result_see_who == Votings.VOTED:
+                return self.is_voted(request.user) and self.is_ended()
+            else:
+                return self.is_ended()
+        else:
+            if self.result_see_who == Votings.VOTED:
+                return self.is_voted(request.user)
+            else:
+                return True
+
+    def is_voted(self, request):
+        if request.user.is_authenticated:
+            votes = Votes.objects.filter(voting=self.pk, user=request.user)
+        else:
+            votes = Votes.objects.filter(voting=self.pk, fingerprint=request.POST.get('fingerprint', -1))
+        return len(votes) > 0
+
+    def can_vote(self, request):
+        if self.is_ended():
+            return False
+        elif self.is_voted(request):
+            return False
+        elif not request.user.is_authenticated:
+            return self.anons_can_vote
+        return True
+
+    def get_reason_cant_vote(self, request):
+        if self.is_ended():
+            return 'Голосование закончилось'
+        elif self.is_voted(request):
+            return 'Вы уже голосовали'
+        elif not request.user.is_authenticated and not self.anons_can_vote:
+            return 'Для этого голосования необходимо авторизоваться'
+        return ''
+
+    def can_edit(self, request):
+        if not request.user.is_authenticated:
+            return False
+        add_info = AdditionUserInfo.objects.get(user=request.user)
+        return self.author == request.user or add_info.user_rights == AdditionUserInfo.ADMIN
+
 
 class VoteVariants(models.Model):
     voting = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
@@ -80,7 +132,8 @@ class VoteVariants(models.Model):
 
 
 class Votes(models.Model):
-    user = models.ForeignKey(to=User, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(to=User, on_delete=models.DO_NOTHING, null=True)
+    fingerprint = models.CharField(null=True, max_length=256)
     voting = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
     variant = models.ForeignKey(to=VoteVariants, on_delete=models.CASCADE)
     vote_date = models.DateTimeField(auto_now_add=True)
