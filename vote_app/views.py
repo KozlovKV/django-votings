@@ -99,6 +99,8 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
     def post(self, request, *args, **kwargs):
         self.old_object = Votings.objects.get(pk=kwargs["voting_id"])
         post_response = super(EditVotingView, self).post(self, request, *args, **kwargs)
+        self.new_variants = get_variants_description_list(self.request)
+        self.new_variants_count = len(self.new_variants)
         if '_clear' in request.POST:
             self.clear_all_votes()
             if self.is_variants_changed() or self.is_number_of_variants_changed():
@@ -126,8 +128,6 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
 
     def is_variants_changed(self):  # False когда изменилось количество
         need_moderator = False
-        self.new_variants = get_variants_description_list(self.request)
-        self.new_variants_count = len(self.new_variants)
         if not self.is_number_of_variants_changed():
             for serial_number in range(self.new_variants_count):
                 if not need_moderator:
