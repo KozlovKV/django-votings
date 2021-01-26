@@ -44,49 +44,33 @@
     <div class="horizontal-centering">
         <div class="medium-block medium">
             <h2>Созданные голосования</h2>
-            <div class="list-elem">
-                <h4>Заголовок голосования</h4>
-                <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="medium-btn blue fas fa-arrow-right"></a>
-            </div>
-            <div class="list-elem">
-                <h4>Заголовок голосования</h4>
-                <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="medium-btn blue fas fa-arrow-right"></a>
-            </div>
-            <div class="list-elem">
-                <h4>Заголовок голосования</h4>
-                <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="medium-btn blue fas fa-arrow-right"></a>
-            </div>
+            {% if votings|length == 0 %}
+                <h3>Пусто</h3>
+            {% endif %}
+            {% for voting in votings %}
+                <div class="list-elem">
+                    <h4>{{ voting.title }}</h4>
+                    <a href="{{ voting.get_absolute_url }}" class="medium-btn blue fas fa-arrow-right"></a>
+                </div>
+            {% endfor %}
         </div>
         {% if object == current_user %}
             <div class="medium-block medium">
                 <h2>Участвовал в голсованиях</h2>
-                <div class="list-elem">
-                    <div>
-                        <h4>Заголовок голосования</h4>
-                        <p>Выбранный вариант</p>
+                {% if votes|length == 0 %}
+                    <h3>Пусто</h3>
+                {% endif %}
+                {% for vote in votes %}
+                    <div class="list-elem">
+                        <div>
+                            <h4>{{ vote.voting.title }}</h4>
+                            <p>{{ vote.variant.description }}</p>
+                        </div>
+                        <div>
+                            <a href="{{ vote.get_absolute_url }}" class="medium-btn blue fas fa-arrow-right"></a>
+                        </div>
                     </div>
-                    <div>
-                        <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue fas fa-arrow-right"></a>
-                    </div>
-                </div>
-                <div class="list-elem">
-                    <div>
-                        <h4>Заголовок голосования</h4>
-                        <p>Выбранный вариант</p>
-                    </div>
-                    <div>
-                        <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue fas fa-arrow-right"></a>
-                    </div>
-                </div>
-                <div class="list-elem">
-                    <div>
-                        <h4>Заголовок голосования</h4>
-                        <p>Выбранный вариант</p>
-                    </div>
-                    <div>
-                        <a href="{# context_url or... #}{% url 'vote_view' 0 %}" class="big-btn blue fas fa-arrow-right"></a>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         {% endif %}
     </div>

@@ -128,7 +128,7 @@ class VoteVariants(models.Model):
     votes_count = models.IntegerField()
 
     def get_absolute_url(self):
-        return reverse_lazy('vote_view', args=(self.voting,))
+        return reverse_lazy('vote_view', args=(self.voting.pk,))
 
 
 class Votes(models.Model):
@@ -139,4 +139,4 @@ class Votes(models.Model):
     vote_date = models.DateTimeField(auto_now_add=True)
 
     def get_absolute_url(self):
-        return reverse_lazy('vote_view', args=(self.voting,))
+        return reverse_lazy('vote_view', args=(self.voting.pk,))
