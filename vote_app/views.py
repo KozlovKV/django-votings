@@ -91,16 +91,20 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
     def post(self, request, *args, **kwargs):
         self.old_object = Votings.objects.get(pk=kwargs["voting_id"])
         post_response = super(EditVotingView, self).post(self, request, *args, **kwargs)
-        if self.is_title_img_or_desc_changed() or self.is_variants_changed():
-            if '_save' in request.POST:
+        if '_clear' in request.POST:
+            self.clear_all_votes()
+            if self.is_variants_changed() or self.is_number_of_variants_changed():
+                self.save_new_vote_variants()
+        if '_save' in request.POST:
+            if self.is_title_img_or_desc_changed() or self.is_variants_changed():
                 self.save_request()
                 self.save_vote_variants()
                 self.object = copy.copy(self.old_object)
-            self.object.save()
-        elif self.is_number_of_variants_changed() or self.is_type_or_anons_changed():
-            self.clear_all_votes()
-            if self.is_number_of_variants_changed():
-                self.save_new_vote_variants()
+                self.object.save()
+            elif self.is_number_of_variants_changed() or self.is_type_or_anons_changed():
+                self.clear_all_votes()
+                if self.is_number_of_variants_changed():
+                    self.save_new_vote_variants()
         return post_response
 
     def is_type_or_anons_changed(self):
@@ -145,9 +149,10 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
 
     def save_request(self):
         # Здесь нужно отформатировать датувремя, чтобы джанга скушала
-        date_str = self.request.POST.get('end_date') if self.request.POST.get('end_date') != '' else None
-        date = date_str.datetime.strptime('%d.%m.%Y').strftime('%m/%d/%Y')
-        date = date.datetime.strptime('%d/%m/%Y').strftime('%m/%d/%Y')
+        date = self.request.POST.get('end_date') if self.request.POST.get('end_date') != '' else None
+        # date_str = self.request.POST.get('end_date') if self.request.POST.get('end_date') != '' else None
+        # date = date_str.datetime.strptime('%d.%m.%Y').strftime('%m/%d/%Y')
+        # date = date.datetime.strptime('%d/%m/%Y').strftime('%m/%d/%Y')
         self.new_request = VoteChangeRequest(voting=self.object,
                                              title=self.request.POST.get('title'),
                                              image=self.request.POST.get('image'),
