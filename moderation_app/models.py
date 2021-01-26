@@ -105,4 +105,4 @@ class VoteVariantsChangeRequest(models.Model):
     description = models.TextField()
 
     def get_absolute_url(self):
-        return reverse_lazy('vote_view', args=(self.voting_request,))
+        return reverse_lazy('vote_view', args=(self.voting_request.pk,))
