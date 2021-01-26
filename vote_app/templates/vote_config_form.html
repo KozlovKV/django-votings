@@ -92,6 +92,10 @@
             </script>
         {% else %}
             <script>
+                let date_value = "{{ object.end_date|date:"Y-m-d" }}T{{ object.end_date|date:"H:i" }}"
+                id_end_date.value = date_value
+            </script>
+            <script>
                 let current_count = Number({{ vote_variants|length }})
                 while (variant_blocks.length < current_count) {
                     add_new_variant()

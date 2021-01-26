@@ -34,7 +34,7 @@ class ModeledVoteCreateForm(forms.ModelForm):
             'result_see_who': forms.RadioSelect,
             'result_see_when': forms.RadioSelect,
             'end_date': forms.DateTimeInput(attrs={
-                'type': 'datetime',
+                'type': 'datetime-local',
             }),
             'variants_count': forms.NumberInput(attrs={
                 'type': 'hidden',
@@ -82,7 +82,7 @@ class ModeledVoteEditForm(forms.ModelForm):
             'result_see_who': forms.RadioSelect,
             'result_see_when': forms.RadioSelect,
             'end_date': forms.DateTimeInput(attrs={
-                'type': 'datetime',
+                'type': 'datetime-local',
             }),
             'variants_count': forms.NumberInput(attrs={
                 'type': 'hidden',
