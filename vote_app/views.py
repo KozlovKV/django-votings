@@ -107,6 +107,7 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
                 self.save_new_vote_variants()
         if '_save' in request.POST:
             if self.is_title_img_or_desc_changed() or self.is_variants_changed():
+                print(self.is_title_img_or_desc_changed(), self.is_variants_changed())
                 self.save_request()
                 self.save_vote_variants()
                 self.object = copy.copy(self.old_object)
@@ -123,7 +124,9 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
 
     def is_title_img_or_desc_changed(self):
         return self.request.POST.get('title') != self.old_object.title or \
-            self.request.POST.get('image') != self.old_object.image or \
+            (self.object.image
+             if self.request.POST.get('image') == ''
+             else self.request.POST.get('image')) != self.old_object.image or \
             self.request.POST.get('description') != self.old_object.description
 
     def is_variants_changed(self):  # False когда изменилось количество
@@ -158,9 +161,12 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
     def save_request(self):
         self.new_request = VoteChangeRequest(voting=self.object,
                                              title=self.request.POST.get('title'),
-                                             image=self.request.POST.get('image'),
+                                             image=self.object.image
+                                             if self.request.POST.get('image') == ''
+                                             else self.request.POST.get('image'),
                                              description=self.request.POST.get('description'),
-                                             end_date=self.request.POST.get('end_date') if self.request.POST.get('end_date') != '' else None,
+                                             end_date=self.request.POST.get('end_date') if
+                                             self.request.POST.get('end_date') != '' else None,
                                              result_see_who=self.request.POST.get('result_see_who'),
                                              result_see_when=self.request.POST.get('result_see_when'),
                                              variants_count=self.request.POST.get('variants_count'),
