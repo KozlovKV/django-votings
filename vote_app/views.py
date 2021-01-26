@@ -26,6 +26,13 @@ def test_page(request):
 class VoteListPageView(TemplateViewWithMenu):
     template_name = 'vote_list.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(VoteListPageView, self).get_context_data(**kwargs)
+        context.update({
+            'votings': list(Votings.objects.all()),
+        })
+        return context
+
 
 class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
     template_name = 'vote_config.html'
@@ -224,10 +231,6 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
             'is_ended': self.object.is_ended(),
             'vote_variants': get_variants_context(self.object),
         })
-        try:
-            context['img_url'] = self.object.image.url
-        except ValueError:
-            context['img_url'] = ''
         context.update(self.extra_context)
         return context
 

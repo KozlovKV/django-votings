@@ -83,6 +83,11 @@ textarea {
     transition: 1s ease-in-out;
 }
 
+.card-img {
+    border: 2px solid black;
+    width: 90%;
+}
+
 .list-elem {
     position: relative;
     display: flex;
