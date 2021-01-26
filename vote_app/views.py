@@ -1,4 +1,5 @@
 import copy
+from datetime import datetime
 
 from django import forms
 from django.utils import timezone
@@ -146,11 +147,13 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
     def save_request(self):
         # Здесь нужно отформатировать датувремя, чтобы джанга скушала
         date_str = self.request.POST.get('end_date') if self.request.POST.get('end_date') != '' else None
+        date = date_str.datetime.strptime('%d.%m.%Y').strftime('%m/%d/%Y')
+        date = date.datetime.strptime('%d/%m/%Y').strftime('%m/%d/%Y')
         self.new_request = VoteChangeRequest(voting=self.object,
                                              title=self.request.POST.get('title'),
                                              image=self.request.POST.get('image'),
                                              description=self.request.POST.get('description'),
-                                             end_date=date_str,
+                                             end_date=date,
                                              result_see_who=self.request.POST.get('result_see_who'),
                                              result_see_when=self.request.POST.get('result_see_when'),
                                              variants_count=self.request.POST.get('variants_count'),
