@@ -92,7 +92,6 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
         self.old_object = Votings.objects.get(pk=kwargs["voting_id"])
         post_response = super(EditVotingView, self).post(self, request, *args, **kwargs)
         if self.is_title_img_or_desc_changed() or self.is_variants_changed():
-            print('prinvet mirrr')
             self.save_request()
             self.save_vote_variants()
             self.object = copy.copy(self.old_object)
@@ -100,7 +99,6 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
         elif self.is_number_of_variants_changed() or self.is_type_or_anons_changed():
             self.clear_all_votes()
             if self.is_number_of_variants_changed():
-                print('Hallo')
                 self.save_new_vote_variants()
         return post_response
 
@@ -113,7 +111,7 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
             self.request.POST.get('image') != self.old_object.image or \
             self.request.POST.get('description') != self.old_object.description
 
-    def is_variants_changed(self):
+    def is_variants_changed(self):  # False когда изменилось количество
         need_moderator = False
         self.new_variants = get_variants_description_list(self.request)
         self.new_variants_count = len(self.new_variants)
