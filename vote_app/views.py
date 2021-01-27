@@ -162,7 +162,7 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
                                              title=self.request.POST.get('title'),
                                              image=self.object.image
                                              if self.request.POST.get('image') == ''
-                                             else self.request.POST.get('image'),
+                                             else self.request.FILES.get('image'),
                                              description=self.request.POST.get('description'),
                                              end_date=self.request.POST.get('end_date') if
                                              self.request.POST.get('end_date') != '' else None,
