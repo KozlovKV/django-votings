@@ -195,7 +195,7 @@ def get_variants_context(voting):
             'serial_number': variant.serial_number,
             'description': variant.description,
             'votes_count': variant.votes_count,
-            'percent': (variant.votes_count * 100) / (voting.votes_count if voting.votes_count != 0 else 1),
+            'percent': (variant.votes_count * 100) / (voting.voters_count if voting.voters_count != 0 else 1),
         }
         res.append(variant_dict)
     res.sort(key=lambda x: x['serial_number'])
@@ -221,7 +221,9 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         object = super(VotingView, self).get_object(queryset)
         self.variants = list(VoteVariants.objects.filter(voting=object))
         self.variants.sort(key=lambda x: x.serial_number)
-        self.update_votes_count(object)
+        object.update_votes_count()
+        object.update_voters_count()
+        object.update_complaint_state()
         return object
 
     def get_context_data(self, **kwargs):
@@ -277,13 +279,6 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         self.object.votes_count = len(Votes.objects.filter(voting=self.object))
         self.object.voters_count += 1
         self.object.save()
-
-    def update_votes_count(self, object):
-        for variant in self.variants:
-            variant.votes_count = len(Votes.objects.filter(variant=variant))
-            variant.save()
-        object.votes_count = len(Votes.objects.filter(voting=object))
-        object.save()
 
 
 class DeleteVotingView(generic_edit.DeleteView, TemplateViewWithMenu):

@@ -8,6 +8,16 @@
 
 {% block main %}
     <div class="block">
+        {% if object.complaint_state != object.ABSENT %}
+            <div class="horizontal-centering small-block grey-2">
+                <h2>Статус жалобы на голосование:</h2>
+                {% if object.complaint_state == object.IN_PROGRESS %}
+                    <h2 class="yellow-text">На рассмотрении</h2>
+                {% if object.complaint_state == object.BANNED %}
+                    <h2 class="red-text">Забанено</h2>
+                {% endif %}
+            </div>
+        {% endif %}
         <div class="list-elem">
             <div>
                 <h2>{{ object.title }}</h2>
@@ -49,12 +59,18 @@
             </div>
         {% endif %}
         <div class="horizontal-centering medium-block grey-2">
+            {% if object.get_img_url != '' %}
             <div class="medium">
+            {% else %}
+            <div class="wide">
+            {% endif %}
                 <p>{{ object.description }}</p>
             </div>
-            <div class="medium">
-                <img src="{{ object.get_img_url }}" class="card-img">
-            </div>
+            {% if object.get_img_url != '' %}
+                <div class="medium">
+                    <img src="{{ object.get_img_url }}" class="card-img">
+                </div>
+            {% endif %}
         </div>
         <div class="medium-block grey-2">
             {% include 'vote_variants.html' %}
