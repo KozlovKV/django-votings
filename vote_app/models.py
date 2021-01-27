@@ -71,6 +71,12 @@ class Votings(models.Model):
             if note[0] == self.result_see_when:
                 return note[1]
 
+    def get_img_url(self):
+        try:
+            return self.image.url
+        except ValueError:
+            return ''
+
     def is_ended(self):
         if self.end_date is None:
             return False
@@ -120,6 +126,28 @@ class Votings(models.Model):
         add_info = AdditionUserInfo.objects.get(user=request.user)
         return self.author == request.user or add_info.user_rights == AdditionUserInfo.ADMIN
 
+    def update_votes_count(self):
+        variants = VoteVariants.objects.filter(voting=self)
+        for variant in variants:
+            variant.votes_count = len(Votes.objects.filter(variant=variant))
+            variant.save()
+        self.votes_count = len(Votes.objects.filter(voting=self))
+        self.save()
+
+    def update_voters_count(self):
+        votes = Votes.objects.filter(voting=self)
+        users = []
+        fingerprints = []
+        for vote in votes:
+            if vote.user is not None:
+                users.append(vote.user)
+            if vote.fingerprint is not None:
+                fingerprints.append(vote.fingerprint)
+        users_set = set(users)
+        fingerprints_set = set(fingerprints)
+        self.voters_count = len(users_set) + len(fingerprints_set)
+        self.save()
+
 
 class VoteVariants(models.Model):
     voting = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
@@ -128,7 +156,7 @@ class VoteVariants(models.Model):
     votes_count = models.IntegerField()
 
     def get_absolute_url(self):
-        return reverse_lazy('vote_view', args=(self.voting,))
+        return reverse_lazy('vote_view', args=(self.voting.pk,))
 
 
 class Votes(models.Model):
@@ -139,4 +167,4 @@ class Votes(models.Model):
     vote_date = models.DateTimeField(auto_now_add=True)
 
     def get_absolute_url(self):
-        return reverse_lazy('vote_view', args=(self.voting,))
+        return reverse_lazy('vote_view', args=(self.voting.pk,))

@@ -14,20 +14,20 @@
 {% block for_moder %}
     <h1>Список запросов на изменения</h1>
     <div class="horizontal-centering">
-        <div class="block">
-            <div class="list-elem">
-                {% if change_requests|length == 0 %}
-                    <h4 class="center">Список пуст</h4>
-                {% else %}
-                    {% for request in change_requests %}
+        <div class="block wide">
+            {% if change_requests|length == 0 %}
+                <h4 class="center">Список пуст</h4>
+            {% else %}
+                {% for request in change_requests %}
+                    <div class="list-elem">
                         <h4>{{ request.title }}</h4>
                         <span class="meta-data">{{ request.date }}</span>
                         <div>
                             <a href="{{ request.form_url }}" class="medium-btn yellow">Просмотр изменений</a>
                         </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}

@@ -5,52 +5,6 @@
     <title>Список голосований</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/btn_style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'vote_app/css/vote_list_style.css' %}">
-    <style>
-
-        section{
-            position: relative;
-            max-width: 1329px;
-            min-height: 367px;
-            background-color: #dddddd;
-            border: 2px solid black;
-            border-radius: 10px;
-            margin-top: 30px;
-        }
-
-        .question{
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        .question__text{
-            margin-left: 20px;
-        }
-
-        .question__img{
-            width: 596px;
-            min-height: 193px;
-            background-color: white;
-            margin: 30px;
-            border-radius: 5px;
-            color: #717171;
-            text-align: center;
-        }
-
-        .question__img p{
-             margin-top: 80px;
-        }
-
-        .klyauza{
-            position: absolute;
-            width: 38px;
-            height: 33px;
-            left: 1336px;
-            top: 347px;
-            background: url(klyauza.png);
-        }
-
-    </style>
 {% endblock %}
 
 {% block main %}
@@ -62,60 +16,24 @@
             <button class="big-btn blue" id="red_btn_on_vote_list">Регистрация</button>
         {% endif %}
     </div>
-    <section>
-        <h3>Заголовок голосования</h3>
-        <img src="#" alt="">
-        <div class="question">
-            <div class="question__text">
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-            </div>
-            <div class="question__img">
-                <p>Область для картинки</p>
-            </div>
-        </div>
-        <div class="klyauza"></div>
-    </section>
-    <section>
-        <h3>Заголовок голосования</h3>
-        <img src="#" alt="">
-        <div class="question">
-            <div class="question__text">
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-            </div>
-            <div class="question__img">
-                <p>Область для картинки</p>
-            </div>
-        </div>
-         <div class="klyauza"></div>
-    </section>
-    <section>
-        <h3>Заголовок голосования</h3>
-        <img src="#" alt="">
-        <div class="question">
-            <div class="question__text">
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-                <p>Суть выносимого на голосование вопроса.</p>
-            </div>
-            <div class="question__img">
-                <p>Область для картинки</p>
-            </div>
-        </div>
-        <div class="klyauza"></div>
-    </section>
+    <div class="horizontal-centering">
+        {% for voting in votings %}
+            <section class="medium-block medium">
+                <h3>{{ voting.title }}</h3>
+                {% if voting.get_img_url != '' %}
+                    <div class="horizontal-centering">
+                        <img src="{{ voting.get_img_url }}" alt="Картинка голосования номер {{ voting.id }}" class="card-img">
+                    </div>
+                {% endif %}
+                <div class="list-elem">
+                    <p>{{ voting.description }}</p>
+                </div>
+                <div class="horizontal-centering">
+                    <a href="{{ voting.get_absolute_url }}" class="medium-btn blue">Перейти</a>
+                </div>
+            </section>
+        {% endfor %}
+    </div>
     <script>
         red_btn_on_vote_list = document.getElementById('red_btn_on_vote_list');
         red_btn_on_vote_list.addEventListener('click', toggle_reg_form);

@@ -33,6 +33,8 @@ h4, h5, h6 {
 
 p {
     margin: 5px;
+    word-wrap: break-word;
+    overflow: hidden;
 }
 
 textarea {
@@ -44,6 +46,10 @@ textarea {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
+}
+
+.between {
+    justify-content: space-between;
 }
 
 .vertical-centering {
@@ -81,6 +87,11 @@ textarea {
     padding: 10px;
     background-color: #DDD;
     transition: 1s ease-in-out;
+}
+
+.card-img {
+    border: 2px solid black;
+    width: 90%;
 }
 
 .list-elem {

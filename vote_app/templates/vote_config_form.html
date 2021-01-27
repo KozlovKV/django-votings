@@ -9,13 +9,25 @@
             {% endif %}
             {% if voting_id != -1 %}
                 <h2>Страница редактирования голосования номер {{ voting_id }}</h2>
-                <h3>Пункты обозначенные (*) не требуют подтверждения модератора.
-                Изменения, внесенные в них, сразу вступят в силу.</h3>
+                <h4>Условные обозначения</h4>
+                <ul>
+                    <li> (*) - не требуют подтверждения модератора.
+                Изменения, внесенные ТОЛЬКО в них, сразу вступят в силу</li>
+                    <li> (**) - не требуют подтверждения модератора.
+                Изменения, внесенные в них и в (*), сразу вступят в силу,
+                    но с обнулением всех голосов</li>
+                    <li>Изменения, внесенные в остальные пункты должны быть подтверждены модератором.
+                Для этого необходимо сформировать запрос, ответ на который придет в ближайшее время.
+                Примите во внимание, что голоса могут быть обнулены. Формируйте запрос тщательно,
+                комментарий может помочь принять модератору верное решение</li>
+                    <li>Можно внести изменения не формируя запрос. Для этого необходимо нажать на кнопку
+                "Сохранить и Обнулить". Примите во внимание, что голоса в таком случае будут обнулены</li>
+                </ul>
             {% endif %}
             <form method="POST" action="{{ context_url }}" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.author }}
-                <div class="horizontal-centering">
+                <div class="horizontal-centering between">
                     <div class="input">
                         <label>{{ form.title.label }}</label>
                         {{ form.title }}
@@ -25,13 +37,13 @@
                         {{ form.image }}
                     </div>
                 </div>
-                <div class="horizontal-centering">
-                    <div class="input wide">
-                        <label>{{ form.description.label }}</label><br>
+                <div class="horizontal-centering between">
+                    <div class="input ultra-wide">
+                        <label>{{ form.description.label }}</label>
                         {{ form.description }}
                     </div>
                 </div>
-                <div class="horizontal-centering">
+                <div class="horizontal-centering between">
                     <div class="input">
                         <label>{{ form.type.label }}</label>
                         {{ form.type }}
@@ -45,7 +57,7 @@
                         {{ form.result_see_when }}
                     </div>
                 </div>
-                <div class="horizontal-centering">
+                <div class="horizontal-centering between">
                     <div class="input">
                         <label>{{ form.anons_can_vote.label }}</label>
                         {{ form.anons_can_vote }}
@@ -57,6 +69,9 @@
                 </div>
                 <div class="block">
                     <h2>Варианты голосования</h2>
+                    {% if voting_id != -1 %}
+                        <h4>Изменение количества вариантов приведёт к мгновенному обнулениею и принятию изменений</h4>
+                    {% endif %}
                     {{ form.variants_count }}
                     <div id="vote_variants">
                         <div class="list-elem">
@@ -82,7 +97,12 @@
                         {{ form.comment }}
                     </div>
                 {% endif %}
-                <input type="submit" value="Сохранить" class="big-btn green">
+                <div class="horizontal-centering">
+                    <input type="submit" value="Сохранить" class="big-btn green" name="_save">
+                    {% if voting_id != -1 %}
+                        <input type="submit" value="Сохранить и Обнулить" class="big-btn red" name="_clear">
+                    {% endif %}
+                </div>
             </form>
         </div>
         <script src="{% static 'vote_app/js/variants_script.js' %}"></script>
@@ -91,6 +111,10 @@
                 document.querySelector('#author').value = {{ user.id }}
             </script>
         {% else %}
+            <script>
+                let date_value = "{{ object.end_date|date:"Y-m-d" }}T{{ object.end_date|date:"H:i" }}"
+                id_end_date.value = date_value
+            </script>
             <script>
                 let current_count = Number({{ vote_variants|length }})
                 while (variant_blocks.length < current_count) {

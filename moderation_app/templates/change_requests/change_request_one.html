@@ -28,33 +28,17 @@
         </div>
         <div class="medium-block horizontal-centering grey-2">
             <h2>Список изменений</h2>
-            <div class="list-elem grey-3">
-                <div>
-                    <h4>Название изменённого элемента</h4>
-                    <ul>
-                        <li>Было: А вот раньше было лучше! Не то что сейчас в этих ваших интернетах!</li>
-                        <li>Стало: Хотя... И сейчас куча классных вещей. Вот этот сайт например</li>
-                    </ul>
+            {% for change in changes %}
+                <div class="list-elem wide grey-3">
+                    <div>
+                        <h4>{{ change.name }}</h4>
+                        <ul>
+                            <li>Было: {{ change.old }}</li>
+                            <li>Стало: {{ change.new }}</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="list-elem grey-3">
-                <div>
-                    <h4>Название изменённого элемента</h4>
-                    <ul>
-                        <li>Было: А вот раньше было лучше! Не то что сейчас в этих ваших интернетах!</li>
-                        <li>Стало: Хотя... И сейчас куча классных вещей. Вот этот сайт например</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="list-elem grey-3">
-                <div>
-                    <h4>Название изменённого элемента</h4>
-                    <ul>
-                        <li>Было: А вот раньше было лучше! Не то что сейчас в этих ваших интернетах!</li>
-                        <li>Стало: Хотя... И сейчас куча классных вещей. Вот этот сайт например</li>
-                    </ul>
-                </div>
-            </div>
+            {% endfor %}
         </div>
         <div class="medium-block horizontal-centering grey-2">
             <h2 class="wide">Действия</h2>

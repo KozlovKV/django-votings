@@ -24,14 +24,20 @@ class ModeledVoteCreateForm(forms.ModelForm):
             'end_date': 'Дата окончания (пусто - бессрочно)',
         }
         widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'input',
+            }),
+            'image': forms.FileInput(attrs={
+                'class': 'input',
+            }),
             'description': forms.Textarea(attrs={
-                'class': 'input wide',
+                'class': 'input ultra-wide',
             }),
             'type': forms.RadioSelect,
             'result_see_who': forms.RadioSelect,
             'result_see_when': forms.RadioSelect,
             'end_date': forms.DateTimeInput(attrs={
-                'type': 'datetime',
+                'type': 'datetime-local',
             }),
             'variants_count': forms.NumberInput(attrs={
                 'type': 'hidden',
@@ -62,22 +68,27 @@ class ModeledVoteEditForm(forms.ModelForm):
             'title': 'Заголовок',
             'image': 'Картинка',
             'description': 'Описание',
-            'type': 'Тип голосования',
-            'anons_can_vote': 'Разрешить голосовать анонимам',
-            'result_see_who': 'Кому видны результаты*',
-            'result_see_when': 'Когда видные результаты*',
-            'end_date': 'Дата окончания (пусто - бессрочно)*',
+            'type': 'Тип голосования **',
+            'anons_can_vote': 'Разрешить голосовать анонимам **',
+            'result_see_who': 'Кому видны результаты *',
+            'result_see_when': 'Когда видные результаты *',
+            'end_date': 'Дата окончания (пусто - бессрочно) *',
         }
         widgets = {
-            'description': forms.Textarea(attrs={
-                'class': 'input wide',
+            'title': forms.TextInput(attrs={
+                'class': 'input',
             }),
-            'type': forms.RadioSelect(attrs={'disabled': True}),
-            'anons_can_vote': forms.CheckboxInput(attrs={'disabled': True}),
+            'image': forms.FileInput(attrs={
+                'class': 'input',
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'input ultra-wide',
+            }),
+            'type': forms.RadioSelect(),
             'result_see_who': forms.RadioSelect,
             'result_see_when': forms.RadioSelect,
             'end_date': forms.DateTimeInput(attrs={
-                'type': 'datetime',
+                'type': 'datetime-local',
             }),
             'variants_count': forms.NumberInput(attrs={
                 'type': 'hidden',

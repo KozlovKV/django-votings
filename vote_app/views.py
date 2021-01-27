@@ -1,3 +1,6 @@
+import copy
+from datetime import datetime
+
 from django import forms
 from django.utils import timezone
 from django.shortcuts import render
@@ -7,7 +10,7 @@ import django.views.generic.detail as generic_detail
 
 from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
-from moderation_app.models import VoteChangeRequest, Reports
+from moderation_app.models import VoteChangeRequest, Reports, VoteVariantsChangeRequest
 from profile_app.models import AdditionUserInfo
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
 
@@ -22,6 +25,13 @@ def test_page(request):
 
 class VoteListPageView(TemplateViewWithMenu):
     template_name = 'vote_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(VoteListPageView, self).get_context_data(**kwargs)
+        context.update({
+            'votings': list(Votings.objects.all()),
+        })
+        return context
 
 
 class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
@@ -52,29 +62,31 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
             record = VoteVariants(voting=self.object,
                                   serial_number=serial_number,
                                   description=variants_list[serial_number],
-                                  votes_count=0,)
+                                  votes_count=0, )
             record.save()
 
 
 class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
     template_name = 'vote_config.html'
-    model = Votings  # and VoteChangeRequest
-    object = None
-    old_object = None
+    model = Votings  # and VoteChangeRequest and VoteVariantsChangeRequest
+    object = None  # Обрабатываемый объект типа Votings, если не должен изменяеться -> old_object
+    old_object = None  # Объект типа Votings, содержит в себе неизменную версию object
+    new_request = None  # Объект типа VoteChangeRequest, запрос
     form_class = ModeledVoteEditForm
     pk_url_kwarg = 'voting_id'
-    need_moderator = False
-    variants = []
+    old_variants = []  # Список объектов типа VoteVariants со старыми вариантами
+    new_variants = []  # Список строк с новыми вариантами
+    new_variants_count = 0
+    need_clear_votes = False
 
     def get_object(self, queryset=None):
         object = super(EditVotingView, self).get_object(queryset)
-        self.variants = list(VoteVariants.objects.filter(voting=object))
-        self.variants.sort(key=lambda x: x.serial_number)
+        self.old_variants = list(VoteVariants.objects.filter(voting=object))
+        self.old_variants.sort(key=lambda x: x.serial_number)
         return object
 
     def get_context_data(self, **kwargs):
         self.object = self.get_object()
-        self.old_object = self.object
         context = super(EditVotingView, self).get_context_data(**kwargs)
         context.update({
             'voting_id': self.object.pk,
@@ -85,32 +97,87 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
         return context
 
     def post(self, request, *args, **kwargs):
+        self.old_object = Votings.objects.get(pk=kwargs["voting_id"])
         post_response = super(EditVotingView, self).post(self, request, *args, **kwargs)
-        self.save_change_request()
-        if self.need_moderator:
-            self.object = self.old_object
+        self.new_variants = get_variants_description_list(self.request)
+        self.new_variants_count = len(self.new_variants)
+        if '_clear' in request.POST:
+            self.clear_all_votes()
+            if self.is_variants_changed() or self.is_number_of_variants_changed():
+                self.save_new_vote_variants()
+        if '_save' in request.POST:
+            if self.is_title_img_or_desc_changed() or self.is_variants_changed():
+                self.save_request()
+                self.save_vote_variants()
+                self.object = copy.copy(self.old_object)
+                self.object.save()
+            elif self.is_number_of_variants_changed() or self.is_type_or_anons_changed():
+                self.clear_all_votes()
+                if self.is_number_of_variants_changed():
+                    self.save_new_vote_variants()
         return post_response
 
-    def save_change_request(self):
-        if self.request.POST.get('title') != self.object.title or \
-                self.request.POST.get('image') != self.object.image or \
-                self.request.POST.get('description') != self.object.description:
-            self.need_moderator = True
+    def is_type_or_anons_changed(self):
+        return self.request.POST.get('type') != str(self.old_object.type) or \
+            (self.request.POST.get('anons_can_vote') == 'on') != self.old_object.anons_can_vote
 
-        # Здесь должно быть сравнение старых вариантов голосования и новых
-        # если изменения есть - self.need_moderator = True
+    def is_title_img_or_desc_changed(self):
+        return self.request.POST.get('title') != self.old_object.title or \
+               (self.object.image
+                if self.request.POST.get('image') == ''
+                else self.request.POST.get('image')) != self.old_object.image or \
+               self.request.POST.get('description') != self.old_object.description
 
-        if self.need_moderator:
-            record = VoteChangeRequest(voting=self.object,
-                                       title=self.request.POST.get('title'),
-                                       image=self.request.POST.get('image'),
-                                       description=self.request.POST.get('description'),
-                                       end_date=self.request.POST.get('end_date'),
-                                       result_see_who=self.request.POST.get('result_see_who'),
-                                       result_see_when=self.request.POST.get('result_see_when'),
-                                       variants_count=self.request.POST.get('variants_count'),
-                                       comment=self.request.POST.get('comment'))
+    def is_variants_changed(self):  # False когда изменилось количество
+        need_moderator = False
+        if not self.is_number_of_variants_changed():
+            for serial_number in range(self.new_variants_count):
+                if not need_moderator:
+                    need_moderator = self.new_variants[serial_number] != self.old_variants[serial_number].description
+        return need_moderator
+
+    def is_number_of_variants_changed(self):
+        return self.new_variants_count != len(self.old_variants)
+
+    def save_vote_variants(self):
+        for serial_number in range(self.new_variants_count):
+            record = VoteVariantsChangeRequest(voting_request=self.new_request,
+                                               serial_number=serial_number,
+                                               description=self.new_variants[serial_number], )
             record.save()
+
+    def save_new_vote_variants(self):
+        VoteVariants.objects.filter(voting=self.object).delete()
+        self.object.variants_count = self.new_variants_count
+        self.object.save()
+        for serial_number in range(self.new_variants_count):
+            record = VoteVariants(voting=self.object,
+                                  serial_number=serial_number,
+                                  description=self.new_variants[serial_number],
+                                  votes_count=0, )
+            record.save()
+
+    def save_request(self):
+        self.new_request = VoteChangeRequest(voting=self.object,
+                                             title=self.request.POST.get('title'),
+                                             image=self.object.image
+                                             if self.request.POST.get('image') == ''
+                                             else self.request.FILES.get('image'),
+                                             description=self.request.POST.get('description'),
+                                             end_date=self.request.POST.get('end_date') if
+                                             self.request.POST.get('end_date') != '' else None,
+                                             result_see_who=self.request.POST.get('result_see_who'),
+                                             result_see_when=self.request.POST.get('result_see_when'),
+                                             variants_count=self.request.POST.get('variants_count'),
+                                             comment=self.request.POST.get('comment'))
+        self.new_request.save()
+
+    def clear_all_votes(self):
+        for variant in self.old_variants:
+            variant.votes_count = 0
+        Votes.objects.filter(voting=self.get_object()).delete()
+        self.object.voters_count = 0
+        self.object.save()
 
 
 def get_variants_description_list(request):
@@ -128,7 +195,7 @@ def get_variants_context(voting):
             'serial_number': variant.serial_number,
             'description': variant.description,
             'votes_count': variant.votes_count,
-            'percent': (variant.votes_count * 100) / (voting.votes_count if voting.votes_count != 0 else 1),
+            'percent': (variant.votes_count * 100) / (voting.voters_count if voting.voters_count != 0 else 1),
         }
         res.append(variant_dict)
     res.sort(key=lambda x: x['serial_number'])
@@ -154,7 +221,8 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         object = super(VotingView, self).get_object(queryset)
         self.variants = list(VoteVariants.objects.filter(voting=object))
         self.variants.sort(key=lambda x: x.serial_number)
-        self.update_votes_count(object)
+        object.update_votes_count()
+        object.update_voters_count()
         return object
 
     def get_context_data(self, **kwargs):
@@ -169,10 +237,6 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
             'is_ended': self.object.is_ended(),
             'vote_variants': get_variants_context(self.object),
         })
-        try:
-            context['img_url'] = self.object.image.url
-        except ValueError:
-            context['img_url'] = ''
         context.update(self.extra_context)
         return context
 
@@ -214,13 +278,6 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         self.object.votes_count = len(Votes.objects.filter(voting=self.object))
         self.object.voters_count += 1
         self.object.save()
-
-    def update_votes_count(self, object):
-        for variant in self.variants:
-            variant.votes_count = len(Votes.objects.filter(variant=variant))
-            variant.save()
-        object.votes_count = len(Votes.objects.filter(voting=object))
-        object.save()
 
 
 class DeleteVotingView(generic_edit.DeleteView, TemplateViewWithMenu):

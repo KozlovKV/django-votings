@@ -23,7 +23,7 @@
                     {% endif %}
                 </p>
                 {% if is_ended %}
-                    <p>Окончено</p>
+                    <p class="meta-data">Окончено</p>
                 {% endif %}
                 <p class="meta-data">
                     {{ object.status }}
@@ -48,75 +48,22 @@
                 {% endif %}
             </div>
         {% endif %}
-        <div class="list-elem">
-            <div class="main__medium">
+        <div class="horizontal-centering medium-block grey-2">
+            {% if object.get_img_url != '' %}
+            <div class="medium">
+            {% else %}
+            <div class="wide">
+            {% endif %}
                 <p>{{ object.description }}</p>
             </div>
-            <img src="{{ img_url }}" class="main__medium">
-        </div>
-        <div class="medium-block grey-2">
-            {% if can_vote %}
-            <form method="post" action="{% url 'vote_view' object.pk %}">
-                {% csrf_token %}
-                {% if not user.is_authenticated %}
-                    {% include 'fingerprint.html' %}
-                {% endif %}
-                {% for vote_variant in vote_variants %}
-                    <div class="list-elem grey-3">
-                        {% if type_ref == 'radio' %}
-
-                            <label class="btn-radio">
-                                <input type="{{ type_ref }}"
-                                   name="variants"
-                                   value="{{ vote_variant.serial_number }}"
-                                   id="variant_{{ vote_variant.serial_number }}"
-                                   required>
-
-                                <svg width="20px" height="20px" viewBox="0 0 20 20">
-                                    <circle cx="10" cy="10" r="9"></circle>
-                                    <path d="M10,7 C8.34314575,7 7,8.34314575 7,10 C7,11.6568542 8.34314575,13 10,13 C11.6568542,13 13,11.6568542 13,10 C13,8.34314575 11.6568542,7 10,7 Z" class="inner"></path>
-                                    <path d="M10,1 L10,1 L10,1 C14.9705627,1 19,5.02943725 19,10 L19,10 L19,10 C19,14.9705627 14.9705627,19 10,19 L10,19 L10,19 C5.02943725,19 1,14.9705627 1,10 L1,10 L1,10 C1,5.02943725 5.02943725,1 10,1 L10,1 Z" class="outer"></path>
-                                </svg>
-                            </label>
-                        {% endif %}
-                        {% if type_ref == 'checkbox' %}
-                            <div class="checkbox path">
-                                <input type="{{ type_ref }}"
-                                       name="{{ vote_variant.serial_number }}"
-                                       value="{{ vote_variant.serial_number }}"
-                                       id="variant_{{ vote_variant.serial_number }}"
-                                       class="required-checkbox"
-                                       required
-                                       onclick="deRequireCb('required-checkbox')">
-
-                                <svg viewBox="0 0 21 21">
-                                    <path d="M5,10.75 L8.5,14.25 L19.4,2.3 C18.8333333,1.43333333 18.0333333,1 17,1 L4,1 C2.35,1 1,2.35 1,4 L1,17 C1,18.65 2.35,20 4,20 L17,20 C18.65,20 20,18.65 20,17 L20,7.99769186"></path>
-                                </svg>
-                            </div>
-                        {% endif %}
-                        <label for="variant_{{ vote_variant.serial_number }}" class="wide">{{ vote_variant.description }}</label>
-                        <span class="small-vote">{{ vote_variant.votes_count }} - {{ vote_variant.percent | floatformat }}%</span>
-                    </div>
-                {% endfor %}
-                {% if not user.is_authenticated %}
-                    <h4>Если вы аноним и уже голосовали, не пытайтесь снова - не получится</h4>
-                {% endif %}
-                <div class="horizontal-centering">
-                    <button type="submit" class="big-btn green">Голосовать</button>
-                </div>
-            </form>
-            {% else %}
-                {% for vote_variant in vote_variants %}
-                    <div class="list-elem grey-3">
-                        <label class="wide">{{ vote_variant.description }}</label>
-                        <span class="small-vote">{{ vote_variant.votes_count }} - {{ vote_variant.percent | floatformat }}%</span>
-                    </div>
-                {% endfor %}
-                <div class="horizontal-centering">
-                    <h4 class="wide center">Вы не можете голосовать</h4>
-                    <h4 class="wide center">{{ reason_cant_vote }}</h4>
+            {% if object.get_img_url != '' %}
+                <div class="medium">
+                    <img src="{{ object.get_img_url }}" class="card-img">
                 </div>
             {% endif %}
+        </div>
+        <div class="medium-block grey-2">
+            {% include 'vote_variants.html' %}
         </div>
         <div class="medium-block grey-2">
             <h3>Результаты</h3>

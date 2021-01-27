@@ -97,3 +97,12 @@ class VoteChangeRequest(models.Model):
         for note in self.SEE_WHEN_CHOICES:
             if note[0] == self.result_see_when:
                 return note[1]
+
+
+class VoteVariantsChangeRequest(models.Model):
+    voting_request = models.ForeignKey(to=VoteChangeRequest, on_delete=models.CASCADE)
+    serial_number = models.IntegerField()
+    description = models.TextField()
+
+    def get_absolute_url(self):
+        return reverse_lazy('vote_view', args=(self.voting_request.pk,))
