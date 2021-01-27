@@ -27,7 +27,7 @@
             <form method="POST" action="{{ context_url }}" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.author }}
-                <div class="horizontal-centering">
+                <div class="horizontal-centering between">
                     <div class="input">
                         <label>{{ form.title.label }}</label>
                         {{ form.title }}
@@ -37,13 +37,13 @@
                         {{ form.image }}
                     </div>
                 </div>
-                <div class="horizontal-centering">
-                    <div class="input wide">
-                        <label>{{ form.description.label }}</label><br>
+                <div class="horizontal-centering between">
+                    <div class="input ultra-wide">
+                        <label>{{ form.description.label }}</label>
                         {{ form.description }}
                     </div>
                 </div>
-                <div class="horizontal-centering">
+                <div class="horizontal-centering between">
                     <div class="input">
                         <label>{{ form.type.label }}</label>
                         {{ form.type }}
@@ -57,7 +57,7 @@
                         {{ form.result_see_when }}
                     </div>
                 </div>
-                <div class="horizontal-centering">
+                <div class="horizontal-centering between">
                     <div class="input">
                         <label>{{ form.anons_can_vote.label }}</label>
                         {{ form.anons_can_vote }}
@@ -94,10 +94,12 @@
                         {{ form.comment }}
                     </div>
                 {% endif %}
-                <input type="submit" value="Сохранить" class="big-btn green" name="_save">
-                {% if voting_id != -1 %}
-                    <input type="submit" value="Сохранить и Обнулить" class="big-btn red" name="_clear">
-                {% endif %}
+                <div class="horizontal-centering">
+                    <input type="submit" value="Сохранить" class="big-btn green" name="_save">
+                    {% if voting_id != -1 %}
+                        <input type="submit" value="Сохранить и Обнулить" class="big-btn red" name="_clear">
+                    {% endif %}
+                </div>
             </form>
         </div>
         <script src="{% static 'vote_app/js/variants_script.js' %}"></script>
