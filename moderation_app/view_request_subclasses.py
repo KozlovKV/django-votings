@@ -1,3 +1,5 @@
+import copy
+
 from django.urls import reverse, reverse_lazy
 import django.views.generic.edit as generic_edit
 import django.views.generic.detail as generic_detail
@@ -6,8 +8,9 @@ from django.utils import timezone
 from menu_app.view_menu_context import get_full_site_url
 from menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
 from moderation_app.forms import EditRequestForm
-from moderation_app.models import VoteChangeRequest
+from moderation_app.models import VoteChangeRequest, VoteVariantsChangeRequest
 from profile_app.models import AdditionUserInfo
+from vote_app.models import Votes, VoteVariants
 
 
 def get_change_requests_list_context():
@@ -40,6 +43,23 @@ def add_change_note(list_, name, old, new):
         'old': old,
         'new': new,
     })
+
+
+def get_variants_change_list(old, new_):
+    res = []
+    old_variants = VoteVariants.objects.filter(voting=old)
+    new_variants = VoteVariantsChangeRequest.objects.filter(voting_request=new_)
+    empty_variant = VoteVariantsChangeRequest(
+        voting_request=new_,
+        description='Пусто',
+        serial_number=0,
+    )
+    for i in range(max(len(old_variants), len(new_variants))):
+        old_variant = old_variants[i] if i < len(old_variants) else empty_variant
+        new_variant = new_variants[i] if i < len(new_variants) else empty_variant
+        if old_variant.description != new_variant.description:
+            add_change_note(res, f'Вариант {i + 1}', old_variant.description, new_variant.description)
+    return res
 
 
 class ChangeRequestView(generic_detail.DetailView, TemplateViewWithMenu):
@@ -81,6 +101,7 @@ class ChangeRequestView(generic_detail.DetailView, TemplateViewWithMenu):
                                  new_.get_result_see_when_name())
         if old.variants_count != new_.variants_count:
             add_change_note(res, 'Количество вариантов', old.variants_count, new_.variants_count)
+        res += get_variants_change_list(old, new_)
         return res
 
 
@@ -113,6 +134,53 @@ class ChangeRequestCloseTemplateView(TemplateViewWithMenu, generic_edit.FormView
         email.request = self.request
         email.send()
 
+
+def save_new_voting(request_object, reset=False):
+    voting = request_object.voting
+    new_ = request_object
+    voting.title = new_.title
+    voting.image = new_.image
+    voting.description = new_.description
+    voting.end_date = new_.end_date
+    voting.result_see_who = new_.result_see_who
+    voting.result_see_when = new_.result_see_when
+    voting.variants_count = new_.variants_count
+    old_variants = VoteVariants.objects.filter(voting=voting)
+    new_variants = VoteVariantsChangeRequest.objects.filter(voting_request=new_)
+    empty_variant = VoteVariantsChangeRequest(
+        voting_request=new_,
+        description='Пусто',
+        serial_number=0,
+    )
+    for i in range(new_.variants_count):
+        variant = old_variants[i] if i < len(old_variants) else empty_variant
+        variant.description = new_variants[i].description
+        variant.save()
+    if reset:
+        Votes.objects.filter(voting=voting).delete()
+        voting.voters_count = 0
+        voting.save()
+    voting.save()
+
+
+class ChangeRequestSubmitView(ChangeRequestCloseTemplateView):
+    template_name = 'change_requests/change_request_submit.html'
+    new_status_name = 'принят'
+
+    def post(self, request, *args, **kwargs):
+        request_id = self.kwargs['request_id']
+        self.change_request_object = VoteChangeRequest.objects.get(pk=request_id)
+        post_resp = super(ChangeRequestSubmitView, self).post(self, request, *args, **kwargs)
+        save_new_voting(self.change_request_object, self.request.POST.get('reset_votes', False))
+        self.send_close_email()
+        self.change_request_object.delete()
+        return post_resp
+
+
+class ChangeRequestRejectView(ChangeRequestCloseTemplateView):
+    template_name = 'change_requests/change_request_reject.html'
+    new_status_name = 'отклонён'
+
     def post(self, request, *args, **kwargs):
         request_id = self.kwargs['request_id']
         self.change_request_object = VoteChangeRequest.objects.get(pk=request_id)
@@ -120,13 +188,3 @@ class ChangeRequestCloseTemplateView(TemplateViewWithMenu, generic_edit.FormView
         self.send_close_email()
         self.change_request_object.delete()
         return post_resp
-
-
-class ChangeRequestSubmitView(ChangeRequestCloseTemplateView):
-    template_name = 'change_requests/change_request_submit.html'
-    new_status_name = 'принят'
-
-
-class ChangeRequestRejectView(ChangeRequestCloseTemplateView):
-    template_name = 'change_requests/change_request_reject.html'
-    new_status_name = 'отклонён'
