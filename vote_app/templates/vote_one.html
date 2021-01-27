@@ -13,6 +13,7 @@
                 <h2>Статус жалобы на голосование:</h2>
                 {% if object.complaint_state == object.IN_PROGRESS %}
                     <h2 class="yellow-text">На рассмотрении</h2>
+                {% endif %}
                 {% if object.complaint_state == object.BANNED %}
                     <h2 class="red-text">Забанено</h2>
                 {% endif %}
