@@ -49,12 +49,18 @@
             </div>
         {% endif %}
         <div class="horizontal-centering medium-block grey-2">
+            {% if object.get_img_url != '' %}
             <div class="medium">
+            {% else %}
+            <div class="wide">
+            {% endif %}
                 <p>{{ object.description }}</p>
             </div>
-            <div class="medium">
-                <img src="{{ object.get_img_url }}" class="card-img">
-            </div>
+            {% if object.get_img_url != '' %}
+                <div class="medium">
+                    <img src="{{ object.get_img_url }}" class="card-img">
+                </div>
+            {% endif %}
         </div>
         <div class="medium-block grey-2">
             {% include 'vote_variants.html' %}
