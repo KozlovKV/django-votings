@@ -223,7 +223,6 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
         self.variants.sort(key=lambda x: x.serial_number)
         object.update_votes_count()
         object.update_voters_count()
-        object.update_complaint_state()
         return object
 
     def get_context_data(self, **kwargs):
