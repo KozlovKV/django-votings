@@ -62,7 +62,7 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
             record = VoteVariants(voting=self.object,
                                   serial_number=serial_number,
                                   description=variants_list[serial_number],
-                                  votes_count=0,)
+                                  votes_count=0, )
             record.save()
 
 
@@ -107,7 +107,6 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
                 self.save_new_vote_variants()
         if '_save' in request.POST:
             if self.is_title_img_or_desc_changed() or self.is_variants_changed():
-                print(self.is_title_img_or_desc_changed(), self.is_variants_changed())
                 self.save_request()
                 self.save_vote_variants()
                 self.object = copy.copy(self.old_object)
@@ -119,15 +118,15 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
         return post_response
 
     def is_type_or_anons_changed(self):
-        return self.request.POST.get('type') != self.old_object.type or \
-            self.request.POST.get('anons_can_vote') != self.old_object.anons_can_vote
+        return self.request.POST.get('type') != str(self.old_object.type) or \
+            (self.request.POST.get('anons_can_vote') == 'on') != self.old_object.anons_can_vote
 
     def is_title_img_or_desc_changed(self):
         return self.request.POST.get('title') != self.old_object.title or \
-            (self.object.image
-             if self.request.POST.get('image') == ''
-             else self.request.POST.get('image')) != self.old_object.image or \
-            self.request.POST.get('description') != self.old_object.description
+               (self.object.image
+                if self.request.POST.get('image') == ''
+                else self.request.POST.get('image')) != self.old_object.image or \
+               self.request.POST.get('description') != self.old_object.description
 
     def is_variants_changed(self):  # False когда изменилось количество
         need_moderator = False
@@ -144,7 +143,7 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
         for serial_number in range(self.new_variants_count):
             record = VoteVariantsChangeRequest(voting_request=self.new_request,
                                                serial_number=serial_number,
-                                               description=self.new_variants[serial_number],)
+                                               description=self.new_variants[serial_number], )
             record.save()
 
     def save_new_vote_variants(self):
@@ -155,7 +154,7 @@ class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
             record = VoteVariants(voting=self.object,
                                   serial_number=serial_number,
                                   description=self.new_variants[serial_number],
-                                  votes_count=0,)
+                                  votes_count=0, )
             record.save()
 
     def save_request(self):
