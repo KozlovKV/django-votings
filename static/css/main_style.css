@@ -48,6 +48,10 @@ textarea {
     flex-wrap: wrap;
 }
 
+.between {
+    justify-content: space-between;
+}
+
 .vertical-centering {
     position: relative;
     display: flex;
