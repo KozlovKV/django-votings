@@ -76,12 +76,12 @@ class Votings(models.Model):
     def can_see_result(self, request):
         if self.result_see_when == Votings.BY_TIMER:
             if self.result_see_who == Votings.VOTED:
-                return self.is_voted(request.user) and self.is_ended()
+                return self.is_voted(request) and self.is_ended()
             else:
                 return self.is_ended()
         else:
             if self.result_see_who == Votings.VOTED:
-                return self.is_voted(request.user)
+                return self.is_voted(request)
             else:
                 return True
 
