@@ -113,6 +113,7 @@
         {% else %}
             <script>
                 let date_value = "{{ object.end_date|date:"Y-m-d" }}T{{ object.end_date|date:"H:i" }}"
+                if (date_value == "T") { date_value = "" }
                 id_end_date.value = date_value
             </script>
             <script>
