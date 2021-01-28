@@ -18,11 +18,6 @@ from vote_app.models import Votings, Votes
 from vote_app.models import VoteVariants
 
 
-def test_page(request):
-    context = get_full_menu_context(request)
-    return render(request, 'vote_test.html', context)
-
-
 class VoteListPageView(TemplateViewWithMenu):
     template_name = 'vote_list.html'
 

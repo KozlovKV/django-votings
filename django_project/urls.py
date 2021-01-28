@@ -29,7 +29,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', menu.IndexView.as_view(), name='menu'),
 
-    path('vote/test/', vote.test_page),
     path('vote/list/', vote.VoteListPageView.as_view(), name='vote_list'),
     path('vote/create/', vote.CreateVotingView.as_view(), name='vote_create'),
     path('vote/edit/<int:voting_id>/', vote.EditVotingView.as_view(), name='vote_edit'),
