@@ -14,16 +14,6 @@ class Votings(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(blank=True, null=True)
 
-    ABSENT = 0
-    IN_PROGRESS = 1
-    BANNED = 2
-    COMPL_STATE_CHOICES = [
-        (ABSENT, 'Отсутствует'),
-        (IN_PROGRESS, 'На рассмотрении'),
-        (BANNED, 'Забанено'),
-    ]
-    complaint_state = models.IntegerField(default=0, choices=COMPL_STATE_CHOICES)
-
     ALL = 0
     VOTED = 1
     SEE_WHO_CHOICES = [
