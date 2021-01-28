@@ -13,7 +13,7 @@ from vote_app.models import VoteVariants
 
 
 class VoteListPageView(TemplateViewWithMenu):
-    template_name = 'vote_list.html'
+    template_name = 'votes/vote_list.html'
 
     def get_context_data(self, **kwargs):
         context = super(VoteListPageView, self).get_context_data(**kwargs)
@@ -24,7 +24,7 @@ class VoteListPageView(TemplateViewWithMenu):
 
 
 class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
-    template_name = 'vote_config.html'
+    template_name = 'votes/vote_config.html'
     object = None
     model = Votings
     form_class = ModeledVoteCreateForm
@@ -56,7 +56,7 @@ class CreateVotingView(generic_edit.CreateView, TemplateViewWithMenu):
 
 
 class EditVotingView(generic_edit.UpdateView, TemplateViewWithMenu):
-    template_name = 'vote_config.html'
+    template_name = 'votes/vote_config.html'
     model = Votings  # and VoteChangeRequest and VoteVariantsChangeRequest
     object = None  # Обрабатываемый объект типа Votings, если не должен изменяеться -> old_object
     old_object = None  # Объект типа Votings, содержит в себе неизменную версию object
@@ -192,7 +192,7 @@ def get_variants_context(voting):
 
 
 class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
-    template_name = 'vote_one.html'
+    template_name = 'votes/vote_one.html'
     model = Votings
     object = None
     extra_context = {}
@@ -270,7 +270,7 @@ class VotingView(generic_detail.BaseDetailView, TemplateViewWithMenu):
 
 
 class DeleteVotingView(generic_edit.DeleteView, TemplateViewWithMenu):
-    template_name = 'vote_delete.html'
+    template_name = 'votes/vote_delete.html'
     model = Votings
     object = None
     pk_url_kwarg = 'voting_id'

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'bases/base.html' %}
 
 {% block head %}
     <title>Редактирование голосований</title>
@@ -9,9 +9,9 @@
         <h1>Только авторизованные пользователи могут создавать и редактировать голосования</h1>
     {% else %}
         {% if voting_id == -1 %}
-            {% include 'vote_config_form.html' %}
+            {% include 'votes/vote_config_form.html' %}
         {% elif can_edit %}
-            {% include 'vote_config_form.html' %}
+            {% include 'votes/vote_config_form.html' %}
         {% else %}
             <h2>Вы не можете редактировать это голосование</h2>
             <div class="horizontal-centering">
