@@ -1,4 +1,4 @@
-import copy
+from enum import Enum
 
 from django.urls import reverse, reverse_lazy
 import django.views.generic.edit as generic_edit
@@ -37,12 +37,40 @@ class ChangeRequestsListView(TemplateViewWithMenu):
         return context
 
 
+class ChangePatterns(Enum):
+    TITLE = ('title', 'Заголовок')
+    IMAGE = ('image', 'Изображение')
+    DESCRIPTION = ('description', 'Описание')
+    END_DATE = ('end_date', 'Дата окончания')
+    VARIANTS_COUNT = ('variants_count', 'Количество вариантов')
+
+
 def add_change_note(list_, name, old, new):
     list_.append({
         'name': name,
         'old': old,
         'new': new,
     })
+
+
+def get_fields_change_list(old, new_):
+    res = []
+    old_dict = old.__dict__
+    new_dict = new_.__dict__
+    for field_pattern in ChangePatterns:
+        old_note = old_dict[field_pattern.value[0]]
+        new_note = new_dict[field_pattern.value[0]]
+        if old_note != new_note:
+            add_change_note(res, field_pattern.value[1], old_note, new_note)
+    if old.result_see_who != new_.result_see_who:
+        add_change_note(res, 'Кому видны результаты',
+                        old.get_result_see_who_name(),
+                        new_.get_result_see_who_name())
+    if old.result_see_when != new_.result_see_when:
+        add_change_note(res, 'Когда видны результаты',
+                        old.get_result_see_when_name(),
+                        new_.get_result_see_when_name())
+    return res
 
 
 def get_variants_change_list(old, new_):
@@ -76,31 +104,14 @@ class ChangeRequestView(generic_detail.DetailView, TemplateViewWithMenu):
         context.update({
             'form': EditRequestForm,
             'changes': self.changes_list,
+            'image_label': ChangePatterns.IMAGE.value[1],
         })
         return context
 
     def get_changes_list(self):
-        res = []
         old = self.object.voting
         new_ = self.object
-        if old.title != new_.title:
-            add_change_note(res, 'Заголовок', old.title, new_.title)
-        if old.image != new_.image:
-            add_change_note(res, 'Изображение', old.image, new_.image)
-        if old.description != new_.description:
-            add_change_note(res, 'Описание', old.description, new_.description)
-        if old.end_date != new_.end_date:
-            add_change_note(res, 'Дата окончания', old.end_date, new_.end_date)
-        if old.result_see_who != new_.result_see_who:
-            add_change_note(res, 'Кому видны результаты',
-                                 old.get_result_see_who_name(),
-                                 new_.get_result_see_who_name())
-        if old.result_see_when != new_.result_see_when:
-            add_change_note(res, 'Когда видны результаты',
-                                 old.get_result_see_when_name(),
-                                 new_.get_result_see_when_name())
-        if old.variants_count != new_.variants_count:
-            add_change_note(res, 'Количество вариантов', old.variants_count, new_.variants_count)
+        res = get_fields_change_list(old, new_)
         res += get_variants_change_list(old, new_)
         return res
 

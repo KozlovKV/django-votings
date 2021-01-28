@@ -1,5 +1,4 @@
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView
 
 from menu_app.view_subclasses import TemplateViewWithMenu
 from django.contrib.auth.models import User

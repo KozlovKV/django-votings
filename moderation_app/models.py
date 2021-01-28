@@ -98,6 +98,12 @@ class VoteChangeRequest(models.Model):
             if note[0] == self.result_see_when:
                 return note[1]
 
+    def get_img_url(self):
+        try:
+            return self.image.url
+        except ValueError:
+            return ''
+
 
 class VoteVariantsChangeRequest(models.Model):
     voting_request = models.ForeignKey(to=VoteChangeRequest, on_delete=models.CASCADE)

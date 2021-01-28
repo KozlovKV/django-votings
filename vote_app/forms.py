@@ -25,9 +25,6 @@ class VoteConfigMeta:
         'title': forms.TextInput(attrs={
             'class': 'input',
         }),
-        'image': forms.FileInput(attrs={
-            'class': 'input',
-        }),
         'description': forms.Textarea(attrs={
             'class': 'input ultra-wide',
         }),

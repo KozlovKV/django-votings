@@ -1,17 +1,11 @@
 import copy
-from datetime import datetime
-
-from django import forms
-from django.utils import timezone
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 import django.views.generic.edit as generic_edit
 import django.views.generic.detail as generic_detail
 
-from menu_app.view_menu_context import get_full_menu_context
 from menu_app.view_subclasses import TemplateViewWithMenu
 from moderation_app.models import VoteChangeRequest, Reports, VoteVariantsChangeRequest
-from profile_app.models import AdditionUserInfo
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
 
 from vote_app.models import Votings, Votes
