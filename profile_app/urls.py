@@ -18,7 +18,8 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', reg_subclasses.PasswordResetConfirmViewDetailed.as_view(),
          name='password_reset_confirm'),
     path('reset/done/', menu_subclasses.TemplateViewWithMenu.as_view(
-        template_name='registration/password_reset_complete.html'), name='password_reset_complete'),]
+        template_name='registration/password_reset_complete.html'), name='password_reset_complete'),
+]
 
 reg_patterns = [
     path(
