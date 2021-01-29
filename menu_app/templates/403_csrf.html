@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Страница не найдена</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comfortaa&family=Jura:wght@700&family=Roboto:wght@500&display=swap');
+
+        /*
+            Импортируемые шрифты:
+            font-family: 'Comfortaa', cursive;
+            font-family: 'Jura', sans-serif;
+            font-family: 'Roboto', sans-serif;
+        */
+
+        body {
+            margin: 0;
+            padding: 0;
+            padding-top: 5%;
+            height: 100%;
+            font-family: Roboto;
+        }
+
+        h1, h2, h3 {
+            margin: 15px;
+            font-family: Comfortaa, cursive;
+            text-align: center;
+        }
+
+        .horizontal-centering {
+            position: relative;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .block {
+            position: relative;
+            width: 30%;
+            border: 3px solid black;
+            background-color: #DDD;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 10px;
+            transition: 1s ease-in-out;
+        }
+
+        .red-text {
+            color: #e32636;
+            text-shadow: 0 0 3px black;
+        }
+
+        .small-btn, .medium-btn, .big-btn {
+            display: inline-block;
+            text-decoration: none;
+            cursor: pointer;
+            padding: 5px;
+            margin: 10px;
+            border: 2px solid black;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            color: black;
+            font-family: Jura;
+            background-color: #eee;
+        }
+
+        .yellow {
+            background-color: #DD5;
+        }
+
+        .yellow:hover {
+            background-color: #BB4;
+        }
+
+        .yellow:active {
+            background-color: #993;
+        }
+    </style>
+</head>
+<body class="horizontal-centering">
+    <div class="block">
+        <h1 class="red-text">Отказано в доступе</h1>
+        <div class="horizontal-centering">
+            <a href="/" class="big-btn yellow">На главную</a>
+        </div>
+    </div>
+</body>
+</html>
