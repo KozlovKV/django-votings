@@ -4,7 +4,7 @@
             {% if form.errors %}
                 <div class="block">
                     <h2>Ошибки</h2>
-                    {{ form.errors }}
+                    {% include 'bases/form_errors.html' %}
                 </div>
             {% endif %}
             {% if voting_id != -1 %}

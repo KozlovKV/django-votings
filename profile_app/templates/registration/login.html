@@ -6,7 +6,7 @@
 
 {% block main %}
     <h1>Произошла ошибка!</h1>
-        {{ form.errors }}
+        {% include 'bases/form_errors.html' %}
     <h2>Повторите попытку или сбросьте пароль</h2>
     {% include 'registration/pswd_reset_form_integratable.html' %}
 {% endblock %}
