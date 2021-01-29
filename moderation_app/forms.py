@@ -49,6 +49,7 @@ class ModeledReportCreateForm(forms.ModelForm):
             'element': forms.NumberInput(attrs={
                 'placeholder': 'Пусто',
                 'readonly': True,
+                'disabled': True,
                 'class': 'input wide',
                 'id': 'element',
             }),

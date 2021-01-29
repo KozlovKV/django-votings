@@ -1,5 +1,4 @@
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView
 
 from menu_app.view_subclasses import TemplateViewWithMenu
 from django.contrib.auth.models import User
@@ -8,10 +7,6 @@ import django.views.generic.edit as generic_edit
 from profile_app.forms import ProfilePageForm
 from profile_app.models import AdditionUserInfo
 from vote_app.models import Votes, Votings
-
-
-class TestProfileView(TemplateViewWithMenu):
-    template_name = 'profile_test.html'
 
 
 class ProfilePageView(TemplateViewWithMenu, generic_edit.UpdateView):  # TODO: унаследовать UpdateView - https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/#django.views.generic.edit.UpdateView

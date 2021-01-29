@@ -2,10 +2,6 @@ from menu_app.view_subclasses import TemplateViewWithMenu
 from moderation_app.models import Reports, VoteChangeRequest
 
 
-class TestModerView(TemplateViewWithMenu):
-    template_name = 'report_test.html'
-
-
 class ModerationPanelView(TemplateViewWithMenu):
     template_name = 'moderation_main.html'
 

@@ -6,7 +6,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="shortcut icon" type="image/x-icon" href="{% get_media_prefix %}/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="{% get_media_prefix %}favicon.ico">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/btn_style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/checkbox_style.css' %}">
@@ -16,7 +16,7 @@
 </head>
 <body>
     <header>
-        {% include 'menu.html' %}
+        {% include 'bases/menu.html' %}
         {% block header %}
         {% endblock %}
     </header>
@@ -27,7 +27,7 @@
     <footer>
         {% block footer %}
         {% endblock %}
-        {% include 'footer.html' %}
+        {% include 'bases/footer.html' %}
     </footer>
     <script src="https://kit.fontawesome.com/7028e958f2.js" crossorigin="anonymous"></script>
 </body>

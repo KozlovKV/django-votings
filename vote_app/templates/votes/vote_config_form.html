@@ -4,7 +4,7 @@
             {% if form.errors %}
                 <div class="block">
                     <h2>Ошибки</h2>
-                    {{ form.errors }}
+                    {% include 'bases/form_errors.html' %}
                 </div>
             {% endif %}
             {% if voting_id != -1 %}
@@ -113,6 +113,7 @@
         {% else %}
             <script>
                 let date_value = "{{ object.end_date|date:"Y-m-d" }}T{{ object.end_date|date:"H:i" }}"
+                if (date_value == "T") { date_value = "" }
                 id_end_date.value = date_value
             </script>
             <script>

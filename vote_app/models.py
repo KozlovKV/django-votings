@@ -14,16 +14,6 @@ class Votings(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(blank=True, null=True)
 
-    ABSENT = 0
-    IN_PROGRESS = 1
-    BANNED = 2
-    COMPL_STATE_CHOICES = [
-        (ABSENT, 'Отсутствует'),
-        (IN_PROGRESS, 'На рассмотрении'),
-        (BANNED, 'Забанено'),
-    ]
-    complaint_state = models.IntegerField(default=0, choices=COMPL_STATE_CHOICES)
-
     ALL = 0
     VOTED = 1
     SEE_WHO_CHOICES = [
@@ -86,12 +76,12 @@ class Votings(models.Model):
     def can_see_result(self, request):
         if self.result_see_when == Votings.BY_TIMER:
             if self.result_see_who == Votings.VOTED:
-                return self.is_voted(request.user) and self.is_ended()
+                return self.is_voted(request) and self.is_ended()
             else:
                 return self.is_ended()
         else:
             if self.result_see_who == Votings.VOTED:
-                return self.is_voted(request.user)
+                return self.is_voted(request)
             else:
                 return True
 

@@ -1,0 +1,28 @@
+{% if form.errors %}
+    {% for field in form %}
+        {% if field.errors %}
+            <div class="small-block">
+                <h3>{{ field.label }}</h3>
+                <div class="list-elem">
+                    <ul>
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+    {% if form.non_field_errors %}
+        <div class="small-block">
+            <h3>Другое</h3>
+            <div class="list-elem">
+                <ul>
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
