@@ -57,6 +57,9 @@ class Reports(models.Model):
     def get_absolute_url():
         return reverse_lazy('moder_report_send')
 
+    def __str__(self):
+        return f'{self.author.username} - {self.get_humanity_theme_name()}'
+
 
 class VoteChangeRequest(models.Model):
     voting = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
@@ -104,6 +107,9 @@ class VoteChangeRequest(models.Model):
         except ValueError:
             return ''
 
+    def __str__(self):
+        return self.voting
+
 
 class VoteVariantsChangeRequest(models.Model):
     voting_request = models.ForeignKey(to=VoteChangeRequest, on_delete=models.CASCADE)
@@ -112,3 +118,6 @@ class VoteVariantsChangeRequest(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('vote_view', args=(self.voting_request.pk,))
+
+    def __str__(self):
+        return self.description

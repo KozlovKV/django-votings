@@ -26,7 +26,7 @@ SECRET_KEY = 'slhns1!7pebjs*ow($q-)hdv%f(7x^hmiu26f5a2#%d#*oq*ij'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', '109.120.57.127']
 
 # Application definition
 
@@ -140,8 +140,11 @@ LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_OPEN = True
 
-EMAIL_HOST = 'smtp.mailgun.org'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'postmaster@sandboxcc0c1edf5a144fed8a744c229b140210.mailgun.org'
-EMAIL_HOST_PASSWORD = '41b8fa769abc8101b934584c10270bab-c50a0e68-fb3d0ea6'
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 2525
+EMAIL_HOST_USER = "user@mail.ru"
+EMAIL_HOST_PASSWORD = "password"
+EMAIL_USE_TLS = True
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 

@@ -138,6 +138,9 @@ class Votings(models.Model):
         self.voters_count = len(users_set) + len(fingerprints_set)
         self.save()
 
+    def __str__(self):
+        return f'{self.title} ({self.author})'
+
 
 class VoteVariants(models.Model):
     voting = models.ForeignKey(to=Votings, on_delete=models.CASCADE)
@@ -147,6 +150,9 @@ class VoteVariants(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('vote_view', args=(self.voting.pk,))
+
+    def __str__(self):
+        return f'{self.voting}: {self.serial_number} - {self.description}'
 
 
 class Votes(models.Model):
@@ -158,3 +164,11 @@ class Votes(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('vote_view', args=(self.voting.pk,))
+
+    def __str__(self):
+        res = f'{self.vote_date:%Y-%m-%d %H:%M} - {self.voting} - '
+        if self.user is not None:
+            return res + f'{self.user}'
+        else:
+            return res + f'Аноним {self.fingerprint}'
+

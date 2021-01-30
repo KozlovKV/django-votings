@@ -33,7 +33,9 @@
                     </div>
                 {% endif %}
                 <label for="variant_{{ vote_variant.serial_number }}" class="wide">{{ vote_variant.description }}</label>
-                <span class="small-vote">{{ vote_variant.votes_count }} - {{ vote_variant.percent | floatformat }}%</span>
+                {% if can_watch_res %}
+                    <span class="small-vote">{{ vote_variant.votes_count }} - {{ vote_variant.percent | floatformat }}%</span>
+                {% endif %}
             </div>
         {% endfor %}
         {% if not user.is_authenticated %}
@@ -47,7 +49,9 @@
         {% for vote_variant in vote_variants %}
             <div class="list-elem grey-3">
                 <label class="wide">{{ vote_variant.description }}</label>
-                <span class="small-vote">{{ vote_variant.votes_count }} - {{ vote_variant.percent | floatformat }}%</span>
+                {% if can_watch_res %}
+                    <span class="small-vote">{{ vote_variant.votes_count }} - {{ vote_variant.percent | floatformat }}%</span>
+                {% endif %}
             </div>
         {% endfor %}
         <div class="horizontal-centering">

@@ -1,3 +1,7 @@
-django
-django-registration
-pillow
+asgiref==3.3.1
+confusable-homoglyphs==3.2.0
+Django==3.1.4
+django-registration==3.1.1
+Pillow==8.0.1
+pytz==2020.4
+sqlparse==0.4.1
