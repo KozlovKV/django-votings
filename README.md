@@ -21,7 +21,6 @@
         <li>Pillow</li>
     </ul></li>
     <li>SQLite</li>
-    <li>SQLite</li>
     <li>HTML5 / CSS3 / JS</li>
     <li>Google Charts API</li>
     <li>Google Fonts</li>
@@ -39,11 +38,9 @@
 <div>
 <h2>3d party sources</h2>
 <ul>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
+    <li>[menu button animation](https://nisnom.com/veb-razrabotki/6-stilnyh-hoverov-dlya-knopok/#more-1718)</li>
+    <li>[checkbox animation](https://dribbble.com/shots/3602609-16-Checkbox)</li>
+    <li>radio animation - Andreas Storm, November 21, 2017 (in [list](https://freefrontend.com/css-radio-buttons/))</li>
 </ul>
 <hr>
 <br>
