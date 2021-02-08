@@ -45,7 +45,7 @@ class ModifiedAuthenticationForm(auth_forms.AuthenticationForm):
     )
 
 
-class ModifiedRegistrationForm(reg_forms.RegistrationForm):
+class ModifiedRegistrationForm(reg_forms.RegistrationFormUniqueEmail):
     username = auth_forms.UsernameField(
         widget=forms.TextInput(attrs={
             'placeholder': 'Логин',
