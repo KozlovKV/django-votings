@@ -2,8 +2,8 @@ import copy
 from django.urls import reverse
 import django.views.generic.edit as generic_edit
 
-from menu_app.view_subclasses import TemplateViewWithMenu
-from moderation_app.models import VoteChangeRequest, VoteVariantsChangeRequest
+from apps.menu_app.view_subclasses import TemplateViewWithMenu
+from apps.moderation_app.models import VoteChangeRequest, VoteVariantsChangeRequest
 from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
 
 from vote_app.models import Votings, Votes, VoteVariants

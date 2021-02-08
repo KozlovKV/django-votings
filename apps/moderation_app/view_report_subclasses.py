@@ -2,10 +2,10 @@ from django.urls import reverse_lazy
 import django.views.generic.edit as generic_edit
 from django.utils import timezone
 
-from menu_app.view_menu_context import get_full_site_url
-from menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
-from moderation_app.forms import CommentForm, ModeledReportCreateForm
-from moderation_app.models import Reports
+from apps.menu_app.view_menu_context import get_full_site_url
+from apps.menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
+from apps.moderation_app.forms import CommentForm, ModeledReportCreateForm
+from apps.moderation_app.models import Reports
 from profile_app.models import AdditionUserInfo
 
 

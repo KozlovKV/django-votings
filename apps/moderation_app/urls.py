@@ -1,9 +1,8 @@
 from django.urls import path
 
-import moderation_app.views as moder_main
-import moderation_app.view_report_subclasses as report
-import moderation_app.view_request_subclasses as change_request
-
+from apps.moderation_app import views as moder_main
+from apps.moderation_app import view_request_subclasses as change_request
+from apps.moderation_app import view_report_subclasses as report
 
 urlpatterns = [
     path('send/', report.SendReportView.as_view(), name='moder_report_send'),

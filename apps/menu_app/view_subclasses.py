@@ -1,8 +1,8 @@
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
-from django.views.generic.base import TemplateView, View
+from django.views.generic.base import TemplateView
 
-from menu_app.view_menu_context import get_full_menu_context
+from apps.menu_app.view_menu_context import get_full_menu_context
 
 
 class TemplateViewWithMenu(TemplateView):

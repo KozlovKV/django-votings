@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy
 
-from menu_app.view_subclasses import TemplateViewWithMenu
+from apps.menu_app.view_subclasses import TemplateViewWithMenu
 from django.contrib.auth.models import User
 import django.views.generic.edit as generic_edit
 

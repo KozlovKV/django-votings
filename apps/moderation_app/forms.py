@@ -1,6 +1,6 @@
 from django import forms
 
-from moderation_app.models import Reports
+from apps.moderation_app.models import Reports
 
 
 class CommentForm(forms.Form):

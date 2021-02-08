@@ -3,9 +3,9 @@ from django.urls import reverse_lazy
 
 import django.views.generic.edit as generic_edit
 import django.views.generic.detail as generic_detail
-from menu_app.view_subclasses import TemplateViewWithMenu
+from apps.menu_app.view_subclasses import TemplateViewWithMenu
 
-from moderation_app.models import Reports
+from apps.moderation_app.models import Reports
 from vote_app.models import Votings, Votes, VoteVariants
 
 

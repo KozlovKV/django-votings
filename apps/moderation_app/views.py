@@ -1,5 +1,5 @@
-from menu_app.view_subclasses import TemplateViewWithMenu
-from moderation_app.models import Reports, VoteChangeRequest
+from apps.menu_app.view_subclasses import TemplateViewWithMenu
+from apps.moderation_app.models import Reports, VoteChangeRequest
 
 
 class ModerationPanelView(TemplateViewWithMenu):

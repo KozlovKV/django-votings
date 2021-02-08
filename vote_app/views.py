@@ -1,4 +1,4 @@
-from menu_app.view_subclasses import TemplateViewWithMenu
+from apps.menu_app.view_subclasses import TemplateViewWithMenu
 
 from vote_app.models import Votings
 

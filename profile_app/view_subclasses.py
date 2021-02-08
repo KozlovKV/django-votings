@@ -1,9 +1,8 @@
-from abc import ABC
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 
 import django.contrib.auth.views as auth_views
 import django_registration.backends.activation.views as reg_act_views
-from menu_app.view_subclasses import TemplateViewWithMenu
+from apps.menu_app.view_subclasses import TemplateViewWithMenu
 
 import profile_app.forms as profile_forms
 

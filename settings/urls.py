@@ -17,10 +17,10 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.urls import path, include
 
-import menu_app.views as menu
+import apps.menu_app.views as menu
 
 import profile_app.views as profile
-from django_project import settings
+from settings import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,6 +32,6 @@ urlpatterns = [
 
     path('account/', include('profile_app.urls')),
 
-    path('moderation/', include('moderation_app.urls')),
+    path('moderation/', include('apps.moderation_app.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

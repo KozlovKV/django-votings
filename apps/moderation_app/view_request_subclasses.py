@@ -5,10 +5,10 @@ import django.views.generic.edit as generic_edit
 import django.views.generic.detail as generic_detail
 from django.utils import timezone
 
-from menu_app.view_menu_context import get_full_site_url
-from menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
-from moderation_app.forms import EditRequestForm
-from moderation_app.models import VoteChangeRequest, VoteVariantsChangeRequest
+from apps.menu_app.view_menu_context import get_full_site_url
+from apps.menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
+from apps.moderation_app.forms import EditRequestForm
+from apps.moderation_app.models import VoteChangeRequest, VoteVariantsChangeRequest
 from profile_app.models import AdditionUserInfo
 from vote_app.models import Votes, VoteVariants
 
