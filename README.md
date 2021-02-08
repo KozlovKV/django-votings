@@ -1,9 +1,9 @@
 # Votings web application
 
 ## Description
-Web application on Python Django for creating and participating in voting
+Web application on Python Django for creating and participating in voting.
 
-Anons can participate in public votings
+Anons can participate in public votings.
 Анонимные пользователи могут принимать участие в открытых голосованиях.
 
 Votings creating, reports sending and participating in closed votings available only to authenticated users.
