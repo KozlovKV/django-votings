@@ -6,7 +6,7 @@ import django.views.generic.edit as generic_edit
 
 from apps.profile_app.forms import ProfilePageForm
 from apps.profile_app.models import AdditionUserInfo
-from vote_app.models import Votes, Votings
+from apps.vote_app.models import Votes, Votings
 
 
 class ProfilePageView(TemplateViewWithMenu, generic_edit.UpdateView):  # TODO: унаследовать UpdateView - https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/#django.views.generic.edit.UpdateView

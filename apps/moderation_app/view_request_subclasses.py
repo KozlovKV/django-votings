@@ -10,7 +10,7 @@ from apps.menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSen
 from apps.moderation_app.forms import EditRequestForm
 from apps.moderation_app.models import VoteChangeRequest, VoteVariantsChangeRequest
 from apps.profile_app.models import AdditionUserInfo
-from vote_app.models import Votes, VoteVariants
+from apps.vote_app.models import Votes, VoteVariants
 
 
 def get_change_requests_list_context():

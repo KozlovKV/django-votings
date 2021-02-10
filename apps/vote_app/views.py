@@ -1,6 +1,6 @@
 from apps.menu_app.view_subclasses import TemplateViewWithMenu
 
-from vote_app.models import Votings
+from apps.vote_app.models import Votings
 
 
 class VoteListPageView(TemplateViewWithMenu):

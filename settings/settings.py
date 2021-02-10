@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.menu_app',
-    'vote_app',
+    'apps.vote_app',
     'apps.profile_app',
     'apps.moderation_app',
 ]

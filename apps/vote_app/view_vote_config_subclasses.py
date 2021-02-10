@@ -4,10 +4,10 @@ import django.views.generic.edit as generic_edit
 
 from apps.menu_app.view_subclasses import TemplateViewWithMenu
 from apps.moderation_app.models import VoteChangeRequest, VoteVariantsChangeRequest
-from vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
+from apps.vote_app.forms import ModeledVoteCreateForm, ModeledVoteEditForm
 
-from vote_app.models import Votings, Votes, VoteVariants
-from vote_app.view_vote_one_subclasses import get_variants_context
+from apps.vote_app.models import Votings, Votes, VoteVariants
+from apps.vote_app.view_vote_one_subclasses import get_variants_context
 
 
 def get_variants_description_list(request):

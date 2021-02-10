@@ -1,6 +1,6 @@
 from django import forms
 
-from vote_app.models import Votings
+from apps.vote_app.models import Votings
 
 
 class VoteConfigMeta:

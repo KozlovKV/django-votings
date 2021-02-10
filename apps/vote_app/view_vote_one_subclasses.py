@@ -6,7 +6,7 @@ import django.views.generic.detail as generic_detail
 from apps.menu_app.view_subclasses import TemplateViewWithMenu
 
 from apps.moderation_app.models import Reports
-from vote_app.models import Votings, Votes, VoteVariants
+from apps.vote_app.models import Votings, Votes, VoteVariants
 
 
 def get_variants_context(voting):

@@ -1,7 +1,7 @@
 from django.urls import path
-import vote_app.views as vote_main
-import vote_app.view_vote_config_subclasses as vote_config
-import vote_app.view_vote_one_subclasses as vote_one
+import apps.vote_app.views as vote_main
+import apps.vote_app.view_vote_config_subclasses as vote_config
+import apps.vote_app.view_vote_one_subclasses as vote_one
 
 
 urlpatterns = [
