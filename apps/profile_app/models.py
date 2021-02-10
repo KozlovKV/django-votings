@@ -16,7 +16,7 @@ class AdditionUserInfo(models.Model):
     votings_created = models.IntegerField(default=0)
     votes_given = models.IntegerField(default=0)
     user_rights = models.IntegerField(choices=RIGHTS, default=0)
-    last_website_visited = models.URLField()
+    timezone = models.CharField(default='Europe/Moscow', max_length=128)
 
     def __str__(self):
         return self.user.username

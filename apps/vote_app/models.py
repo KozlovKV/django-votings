@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
@@ -71,7 +73,6 @@ class Votings(models.Model):
         if self.end_date is None:
             return False
         else:
-            # print(get_timezone())
             return timezone.now() >= self.end_date
 
     def can_see_result(self, request):

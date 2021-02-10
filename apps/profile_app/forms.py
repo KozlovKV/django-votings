@@ -3,6 +3,7 @@ import django_registration.forms as reg_forms
 import django.contrib.auth.forms as auth_forms
 from django.contrib.auth import password_validation
 from django.contrib.auth.models import User
+import pytz
 
 
 class ProfilePageForm(forms.ModelForm):
@@ -33,7 +34,7 @@ class ModifiedAuthenticationForm(auth_forms.AuthenticationForm):
             'placeholder': 'Логин',
             'class': 'input',
         }
-    ))
+        ))
     password = forms.CharField(
         label='Пароль',
         strip=False,
@@ -43,6 +44,13 @@ class ModifiedAuthenticationForm(auth_forms.AuthenticationForm):
             'class': 'input',
         }),
     )
+
+
+def get_tz_enum(country=None):
+    if country is None:
+        return [(tz, tz) for tz in pytz.common_timezones]
+    else:
+        return [(tz, tz) for tz in pytz.country_timezones(country)]
 
 
 class ModifiedRegistrationForm(reg_forms.RegistrationFormUniqueEmail):
@@ -75,6 +83,13 @@ class ModifiedRegistrationForm(reg_forms.RegistrationFormUniqueEmail):
         }),
         strip=False,
         help_text="Enter the same password as before, for verification.",
+    )
+    timezone = forms.ChoiceField(
+        label='Часовой пояс',
+        choices=get_tz_enum('ru'),
+        widget=forms.Select(attrs={
+            'class': 'input wide',
+        })
     )
 
 

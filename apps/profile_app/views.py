@@ -9,7 +9,7 @@ from apps.profile_app.models import AdditionUserInfo
 from apps.vote_app.models import Votes, Votings
 
 
-class ProfilePageView(TemplateViewWithMenu, generic_edit.UpdateView):  # TODO: унаследовать UpdateView - https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-editing/#django.views.generic.edit.UpdateView
+class ProfilePageView(TemplateViewWithMenu, generic_edit.UpdateView):
     template_name = 'profile_page.html'
     model = User
     object = None
