@@ -1,8 +1,8 @@
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 
-import profile_app.forms as profile_forms
-from profile_app.models import AdditionUserInfo
+from apps.profile_app import forms as profile_forms
+from apps.profile_app.models import AdditionUserInfo
 
 
 def get_menu_context(request):

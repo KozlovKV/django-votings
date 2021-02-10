@@ -4,8 +4,8 @@ from apps.menu_app.view_subclasses import TemplateViewWithMenu
 from django.contrib.auth.models import User
 import django.views.generic.edit as generic_edit
 
-from profile_app.forms import ProfilePageForm
-from profile_app.models import AdditionUserInfo
+from apps.profile_app.forms import ProfilePageForm
+from apps.profile_app.models import AdditionUserInfo
 from vote_app.models import Votes, Votings
 
 

@@ -9,7 +9,7 @@ from apps.menu_app.view_menu_context import get_full_site_url
 from apps.menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
 from apps.moderation_app.forms import EditRequestForm
 from apps.moderation_app.models import VoteChangeRequest, VoteVariantsChangeRequest
-from profile_app.models import AdditionUserInfo
+from apps.profile_app.models import AdditionUserInfo
 from vote_app.models import Votes, VoteVariants
 
 

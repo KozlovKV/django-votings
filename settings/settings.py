@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.menu_app',
     'vote_app',
-    'profile_app',
+    'apps.profile_app',
     'apps.moderation_app',
 ]
 

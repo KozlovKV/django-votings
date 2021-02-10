@@ -4,9 +4,9 @@ import django.contrib.auth.views as auth_views
 import django_registration.backends.activation.views as reg_act_views
 from apps.menu_app.view_subclasses import TemplateViewWithMenu
 
-import profile_app.forms as profile_forms
+from apps.profile_app import forms as profile_forms
 
-import profile_app.models as profile_models
+import apps.profile_app.models as profile_models
 
 
 class LoginViewDetailed(auth_views.LoginView, TemplateViewWithMenu):

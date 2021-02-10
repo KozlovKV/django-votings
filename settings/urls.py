@@ -19,7 +19,7 @@ from django.urls import path, include
 
 import apps.menu_app.views as menu
 
-import profile_app.views as profile
+import apps.profile_app.views as profile
 from settings import settings
 
 urlpatterns = [
@@ -30,7 +30,7 @@ urlpatterns = [
 
     path('profile/view/<int:profile_id>/', profile.ProfilePageView.as_view(), name='profile_view'),
 
-    path('account/', include('profile_app.urls')),
+    path('account/', include('apps.profile_app.urls')),
 
     path('moderation/', include('apps.moderation_app.urls')),
 

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.utils import timezone
 
-from profile_app.models import AdditionUserInfo
+from apps.profile_app.models import AdditionUserInfo
 
 
 class Votings(models.Model):
@@ -71,7 +71,7 @@ class Votings(models.Model):
         if self.end_date is None:
             return False
         else:
-            print(get_timezone())
+            # print(get_timezone())
             return timezone.now() >= self.end_date
 
     def can_see_result(self, request):

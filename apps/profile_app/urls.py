@@ -1,7 +1,7 @@
 from django.contrib.auth import views
 from django.urls import path
 
-import profile_app.view_subclasses as reg_subclasses
+import apps.profile_app.view_subclasses as reg_subclasses
 import apps.menu_app.view_subclasses as menu_subclasses
 
 

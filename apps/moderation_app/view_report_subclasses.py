@@ -6,7 +6,7 @@ from apps.menu_app.view_menu_context import get_full_site_url
 from apps.menu_app.view_subclasses import TemplateViewWithMenu, TemplateEmailSender
 from apps.moderation_app.forms import CommentForm, ModeledReportCreateForm
 from apps.moderation_app.models import Reports
-from profile_app.models import AdditionUserInfo
+from apps.profile_app.models import AdditionUserInfo
 
 
 def get_reports_list_context(model_list):
